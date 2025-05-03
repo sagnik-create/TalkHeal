@@ -117,6 +117,14 @@ st.markdown("""
         margin-top: 0.2rem;
         text-align: right;
     }
+
+    /* Ensure message-time stays inside the bubble */
+    .user-message .message-time,
+    .bot-message .message-time {
+        display: block;
+        margin-top: 0.5rem;
+        text-align: right;
+    }
     
     /* Conversation history styling */
     .convo-item {
