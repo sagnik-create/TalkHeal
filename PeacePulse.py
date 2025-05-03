@@ -227,15 +227,6 @@ def create_new_conversation(initial_message=None):
     st.session_state.active_conversation = 0
     return 0
 
-# Layout: Top Navigation
-col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
-with col1:
-    st.markdown('<div style="text-align: center; font-weight: bold;">Home</div>', unsafe_allow_html=True)
-with col5:
-    st.markdown('<div style="text-align: right;">👤</div>', unsafe_allow_html=True)
-
-st.markdown("---")
-
 # Main Layout: 3 columns
 sidebar_col, main_col, right_col = st.columns([1, 3, 1])
 
