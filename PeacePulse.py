@@ -228,7 +228,7 @@ def create_new_conversation(initial_message=None):
     return 0
 
 # Main Layout: 3 columns
-sidebar_col, main_col, right_col = st.columns([1, 3, 1])
+sidebar_col, main_col, right_col = st.columns([1, 5, 1])
 
 # Sidebar: Conversation History
 with sidebar_col:
