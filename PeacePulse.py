@@ -307,7 +307,7 @@ with main_col:
         active_convo["messages"].append({"sender": "bot", "message": response, "time": get_current_time()})
         
         # Force refresh
-        st.experimental_rerun()
+        st.rerun()
 
 # Right Column: Features
 with right_col:    
