@@ -23,6 +23,17 @@ def set_bg_from_local(img_path):
         """,
         unsafe_allow_html=True
     )
+    
+st.markdown("""
+    <style>
+    .stApp {
+        color: #111111; /* Dark text */
+    }
+    h1, h2, h3, h4, h5, h6 {
+        color: #111111;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # 🖼️ Replace this with the correct path to your image
 set_bg_from_local("PeacePulseLogo.png")
@@ -45,6 +56,28 @@ if st.button("🔍 Search for Help Resources"):
         with col3:
             st.markdown(f"[🧠 Mind UK](https://www.mind.org.uk/search-results/?q={search_term})", unsafe_allow_html=True)
 
+import google.generativeai as genai
+
+# Configure Gemini
+genai.configure(api_key="AIzaSyBeulOMD_D6_AUVdf1MKG6wnjxQ_gaSYsw")
+model = genai.GenerativeModel('gemini-2.0-flash')
+
+# Chatbot UI
+st.subheader("🧠 Chat with PeacePulse AI Assistant")
+chat_history = st.session_state.get("chat_history", [])
+user_input = st.text_input("You:", key="chat_input")
+
+if st.button("💬 Send"):
+    if user_input:
+        response = model.generate_content(user_input)
+        chat_history.append(("You", user_input))
+        chat_history.append(("PeacePulse AI", response.text))
+        st.session_state.chat_history = chat_history
+
+# Display chat history
+for speaker, message in chat_history:
+    st.markdown(f"**{speaker}:** {message}")
+
 # --- Location-based Care Centres ---
 st.subheader("📍 Where Do You Stay Friend?")
 location_input = st.text_input("Enter your city or location")
@@ -62,7 +95,7 @@ if st.button("🔍 Find Mental Health Professionals"):
 # --- Developer Info & Date ---
 st.markdown("---")
 st.markdown("### 👨‍💻 Developed By:")
-st.markdown("**The Quantum Tech Mystifiers**  \n_“It's absolutely okay not to be okay :)”_", unsafe_allow_html=True)
+st.markdown("**Eccentric Explorer**  \n_“It's absolutely okay not to be okay :)”_", unsafe_allow_html=True)
 
 st.markdown(f"📅 **Date:** {time.strftime('%d/%m/%y')}")
 
