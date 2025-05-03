@@ -243,9 +243,14 @@ with main_col:
     
     # Display chat container
     st.markdown('<div class="chat-container">', unsafe_allow_html=True)
-    
-    # Initial greeting message if no messages
+
+    # ✅ Fix: Ensure at least one conversation exists
+    if len(st.session_state.conversations) == 0:
+        create_new_conversation("Hi, I need someone to talk to.")
+
+    # Now safe to access
     active_convo = st.session_state.conversations[st.session_state.active_conversation]
+
     if not active_convo["messages"]:
         st.markdown(f"""
         <div class="bot-message">
