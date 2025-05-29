@@ -22,6 +22,10 @@ st.set_page_config(
     menu_items=None
 )
 
+# Initialize sidebar state
+if "sidebar_collapsed" not in st.session_state:
+    st.session_state.sidebar_collapsed = False
+
 # --- Enhanced Custom CSS with consistent theme ---
 st.markdown("""
 <style>
@@ -73,6 +77,72 @@ st.markdown("""
     .main .block-container > div:first-child {
     margin-top: 0 !important;
     padding-top: 0 !important;
+    }
+    
+    /* Sidebar toggle button */
+    .sidebar-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: var(--surface);
+        border: 2px solid var(--primary-color);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 16px var(--shadow-lg);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 20px;
+        color: var(--primary-color);
+    }
+    
+    .sidebar-toggle:hover {
+        transform: scale(1.1);
+        background: var(--primary-color);
+        color: white;
+        box-shadow: 0 6px 24px var(--shadow-lg);
+    }
+    
+    /* Collapsible sidebar container */
+    .sidebar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 300px;
+        background: var(--surface);
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 24px var(--shadow-lg);
+        overflow-y: auto;
+        padding: 80px 20px 20px 20px;
+    }
+    
+    .sidebar-container.open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-overlay.open {
+        opacity: 1;
+        visibility: visible;
     }
     
     /* Chat container with improved styling */
@@ -223,7 +293,7 @@ st.markdown("""
         background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
     }
     
-    /* Sidebar styling */
+    /* Sidebar content styling */
     .sidebar-content {
         background: var(--surface);
         border-radius: var(--radius-lg);
@@ -356,8 +426,6 @@ st.markdown("""
         border-color: var(--primary-color) !important;
     }
     
-    /* Hide Streamlit branding */
-    
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .main .block-container {
@@ -377,6 +445,10 @@ st.markdown("""
             min-height: 400px;
             max-height: 500px;
             padding: 16px;
+        }
+        
+        .sidebar-container {
+            width: 280px;
         }
     }
 </style>
@@ -462,41 +534,98 @@ emergency_resources = {
     ]
 }
 
-# Main Layout
-col1, col2, col3 = st.columns([2.5, 6, 2.5])
+# Sidebar Toggle Button and Container
+st.markdown(f"""
+<div class="sidebar-toggle" onclick="toggleSidebar()">
+    {"☰" if not st.session_state.sidebar_collapsed else "✕"}
+</div>
 
-# Left Sidebar: Conversation History
-with col1:
-    st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-    st.markdown("### 💬 Conversations")
-    
-    # New conversation button
-    if st.button("➕ New Chat", key="new_chat", use_container_width=True):
-        create_new_conversation()
-        st.rerun()
-    
-    st.markdown("---")
-    
-    # Display conversation history
-    if st.session_state.conversations:
-        for i, convo in enumerate(st.session_state.conversations):
-            button_style = "🟢" if i == st.session_state.active_conversation else "📝"
-            
-            if st.button(
-                f"{button_style} {convo['title'][:22]}...", 
-                key=f"convo_{i}",
-                help=f"Started: {convo['date']}",
-                use_container_width=True
-            ):
-                st.session_state.active_conversation = i
-                st.rerun()
-    else:
-        st.info("No conversations yet. Start a new chat!")
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+<div class="sidebar-overlay {'open' if not st.session_state.sidebar_collapsed else ''}" onclick="closeSidebar()"></div>
+
+<div class="sidebar-container {'open' if not st.session_state.sidebar_collapsed else ''}">
+    <div id="sidebar-content"></div>
+</div>
+
+<script>
+function toggleSidebar() {{
+    window.parent.postMessage({{
+        type: 'streamlit:setComponentValue',
+        key: 'sidebar_toggle',
+        value: true
+    }}, '*');
+}}
+
+function closeSidebar() {{
+    window.parent.postMessage({{
+        type: 'streamlit:setComponentValue', 
+        key: 'sidebar_close',
+        value: true
+    }}, '*');
+}}
+</script>
+""", unsafe_allow_html=True)
+
+# Check for sidebar toggle events
+if st.button("", key="sidebar_toggle_hidden", help="Hidden toggle"):
+    st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
+    st.rerun()
+
+# Dynamic layout based on sidebar state
+if st.session_state.sidebar_collapsed:
+    # Full width layout when sidebar is collapsed
+    col1, col2 = st.columns([7, 3])
+    sidebar_col = None
+else:
+    # Three column layout when sidebar is open
+    col1, col2, col3 = st.columns([2.5, 6, 2.5])
+    sidebar_col = col1
+
+# Collapsible Left Sidebar: Conversation History
+if not st.session_state.sidebar_collapsed and sidebar_col:
+    with sidebar_col:
+        st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
+        st.markdown("### 💬 Conversations")
+        
+        # Sidebar toggle button
+        if st.button("◀️ Hide", key="hide_sidebar", use_container_width=True):
+            st.session_state.sidebar_collapsed = True
+            st.rerun()
+        
+        # New conversation button
+        if st.button("➕ New Chat", key="new_chat", use_container_width=True):
+            create_new_conversation()
+            st.rerun()
+        
+        st.markdown("---")
+        
+        # Display conversation history
+        if st.session_state.conversations:
+            for i, convo in enumerate(st.session_state.conversations):
+                button_style = "🟢" if i == st.session_state.active_conversation else "📝"
+                
+                if st.button(
+                    f"{button_style} {convo['title'][:22]}...", 
+                    key=f"convo_{i}",
+                    help=f"Started: {convo['date']}",
+                    use_container_width=True
+                ):
+                    st.session_state.active_conversation = i
+                    st.rerun()
+        else:
+            st.info("No conversations yet. Start a new chat!")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # Main Chat Area
-with col2:
+main_col = col1 if st.session_state.sidebar_collapsed else col2
+
+with main_col:
+    # Show sidebar toggle when collapsed
+    if st.session_state.sidebar_collapsed:
+        if st.button("☰ Show Conversations", key="show_sidebar"):
+            st.session_state.sidebar_collapsed = False
+            st.rerun()
+    
     # Header
     st.markdown("""
     <div class="main-header">
@@ -595,7 +724,9 @@ with col2:
             st.rerun()
 
 # Right Sidebar: Resources and Tools
-with col3:
+right_col = col2 if st.session_state.sidebar_collapsed else col3
+
+with right_col:
     st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
     
     # Emergency Help Button
