@@ -413,21 +413,24 @@ with col2:
     
     # Chat input area
     st.markdown("---")
-    input_col, send_col = st.columns([5, 1])
     
-    with input_col:
-        user_input = st.text_input(
-            "Share your thoughts...", 
-            key="user_message", 
-            label_visibility="collapsed",
-            placeholder="Type your message here..."
-        )
-    
-    with send_col:
-        send_pressed = st.button("Send", key="send_button", use_container_width=True)
+    # Use a form to handle input properly
+    with st.form(key="chat_form", clear_on_submit=True):
+        input_col, send_col = st.columns([5, 1])
+        
+        with input_col:
+            user_input = st.text_input(
+                "Share your thoughts...", 
+                key="message_input", 
+                label_visibility="collapsed",
+                placeholder="Type your message here..."
+            )
+        
+        with send_col:
+            send_pressed = st.form_submit_button("Send", use_container_width=True)
     
     # Handle message sending
-    if (send_pressed and user_input) or (user_input and st.session_state.get("enter_pressed")):
+    if send_pressed and user_input.strip():
         if st.session_state.active_conversation >= 0:
             current_time = get_current_time()
             active_convo = st.session_state.conversations[st.session_state.active_conversation]
@@ -435,7 +438,7 @@ with col2:
             # Add user message
             active_convo["messages"].append({
                 "sender": "user", 
-                "message": user_input, 
+                "message": user_input.strip(), 
                 "time": current_time
             })
             
@@ -444,15 +447,16 @@ with col2:
                 active_convo["title"] = user_input[:30] + "..." if len(user_input) > 30 else user_input
             
             # Generate and add AI response
-            ai_response = get_ai_response(user_input)
+            with st.spinner("PeacePulse is thinking..."):
+                ai_response = get_ai_response(user_input.strip())
+            
             active_convo["messages"].append({
                 "sender": "bot", 
                 "message": ai_response, 
                 "time": get_current_time()
             })
             
-            # Clear input and refresh
-            st.session_state.user_message = ""
+            # Refresh the page
             st.rerun()
 
 # Right Sidebar: Resources and Tools
