@@ -1,31 +1,8 @@
-import streamlit as st
-import webbrowser
-from datetime import datetime
-from core.utils import create_new_conversation
-
-# Emergency contacts and resources
-emergency_resources = {
-    "Crisis Hotlines": [
-        "National Suicide Prevention Lifeline: 988",
-        "Crisis Text Line: Text HOME to 741741",
-        "SAMHSA National Helpline: 1-800-662-4357"
-    ],
-    "International": [
-        "India: 9152987821 (AASRA)",
-        "UK: 116 123 (Samaritans)",
-        "Australia: 13 11 14 (Lifeline)"
-    ]
-}
-
 def render_sidebar():
     """Renders the left and right sidebars."""
     with st.sidebar:
-        # --- REMOVED: Sidebar Toggle Button - NO LONGER HERE ---
-        # toggle_button = st.button("☰", key="sidebar_toggle_in_sidebar")
-        # if toggle_button:
-        #     st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
-
-        st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
+        # The content that belongs together under 'Conversations'
+        st.markdown('<div class="sidebar-section">', unsafe_allow_html=True) # Changed class name for clarity
         st.markdown("### 💬 Conversations")
 
         # New conversation button
@@ -50,21 +27,18 @@ def render_sidebar():
                     st.rerun()
         else:
             st.info("No conversations yet. Start a new chat!")
+        st.markdown('</div>', unsafe_allow_html=True) # Close the conversations section
 
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        # Right Sidebar: Resources and Tools
-        st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-
-        # Emergency Help Button
+        # Emergency Help Button and other resources will be in separate sections
+        st.markdown('<div class="sidebar-section">', unsafe_allow_html=True) # New section for emergency button
         st.markdown("""
         <div class="emergency-button" onclick="window.open('https://www.mentalhealth.gov/get-help/immediate-help', '_blank')">
             🚨 Emergency Help
         </div>
         """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True) # Close emergency button section
 
-        st.markdown('</div>', unsafe_allow_html=True)
-
+        # The rest of your expanders can stay as they are, or also be wrapped in sidebar-section if desired
         # Quick Assessment
         with st.expander("🧠 Mental Health Check"):
             st.markdown("**How are you feeling today?**")

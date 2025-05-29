@@ -32,7 +32,7 @@ def apply_custom_css():
             /* Update surface colors to be transparent with a slight tint */
             --surface: rgba(255, 255, 255, 0.2); /* Slightly transparent white */
             --surface-alt: rgba(255, 255, 255, 0.1); /* Even more transparent for subtle distinction */
-            --text-primary: #1e293b; /* Keep text readable */
+            --text-primary: #1e293b; /* Keep text readable, dark */
             --text-secondary: #64748b;
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.3); /* Transparent border */
@@ -228,22 +228,22 @@ def apply_custom_css():
             background: linear-gradient(135deg, rgba(220, 38, 38, 0.9) 0%, rgba(185, 28, 28, 0.9) 100%);
         }}
 
-        /* Sidebar content styling - now transparent */
-        .sidebar-content {{
+        /* Sidebar section styling - now transparent and dark text */
+        .sidebar-section { /* Changed from .sidebar-content */
             background: var(--surface); /* Use transparent surface color */
             border-radius: var(--radius-lg);
             padding: 20px;
             margin-bottom: 16px;
             box-shadow: 0 4px 16px var(--shadow);
             border: 1px solid var(--border-light);
-        }}
+        }
 
         /* General Button improvements for light transparency */
         .stButton > button {{
             background: var(--light-transparent-bg); /* Use the new light transparent background */
             color: black; /* Text color for light background */
             border: 1px solid var(--light-transparent-border); /* Light transparent border */
-            border-radius: var(--radius);
+            border-radius: var(--radius); /* Rectangular buttons */
             padding: 12px 16px;
             font-weight: 500;
             transition: all 0.2s ease;
@@ -260,9 +260,7 @@ def apply_custom_css():
         }}
 
         /* Sidebar Toggle button specific styling for light transparency */
-        /* Note: Using data-testid for robustness, replace if you have a specific key */
-        .stApp [data-testid="stSidebarToggleButton"] button,
-        .stApp [data-testid="stSidebar"] .stButton button {{
+        .stApp [data-testid="stSidebarToggleButton"] button {{ /* Target ONLY the sidebar toggle button here */
             background: var(--light-transparent-bg); /* Apply light transparent background */
             color: black; /* Text color for light background */
             border: 1px solid var(--light-transparent-border);
@@ -280,8 +278,7 @@ def apply_custom_css():
             line-height: 1;
         }}
 
-        .stApp [data-testid="stSidebarToggleButton"] button:hover,
-        .stApp [data-testid="stSidebar"] .stButton button:hover {{
+        .stApp [data-testid="stSidebarToggleButton"] button:hover {{ /* Hover for toggle button */
             background: var(--light-transparent-bg-hover); /* Lighter on hover */
             transform: scale(1.1);
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
@@ -324,7 +321,7 @@ def apply_custom_css():
 
         .streamlit-expander > summary {{
             background: var(--surface-alt); /* Transparent background for summary */
-            color: var(--text-primary);
+            color: var(--text-primary); /* Dark text for expander title */
             font-weight: 600;
             padding: 16px;
             border-radius: var(--radius);
@@ -340,31 +337,64 @@ def apply_custom_css():
 
         .stInfo {{
             background: rgba(99, 102, 241, 0.2); /* More transparent */
-            color: var(--text-primary);
+            color: var(--text-primary); /* Dark text */
         }}
 
         .stSuccess {{
             background: rgba(16, 185, 129, 0.2); /* More transparent */
-            color: #047857;
+            color: #047857; /* Dark text */
         }}
 
         .stWarning {{
             background: rgba(245, 158, 11, 0.2); /* More transparent */
-            color: #92400e;
+            color: #92400e; /* Dark text */
         }}
 
         /* Typography improvements - ensure readability on image background */
         h1, h2, h3, h4, h5, h6 {{
-            color: white; /* Make headings white for contrast */
+            color: white; /* Make headings white for contrast in main content */
             font-weight: 600;
             line-height: 1.3;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Add subtle text shadow */
         }}
 
         p, label, .stMarkdown, .stText, .stMarkdown p {{ /* Target common text elements more broadly */
-            color: white; /* Make paragraphs white for contrast */
+            color: white; /* Make paragraphs white for contrast in main content */
             line-height: 1.6;
             text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3); /* Add subtle text shadow */
+        }}
+
+        /* Target text inside sidebar sections specifically for dark text */
+        .stApp [data-testid="stSidebar"] h3,
+        .stApp [data-testid="stSidebar"] h4,
+        .stApp [data-testid="stSidebar"] p,
+        .stApp [data-testid="stSidebar"] div,
+        .stApp [data-testid="stSidebar"] label,
+        .stApp [data-testid="stSidebar"] .stMarkdown,
+        .stApp [data-testid="stSidebar"] .stText,
+        .stApp [data-testid="stSidebar"] .stMarkdown p,
+        .stApp [data-testid="stSidebar"] .stSelectbox,
+        .stApp [data-testid="stSidebar"] .stRadio {{
+            color: var(--text-primary) !important; /* Dark text for primary content in sidebar */
+            text-shadow: none !important; /* Remove text shadow for better readability on light transparent background */
+        }}
+
+        /* Ensure specific dark text for buttons in the sidebar */
+        .stApp [data-testid="stSidebar"] .stButton > button {{
+            color: var(--text-primary); /* Explicitly set dark text for sidebar buttons */
+        }}
+
+
+        /* Dark text for text inputs in sidebar */
+        .stApp [data-testid="stSidebar"] .stTextInput > div > div > input {{
+            color: var(--text-primary); /* Dark text for input */
+        }}
+
+        /* Dark text for info/success/warning messages in sidebar */
+        .stApp [data-testid="stSidebar"] .stInfo,
+        .stApp [data-testid="stSidebar"] .stSuccess,
+        .stApp [data-testid="stSidebar"] .stWarning {{
+            color: var(--text-primary) !important; /* Ensure dark text for these messages */
         }}
 
         /* Loading spinner */
