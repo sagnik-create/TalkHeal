@@ -317,13 +317,13 @@ def apply_custom_css():
         .chat-container {{
             background: var(--surface); /* Use transparent surface color */
             border-radius: var(--radius-lg);
-            padding: 24px;
-            margin: 16px 0;
-            box-shadow: 0 4px 24px var(--shadow-lg);
-            min-height: 500px;
-            max-height: 600px;
+            padding: 24 px;
+            margin: 16 px 0;
+            box-shadow: 0 4 px 24 px var(--shadow-lg);
+            min-height: 500 px;
+            max-height: 600 px;
             overflow-y: auto;
-            border: 1px solid var(--border-light);
+            border: 1 px solid var(--border-light);
             scroll-behavior: smooth;
             position: relative;
         }}
@@ -332,12 +332,12 @@ def apply_custom_css():
         .user-message {{
             background: rgba(99, 102, 241, 0.7); /* Slightly transparent primary color */
             color: white;
-            padding: 16px 20px;
-            border-radius: 20px 20px 8px 20px;
-            margin: 12px 0 12px auto;
+            padding: 16 px 20 px;
+            border-radius: 20 px 20 px 8 px 20 px;
+            margin: 12 px 0 12 px auto;
             max-width: 75%;
             word-wrap: break-word;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 3 px 12 px rgba(0, 0, 0, 0.25);
             font-weight: 500;
             line-height: 1.5;
             position: relative;
@@ -373,9 +373,9 @@ def apply_custom_css():
 
         /* Message time styling (ensure readability on image background) */
         .message-time {{
-            font-size: 0.75em;
+            font-size: 0.75 em;
             opacity: 0.9; /* Make it a bit more opaque for readability */
-            margin-top: 8px;
+            margin-top: 8 px;
             text-align: right;
             font-weight: 400;
             color: rgba(255, 255, 255, 0.8); /* Lighter color for better contrast */
@@ -384,13 +384,13 @@ def apply_custom_css():
         /* Enhanced header - now transparent */
         .main-header {{
             text-align: center;
-            padding: 32px 24px;
+            padding: 32 px 24 px;
             background: var(--surface); /* Use transparent surface color */
             color: var(--text-primary);
             border-radius: var(--radius-lg);
-            margin-bottom: 24px;
-            box-shadow: 0 8px 32px var(--shadow-lg);
-            border: 1px solid var(--border-light);
+            margin-bottom: 24 px;
+            box-shadow: 0 8 px 32 px var(--shadow-lg);
+            border: 1 px solid var(--border-light);
             position: relative;
             overflow: hidden;
         }}
@@ -401,15 +401,15 @@ def apply_custom_css():
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            height: 4 px;
+            background: linear-gradient(90 deg, var(--primary-color), var(--secondary-color));
         }}
 
         .main-header h1 {{
-            margin: 0 0 8px 0;
-            font-size: 2.5em;
+            margin: 0 0 8 px 0;
+            font-size: 2.5 em;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135 deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -417,24 +417,24 @@ def apply_custom_css():
 
         .main-header p {{
             margin: 0;
-            font-size: 1.2em;
+            font-size: 1.2 em;
             color: var(--text-primary); /* Keep text readable */
             font-weight: 500;
         }}
 
         /* Emergency button with better accessibility - can keep current or adjust opacity */
         .emergency-button {{
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%); /* Slightly transparent */
+            background: linear-gradient(135 deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%); /* Slightly transparent */
             color: white;
-            padding: 18px 24px;
+            padding: 18 px 24 px;
             border-radius: var(--radius);
             text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20 px;
+            box-shadow: 0 4 px 16 px rgba(0, 0, 0, 0.3);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3 s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1.1 em;
             border: none;
         }}
 
