@@ -278,7 +278,7 @@ st.markdown("""
     
     .streamlit-expander > summary {
         background: var(--surface-alt);
-        color: #000000;
+        color: #ffffff;
         font-weight: 1600;
         padding: 16px;
         border-radius: var(--radius);
