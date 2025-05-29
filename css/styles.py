@@ -298,7 +298,7 @@ def apply_custom_css():
             background-attachment: fixed; /* Keeps background fixed when scrolling */
             background-position: center center;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
+            min-height: 100 vh;
         }}
 
         /* Apply an overlay to slightly fade the background image */
