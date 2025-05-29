@@ -11,7 +11,7 @@ def apply_custom_css():
     """Applies custom CSS to the Streamlit application for enhanced styling."""
 
     # Path to your background image (adjust this path if your image is in a different folder)
-    background_image_path = "PeacePulseLogo.png" # Assuming 'images' folder in your root
+    background_image_path = "Background.jpg" # Assuming 'images' folder in your root
 
     # Encode the image to base64
     base64_image = get_base64_of_bin_file(background_image_path)
