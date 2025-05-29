@@ -279,7 +279,7 @@ st.markdown("""
     .streamlit-expander > summary {
         background: var(--surface-alt);
         color: #000000;
-        font-weight: 600;
+        font-weight: 1600;
         padding: 16px;
         border-radius: var(--radius);
     }
@@ -293,7 +293,7 @@ st.markdown("""
     
     .stInfo {
         background: rgba(99, 102, 241, 0.1);
-        color: var(--primary-dark);
+        color: #000000;
     }
     
     .stSuccess {
