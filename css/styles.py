@@ -274,7 +274,7 @@ def apply_custom_css():
         }}
 
         .stButton button[key="persistent_sidebar_toggle"]:hover {{
-            background: rgba(79, 70, 229, 0.9); /* Slightly more opaque on hover */
+            background: white /* Slightly more opaque on hover */
             transform: scale(1.1);
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
         }}
