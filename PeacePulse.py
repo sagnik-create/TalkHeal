@@ -357,7 +357,6 @@ st.markdown("""
     }
     
     /* Hide Streamlit branding */
-    footer {visibility: hidden;}
     
     /* Responsive adjustments */
     @media (max-width: 768px) {
