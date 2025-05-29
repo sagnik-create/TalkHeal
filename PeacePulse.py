@@ -475,10 +475,23 @@ emergency_resources = {
 }
 
 # Sidebar Toggle Button
-st.markdown("""
-<div class="sidebar-toggle" onclick="parent.document.querySelector('[data-testid=stSidebar] button').click()">
-    ☰
-</div>
+toggle_button = st.button("☰", key="sidebar_toggle")
+if toggle_button:
+    st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
+
+# Apply sidebar state
+st.markdown(f"""
+<style>
+    [data-testid="stSidebar"] {{
+        visibility: {'hidden' if st.session_state.sidebar_collapsed else 'visible'};
+        transform: translateX({'0' if not st.session_state.sidebar_collapsed else '-100%'});
+        transition: transform 300ms ease-in-out;
+    }}
+    .sidebar-toggle {{
+        left: {'20px' if st.session_state.sidebar_collapsed else 'calc(25% + 20px)'};
+        transition: left 300ms ease-in-out;
+    }}
+</style>
 """, unsafe_allow_html=True)
 
 # Left Sidebar: Conversation History
