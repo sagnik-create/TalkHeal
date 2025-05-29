@@ -273,11 +273,12 @@ st.markdown("""
         border-radius: var(--radius);
         margin-bottom: 12px;
         box-shadow: 0 2px 8px var(--shadow);
+        color: #000000;
     }
     
     .streamlit-expander > summary {
         background: var(--surface-alt);
-        color: var(--text-primary);
+        color: #000000;
         font-weight: 600;
         padding: 16px;
         border-radius: var(--radius);
