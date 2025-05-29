@@ -35,6 +35,7 @@ st.markdown("""
         max-height: 600px;
         overflow-y: auto;
         border: 1px solid #e0e0e0;
+        scroll-behavior: smooth;
     }
     
     /* User message styling */
