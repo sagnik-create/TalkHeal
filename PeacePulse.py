@@ -4,195 +4,248 @@ import time
 from datetime import datetime
 import random
 import google.generativeai as genai
+import webbrowser
 
-# Configure Gemini (with your API key)
-genai.configure(api_key="AIzaSyBeulOMD_D6_AUVdf1MKG6wnjxQ_gaSYsw")
-model = genai.GenerativeModel('gemini-2.0-flash')
+# Configure Gemini (replace with your API key)
+try:
+    genai.configure(api_key="AIzaSyBeulOMD_D6_AUVdf1MKG6wnjxQ_gaSYsw")
+    model = genai.GenerativeModel('gemini-2.0-flash')
+except Exception as e:
+    st.error("Failed to configure Gemini API. Please check your API key.")
 
 # --- Set page configuration ---
 st.set_page_config(
-    page_title="PeacePulse",
+    page_title="PeacePulse - Mental Health Support",
+    page_icon="💙",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- Custom CSS ---
+# --- Enhanced Custom CSS ---
 st.markdown("""
 <style>
-    /* Main app background and text */
+    /* Import modern fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Global styles */
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Main app background */
     .stApp {
-        background-color: #f0f2f5;
-        color: #111111;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #2c3e50;
     }
     
     /* Sidebar styling */
     [data-testid=stSidebar] {
-        background-color: #f7f7f7;
-        padding: 1rem;
-        border-right: 1px solid #e0e0e0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-right: none;
+        box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+    }
+    
+    /* Main content container */
+    .main-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 1rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     }
     
     /* Header styling */
-    .header {
-        display: flex;
-        align-items: center;
-        background-color: #ffffff;
-        padding: 0.5rem 1rem;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-        box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
+    .app-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .app-title {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+    
+    .app-subtitle {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        font-weight: 400;
     }
     
     /* Chat container */
     .chat-container {
-        background-color: white;
-        border-radius: 10px;
-        padding: 1rem;
-        box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        padding: 1.5rem;
         margin-bottom: 1rem;
-        height: 300px;
+        height: 400px;
         overflow-y: auto;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
     }
     
     /* Message bubbles */
     .user-message {
-        background-color: #e1f5fe;
-        padding: 0.8rem;
-        border-radius: 15px 15px 0 15px;
-        margin: 0.5rem 0;
-        max-width: 80%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 20px 20px 5px 20px;
+        margin: 1rem 0;
+        max-width: 75%;
         margin-left: auto;
-        color: #333;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        animation: slideInRight 0.3s ease-out;
     }
     
     .bot-message {
-        background-color: #f5f5f5;
-        padding: 0.8rem;
-        border-radius: 15px 15px 15px 0;
-        margin: 0.5rem 0;
-        max-width: 80%;
-        color: #333;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        color: #2c3e50;
+        padding: 1rem 1.5rem;
+        border-radius: 20px 20px 20px 5px;
+        margin: 1rem 0;
+        max-width: 75%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        animation: slideInLeft 0.3s ease-out;
     }
     
-    /* Input box */
-    .chat-input {
-        border-radius: 20px !important;
-        border: 1px solid #e0e0e0 !important;
-        padding: 0.5rem 1rem !important;
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    /* Input styling */
+    .stTextInput > div > div > input {
+        border-radius: 25px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stTextInput > div > div > input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
     
     /* Feature cards */
     .feature-card {
-        background-color: white;
-        border-radius: 10px;
-        padding: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 1.5rem;
         margin-bottom: 1rem;
-        box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
-        transition: transform 0.2s;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
     }
     
     .feature-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        border-color: #667eea;
     }
     
-    /* Button styling */
-    .stButton button {
-        border-radius: 20px;
-        padding: 0.3rem 1rem;
-        background-color: #3498db;
+    /* Emergency button */
+    .emergency-button {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
         color: white;
-        border: none;
-        font-weight: 500;
+        padding: 1rem;
+        text-align: center;
+        border-radius: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        transition: all 0.3s ease;
     }
     
-    .stButton button:hover {
-        background-color: #2980b9;
+    .emergency-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
     }
     
-    /* Message metadata */
+    /* Conversation items */
+    .convo-item {
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        background: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+    
+    .convo-item:hover {
+        background: rgba(102, 126, 234, 0.1);
+        border-color: #667eea;
+        transform: translateX(5px);
+    }
+    
+    .convo-item.active {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+    
+    /* Message time */
     .message-time {
-        font-size: 0.7rem;
-        color: #888;
-        margin-top: 0.2rem;
-        text-align: right;
-    }
-
-    /* Ensure message-time stays inside the bubble */
-    .user-message .message-time,
-    .bot-message .message-time {
-        display: block;
+        font-size: 0.75rem;
+        opacity: 0.7;
         margin-top: 0.5rem;
         text-align: right;
     }
     
-    /* Conversation history styling */
-    .convo-item {
-        padding: 0.7rem;
-        border-radius: 8px;
-        margin-bottom: 0.5rem;
-        background-color: white;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        border-left: 3px solid transparent;
-    }
-    
-    .convo-item:hover {
-        background-color: #e8f4f8;
-        border-left: 3px solid #3498db;
-    }
-    
-    /* Hide Streamlit branding */
+    /* Hide Streamlit elements */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    .stDeployButton {display: none;}
     
-    /* Additional right panel styling */
-    .right-panel {
-        background-color: white;
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1);
         border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
     }
     
-    /* Disorder list */
-    .disorder-item {
-        padding: 0.5rem;
-        border-bottom: 1px solid #f0f0f0;
-    }
-    
-    /* Help button */
-    .help-button {
-        background-color: #e74c3c;
-        color: white;
-        padding: 1rem;
-        text-align: center;
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea, #764ba2);
         border-radius: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        margin: 1rem 0;
     }
     
-    /* Video thumbnail */
-    .video-thumbnail {
-        position: relative;
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        background: rgba(102, 126, 234, 0.1);
         border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 1rem;
-    }
-    
-    .play-button {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(255,255,255,0.7);
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-weight: 600;
     }
     
 </style>
@@ -203,19 +256,23 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 if "conversations" not in st.session_state:
-    st.session_state.conversations = [
-    ]
+    st.session_state.conversations = []
 
 if "active_conversation" not in st.session_state:
-    st.session_state.active_conversation = 0
+    st.session_state.active_conversation = -1
 
 if "mental_disorders" not in st.session_state:
     st.session_state.mental_disorders = [
-        "Depression",
-        "Anxiety Disorders",
+        "Depression & Mood Disorders",
+        "Anxiety & Panic Disorders", 
         "Bipolar Disorder",
-        "Schizophrenia",
-        "Obsessive-Compulsive Disorder (OCD)"
+        "PTSD & Trauma",
+        "OCD & Related Disorders",
+        "Eating Disorders",
+        "Substance Use Disorders",
+        "ADHD & Neurodevelopmental",
+        "Personality Disorders",
+        "Sleep Disorders"
     ]
 
 # Helper Functions
@@ -224,133 +281,264 @@ def get_current_time():
 
 def create_new_conversation(initial_message=None):
     new_convo = {
+        "id": len(st.session_state.conversations),
         "title": initial_message[:30] + "..." if initial_message and len(initial_message) > 30 else "New Conversation",
-        "date": "Today",
+        "date": datetime.now().strftime("%B %d, %Y"),
         "messages": []
     }
+    
     if initial_message:
-        new_convo["messages"].append({"sender": "user", "message": initial_message, "time": get_current_time()})
+        new_convo["messages"].append({
+            "sender": "user", 
+            "message": initial_message, 
+            "time": get_current_time()
+        })
     
     st.session_state.conversations.insert(0, new_convo)
     st.session_state.active_conversation = 0
     return 0
 
-# Main Layout: 3 columns
-sidebar_col, main_col, right_col = st.columns([1, 5, 1])
+def get_ai_response(user_message):
+    """Generate AI response with mental health context"""
+    mental_health_prompt = f"""
+    You are a compassionate mental health support chatbot named PeacePulse. Your role is to:
+    1. Provide empathetic, supportive responses
+    2. Encourage professional help when needed
+    3. Never diagnose or provide medical advice
+    4. Be warm, understanding, and non-judgmental
+    5. Ask follow-up questions to better understand the user's situation
+    6. Provide coping strategies and resources when appropriate
+    
+    User message: {user_message}
+    
+    Respond in a caring, supportive manner (keep response under 150 words):
+    """
+    
+    try:
+        response = model.generate_content(mental_health_prompt)
+        return response.text
+    except Exception as e:
+        return "I'm here to listen and support you. Sometimes I have trouble connecting, but I want you to know that your feelings are valid and you're not alone. Would you like to share more about what you're experiencing?"
 
-# Sidebar: Conversation History
-with sidebar_col:
+# Emergency contacts and resources
+emergency_resources = {
+    "Crisis Hotlines": [
+        "National Suicide Prevention Lifeline: 988",
+        "Crisis Text Line: Text HOME to 741741",
+        "SAMHSA National Helpline: 1-800-662-4357"
+    ],
+    "International": [
+        "India: 9152987821 (AASRA)",
+        "UK: 116 123 (Samaritans)",
+        "Australia: 13 11 14 (Lifeline)"
+    ]
+}
+
+# Main Layout
+col1, col2, col3 = st.columns([2, 6, 2])
+
+# Left Sidebar: Conversation History
+with col1:
+    st.markdown("### 💬 Conversations")
     
     # New conversation button
-    if st.button("New Request", key="new_request"):
+    if st.button("➕ New Chat", key="new_chat", use_container_width=True):
         create_new_conversation()
+        st.rerun()
+    
+    st.markdown("---")
+    
+    # Display conversation history
+    if st.session_state.conversations:
+        for i, convo in enumerate(st.session_state.conversations):
+            active_class = "active" if i == st.session_state.active_conversation else ""
+            
+            if st.button(
+                f"📝 {convo['title'][:25]}...", 
+                key=f"convo_{i}",
+                help=f"Started: {convo['date']}",
+                use_container_width=True
+            ):
+                st.session_state.active_conversation = i
+                st.rerun()
+    else:
+        st.info("No conversations yet. Start a new chat!")
 
 # Main Chat Area
-with main_col:
-    st.markdown("<h2>PeacePulse</h2>", unsafe_allow_html=True)
+with col2:
+    # Header
+    st.markdown("""
+    <div class="app-header">
+        <div class="app-title">PeacePulse</div>
+        <div class="app-subtitle">Your Mental Health Companion 💙</div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Display chat container
+    # Ensure we have at least one conversation
+    if not st.session_state.conversations:
+        create_new_conversation()
+    
+    # Display chat messages
     st.markdown('<div class="chat-container">', unsafe_allow_html=True)
-
-    # ✅ Fix: Ensure at least one conversation exists
-    if len(st.session_state.conversations) == 0:
-        create_new_conversation("Hi, I need someone to talk to.")
-
-    # Now safe to access
-    active_convo = st.session_state.conversations[st.session_state.active_conversation]
-
-    if not active_convo["messages"]:
-        st.markdown(f"""
-        <div class="bot-message">
-            Let's explore your thoughts together and guide you towards the right professional assistance 😊
-            <div class="message-time">{get_current_time()}</div>
-        </div>
-        """, unsafe_allow_html=True)
     
-    # Display existing messages
-    for msg in active_convo["messages"]:
-        if msg["sender"] == "user":
-            st.markdown(f"""
-            <div class="user-message">
-                {msg["message"]}
-                <div class="message-time">{msg["time"]}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        else:
+    if st.session_state.active_conversation >= 0:
+        active_convo = st.session_state.conversations[st.session_state.active_conversation]
+        
+        if not active_convo["messages"]:
             st.markdown(f"""
             <div class="bot-message">
-                {msg["message"]}
-                <div class="message-time">{msg["time"]}</div>
+                Hello! I'm PeacePulse, your mental health companion. I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
+                <div class="message-time">{get_current_time()}</div>
             </div>
             """, unsafe_allow_html=True)
+        
+        # Display conversation messages
+        for msg in active_convo["messages"]:
+            if msg["sender"] == "user":
+                st.markdown(f"""
+                <div class="user-message">
+                    {msg["message"]}
+                    <div class="message-time">{msg["time"]}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div class="bot-message">
+                    {msg["message"]}
+                    <div class="message-time">{msg["time"]}</div>
+                </div>
+                """, unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # Chat input
-    chat_col1, chat_col2 = st.columns([4, 1])
+    # Chat input area
+    st.markdown("---")
+    input_col, send_col = st.columns([5, 1])
     
-    with chat_col1:
-        user_input = st.text_input("Write your request...", key="user_message", label_visibility="collapsed")
+    with input_col:
+        user_input = st.text_input(
+            "Share your thoughts...", 
+            key="user_message", 
+            label_visibility="collapsed",
+            placeholder="Type your message here..."
+        )
     
-    with chat_col2:
-        send_pressed = st.button("Send", key="send_button")
+    with send_col:
+        send_pressed = st.button("Send", key="send_button", use_container_width=True)
     
-    if send_pressed and user_input:
-        # Add user message
-        current_time = get_current_time()
-        active_convo = st.session_state.conversations[st.session_state.active_conversation]
-        active_convo["messages"].append({"sender": "user", "message": user_input, "time": current_time})
-        
-        # Update conversation title if it's the first message
-        if len(active_convo["messages"]) == 1:
-            active_convo["title"] = user_input[:30] + "..." if len(user_input) > 30 else user_input
-        
-        # Generate AI response
-        try:
-            response = model.generate_content(user_input).text
-        except:
-            response = "I'm here to listen and help. Could you share more about what you're experiencing so I can better understand how to support you?"
-        
-        # Add AI response
-        active_convo["messages"].append({"sender": "bot", "message": response, "time": get_current_time()})
-        
-        # Force refresh
-        st.rerun()
+    # Handle message sending
+    if (send_pressed and user_input) or (user_input and st.session_state.get("enter_pressed")):
+        if st.session_state.active_conversation >= 0:
+            current_time = get_current_time()
+            active_convo = st.session_state.conversations[st.session_state.active_conversation]
+            
+            # Add user message
+            active_convo["messages"].append({
+                "sender": "user", 
+                "message": user_input, 
+                "time": current_time
+            })
+            
+            # Update conversation title if it's the first message
+            if len(active_convo["messages"]) == 1:
+                active_convo["title"] = user_input[:30] + "..." if len(user_input) > 30 else user_input
+            
+            # Generate and add AI response
+            ai_response = get_ai_response(user_input)
+            active_convo["messages"].append({
+                "sender": "bot", 
+                "message": ai_response, 
+                "time": get_current_time()
+            })
+            
+            # Clear input and refresh
+            st.session_state.user_message = ""
+            st.rerun()
 
-# Right Column: Features
-with right_col:    
-    # Help button
+# Right Sidebar: Resources and Tools
+with col3:
+    # Emergency Help Button
     st.markdown("""
-    <div class="help-button">
-        I need Help!
+    <div class="emergency-button" onclick="alert('In case of emergency, please call 911 or your local emergency services immediately.')">
+        🚨 Emergency Help
     </div>
     """, unsafe_allow_html=True)
-
-    # Location-Based Centers Section
-    with st.expander("📍 Location-Based Centers"):
-        st.markdown("<h4>Find Mental Health Centers Near You</h4>", unsafe_allow_html=True)
-        location_input = st.text_input("Enter your city or location", key="location_input")
-        if st.button("📌 Search Nearby Centers", key="search_centers"):
+    
+    # Quick Assessment
+    with st.expander("🧠 Mental Health Check"):
+        st.markdown("**How are you feeling today?**")
+        mood = st.select_slider(
+            "Mood Scale",
+            options=["😔 Very Low", "😐 Low", "😊 Okay", "😄 Good", "🌟 Great"],
+            value="😊 Okay",
+            label_visibility="collapsed"
+        )
+        
+        if st.button("Get Personalized Tips", key="mood_tips"):
+            tips = {
+                "😔 Very Low": "Consider reaching out to a mental health professional. You don't have to go through this alone.",
+                "😐 Low": "Try some self-care activities like a short walk, listening to music, or calling a friend.",
+                "😊 Okay": "Keep maintaining healthy habits and stay connected with supportive people.",
+                "😄 Good": "Great! Consider helping others or engaging in activities you enjoy.",
+                "🌟 Great": "Wonderful! Share your positive energy and remember this feeling for tough days."
+            }
+            st.success(tips[mood])
+    
+    # Mental Health Resources
+    with st.expander("📚 Resources"):
+        st.markdown("**Common Mental Health Topics:**")
+        for disorder in st.session_state.mental_disorders:
+            if st.button(f"ℹ️ {disorder}", key=f"info_{disorder}", use_container_width=True):
+                st.info(f"Learn more about {disorder}. Consider speaking with a mental health professional for personalized guidance.")
+    
+    # Location-Based Centers
+    with st.expander("📍 Find Help Nearby"):
+        location_input = st.text_input("Enter your city", key="location_search")
+        if st.button("🔍 Search Centers", key="search_nearby"):
             if location_input:
-                map_url = f"https://www.google.com/maps/search/Mental+Hospitals+and+trauma+care+centres+in+{location_input.replace(' ', '+')}"
-                st.markdown(f"[View on Google Maps]({map_url})")
-
-    # Professionals Section
-    with st.expander("👩‍⚕️ Mental Health Professionals"):
-        st.markdown("<h4>Connect with Specialists</h4>", unsafe_allow_html=True)
+                search_url = f"https://www.google.com/maps/search/mental+health+centers+{location_input.replace(' ', '+')}"
+                st.markdown(f"[🗺️ View Mental Health Centers Near {location_input}]({search_url})")
+            else:
+                st.warning("Please enter a city name")
     
-    # Issues Section
-    with st.expander("💬 What's your Issue ^-*?"):
-        st.markdown("<h4>💬 What's your Issue ^-*?</h4>", unsafe_allow_html=True)
+    # Crisis Resources
+    with st.expander("☎️ Crisis Support"):
+        st.markdown("**24/7 Crisis Hotlines:**")
+        for category, numbers in emergency_resources.items():
+            st.markdown(f"**{category}:**")
+            for number in numbers:
+                st.markdown(f"• {number}")
     
-    # Developer Info
-    with st.expander("👨‍💻 Developer Info"):
+    # About Section
+    with st.expander("ℹ️ About PeacePulse"):
         st.markdown("""
-        <div style="text-align: center;">
-            <h4>Developed By:</h4>
-            <p><b>Eccentric Explorer</b><br>
-            <i>"It's absolutely okay not to be okay :)"</i>
-            </p>
-            <p>📅 Date: May 03, 2025</p>
-        </div>
-        """, unsafe_allow_html=True)
+        **PeacePulse** is your compassionate mental health companion, designed to provide:
+        
+        • 24/7 emotional support
+        • Resource guidance
+        • Crisis intervention
+        • Professional referrals
+        
+        **Remember:** This is not a substitute for professional mental health care.
+        
+        ---
+        
+        **Created with ❤️ by Eccentric Explorer**
+        
+        *"It's absolutely okay not to be okay :)"*
+        
+        📅 Enhanced Version - May 2025
+        """)
+
+# Auto-scroll chat to bottom (JavaScript injection)
+st.markdown("""
+<script>
+function scrollToBottom() {
+    var chatContainer = document.querySelector('.chat-container');
+    if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+}
+setTimeout(scrollToBottom, 100);
+</script>
+""", unsafe_allow_html=True)
