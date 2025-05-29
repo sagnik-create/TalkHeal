@@ -257,39 +257,39 @@ with col2:
     chat_container = st.container()
     
     with chat_container:
-        st.markdown('<div class="chat-container">', unsafe_allow_html=True)
-        
+        html = '<div class="chat-container">'
+
         if st.session_state.active_conversation >= 0:
             active_convo = st.session_state.conversations[st.session_state.active_conversation]
-            
+
             if not active_convo["messages"]:
-                st.markdown(f"""
+                html += f"""
                 <div class="welcome-message">
                     <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
                     I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
                     <div class="message-time">{get_current_time()}</div>
                 </div>
-                """, unsafe_allow_html=True)
+                """
             
-            # Display conversation messages
             for msg in active_convo["messages"]:
                 if msg["sender"] == "user":
-                    st.markdown(f"""
+                    html += f"""
                     <div class="user-message">
                         {msg["message"]}
                         <div class="message-time">{msg["time"]}</div>
                     </div>
-                    """, unsafe_allow_html=True)
+                    """
                 else:
-                    st.markdown(f"""
+                    html += f"""
                     <div class="bot-message">
                         {msg["message"]}
                         <div class="message-time">{msg["time"]}</div>
                     </div>
-                    """, unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+                    """
+
+        html += '</div>'
+        st.markdown(html, unsafe_allow_html=True)
+
     # Chat input area
     st.markdown("---")
     
