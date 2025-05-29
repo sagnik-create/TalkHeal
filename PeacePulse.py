@@ -681,7 +681,7 @@ with st.sidebar:
                 st.markdown(f"• {number}")
     
     # About Section
-    with st.expander(""):
+    with st.expander("ℹ️ About PeacePulse"):
         st.markdown("""
         **PeacePulse** is your compassionate mental health companion, designed to provide:
         
