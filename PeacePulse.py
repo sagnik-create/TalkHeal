@@ -25,7 +25,7 @@ if "active_conversation" not in st.session_state:
 if "mental_disorders" not in st.session_state:
     st.session_state.mental_disorders = [
         "Depression & Mood Disorders",
-        "Anxiety & Panic Disorders", 
+        "Anxiety & Panic Disorders",
         "Bipolar Disorder",
         "PTSD & Trauma",
         "OCD & Related Disorders",
@@ -44,10 +44,10 @@ if "sidebar_collapsed" not in st.session_state:
 model = configure_gemini()
 
 
-# Sidebar Toggle Button (moved here for global access to session_state)
-toggle_button = st.button("☰", key="sidebar_toggle")
-if toggle_button:
-    st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
+# NO LONGER NEEDED HERE: Sidebar Toggle Button (moved to sidebar.py)
+# toggle_button = st.button("☰", key="sidebar_toggle")
+# if toggle_button:
+#     st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
 
 # Apply sidebar state
 st.markdown(f"""
@@ -57,10 +57,7 @@ st.markdown(f"""
         transform: translateX({'0' if not st.session_state.sidebar_collapsed else '-100%'});
         transition: transform 300ms ease-in-out;
     }}
-    .sidebar-toggle {{
-        left: {'20px' if st.session_state.sidebar_collapsed else 'calc(25% + 20px)'};
-        transition: left 300ms ease-in-out;
-    }}
+    /* The sidebar-toggle class CSS will now be primarily managed in styles.py for internal sidebar positioning */
 </style>
 """, unsafe_allow_html=True)
 
