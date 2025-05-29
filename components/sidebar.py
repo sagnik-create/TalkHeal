@@ -20,10 +20,10 @@ emergency_resources = {
 def render_sidebar():
     """Renders the left and right sidebars."""
     with st.sidebar:
-        # Sidebar Toggle Button - MOVED HERE
-        toggle_button = st.button("☰", key="sidebar_toggle_in_sidebar")
-        if toggle_button:
-            st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
+        # --- REMOVED: Sidebar Toggle Button - NO LONGER HERE ---
+        # toggle_button = st.button("☰", key="sidebar_toggle_in_sidebar")
+        # if toggle_button:
+        #     st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
 
         st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
         st.markdown("### 💬 Conversations")
@@ -97,7 +97,6 @@ def render_sidebar():
             location_input = st.text_input("Enter your city", key="location_search")
             if st.button("🔍 Search Centers", key="search_nearby"):
                 if location_input:
-                    # Note: Original code has googleusercontent.com in URL, corrected to maps.google.com
                     search_url = f"https://www.google.com/maps/search/mental+health+centers+near+{location_input.replace(' ', '+')}"
                     st.markdown(f"[🗺️ View Mental Health Centers Near {location_input}]({search_url})")
                 else:
