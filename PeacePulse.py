@@ -18,7 +18,8 @@ st.set_page_config(
     page_title="PeacePulse - Mental Health Support",
     page_icon="💙",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items=None
 )
 
 # --- Enhanced Custom CSS with consistent theme ---
@@ -54,12 +55,24 @@ st.markdown("""
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         min-height: 100vh;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    .stApp > header {
+    display: none !important;
     }
     
     .main .block-container {
-        padding-top: 0.5rem;
+        padding-top: 0rem;
         padding-bottom: 2rem;
         max-width: 1200px;
+        margin-top: 0;
+    }
+    
+    .main .block-container > div:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
     }
     
     /* Chat container with improved styling */
@@ -218,6 +231,26 @@ st.markdown("""
         margin-bottom: 16px;
         box-shadow: 0 4px 16px var(--shadow);
         border: 1px solid var(--border-light);
+    }
+    
+    .stColumns {
+    margin-top: 0 !important;
+    }
+    
+    div[data-testid="stAppViewContainer"] {
+        padding-top: 0 !important;
+    }
+
+    div[data-testid="stHeader"] {
+        display: none !important;
+    }
+
+    div[data-testid="stToolbar"] {
+        display: none !important;
+    }
+
+    section[data-testid="stSidebar"] + section {
+        padding-top: 0 !important;
     }
     
     /* Button improvements */
