@@ -1,5 +1,5 @@
 import streamlit as st
-import base64 # Import base64 to encode the image
+import base64
 
 def get_base64_of_bin_file(bin_file):
     """Encodes a binary file (like an image) to base64."""
@@ -11,7 +11,7 @@ def apply_custom_css():
     """Applies custom CSS to the Streamlit application for enhanced styling."""
 
     # Path to your background image (adjust this path if your image is in a different folder)
-    background_image_path = "Background.jpg" # Assuming 'images' folder in your root
+    background_image_path = "Background.jpg" # Assuming 'Background.jpg' is in the same directory as your main app file
 
     # Encode the image to base64
     base64_image = get_base64_of_bin_file(background_image_path)
@@ -41,6 +41,11 @@ def apply_custom_css():
             --shadow-lg: rgba(0, 0, 0, 0.2);
             --radius: 12px;
             --radius-lg: 16px;
+
+            /* Define specific light transparent colors for buttons/sidebar elements */
+            --light-transparent-bg: rgba(255, 255, 255, 0.4); /* Light background, 40% opaque */
+            --light-transparent-bg-hover: rgba(255, 255, 255, 0.6); /* Lighter on hover, 60% opaque */
+            --light-transparent-border: rgba(255, 255, 255, 0.5); /* Light border */
         }}
 
         /* Global styles - Set the background image */
@@ -233,11 +238,11 @@ def apply_custom_css():
             border: 1px solid var(--border-light);
         }}
 
-        /* Button improvements - now transparent */
+        /* General Button improvements for light transparency */
         .stButton > button {{
-            background: rgba(255, 255, 255, 0.1); /* Slightly transparent button background */
-            color: var(--text-primary); /* Keep text readable */
-            border: 1px solid var(--border);
+            background: var(--light-transparent-bg); /* Use the new light transparent background */
+            color: black; /* Text color for light background */
+            border: 1px solid var(--light-transparent-border); /* Light transparent border */
             border-radius: var(--radius);
             padding: 12px 16px;
             font-weight: 500;
@@ -247,262 +252,41 @@ def apply_custom_css():
         }}
 
         .stButton > button:hover {{
-            background: rgba(255, 255, 255, 0.2); /* Slightly more opaque on hover */
+            background: var(--light-transparent-bg-hover); /* Lighter on hover */
             border-color: var(--primary-color);
-            color: var(--primary-color);
+            color: var(--primary-color); /* Primary color on hover */
             transform: translateY(-1px);
             box-shadow: 0 4px 12px var(--shadow);
         }}
 
-        /* Target the specific sidebar toggle button by its key or a specific ancestor */
-        .stButton button[key="persistent_sidebar_toggle"] {{
-            background: white; /* Transparent primary color */
-            color: black;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
+        /* Sidebar Toggle button specific styling for light transparency */
+        /* Note: Using data-testid for robustness, replace if you have a specific key */
+        .stApp [data-testid="stSidebarToggleButton"] button,
+        .stApp [data-testid="stSidebar"] .stButton button {{
+            background: var(--light-transparent-bg); /* Apply light transparent background */
+            color: black; /* Text color for light background */
+            border: 1px solid var(--light-transparent-border);
+            border-radius: 50%; /* Keep it round if it's the toggle button */
+            width: 40px; /* Adjust size if needed */
             height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
             margin: 0;
             padding: 0;
             line-height: 1;
         }}
 
-        .stButton button[key="persistent_sidebar_toggle"]:hover {{
-            background: white; /* Slightly more opaque on hover */
+        .stApp [data-testid="stSidebarToggleButton"] button:hover,
+        .stApp [data-testid="stSidebar"] .stButton button:hover {{
+            background: var(--light-transparent-bg-hover); /* Lighter on hover */
             transform: scale(1.1);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
-        }}
-
-def apply_custom_css():
-    """Applies custom CSS to the Streamlit application for enhanced styling."""
-
-    # Path to your background image (adjust this path if your image is in a different folder)
-    background_image_path = "Background.jpg" # Assuming 'images' folder in your root
-
-    # Encode the image to base64
-    base64_image = get_base64_of_bin_file(background_image_path)
-
-    st.markdown(f"""
-    <style>
-        /* Global styles - Set the background image */
-        .stApp {{
-            background-image: url("data:image/jpeg;base64,{base64_image}");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* Keeps background fixed when scrolling */
-            background-position: center center;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100 vh;
-        }}
-
-        /* Apply an overlay to slightly fade the background image */
-        .stApp::before {{
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3); /* Dark overlay, adjust opacity as needed */
-            z-index: -1; /* Place behind content */
-        }}
-
-        /* Chat container with improved styling - now transparent */
-        .chat-container {{
-            background: var(--surface); /* Use transparent surface color */
-            border-radius: var(--radius-lg);
-            padding: 24 px;
-            margin: 16 px 0;
-            box-shadow: 0 4 px 24 px var(--shadow-lg);
-            min-height: 500 px;
-            max-height: 600 px;
-            overflow-y: auto;
-            border: 1 px solid var(--border-light);
-            scroll-behavior: smooth;
-            position: relative;
-        }}
-
-        /* User message with better contrast (can keep gradient or make transparent) */
-        .user-message {{
-            background: rgba(99, 102, 241, 0.7); /* Slightly transparent primary color */
-            color: white;
-            padding: 16 px 20 px;
-            border-radius: 20 px 20 px 8 px 20 px;
-            margin: 12 px 0 12 px auto;
-            max-width: 75%;
-            word-wrap: break-word;
-            box-shadow: 0 3 px 12 px rgba(0, 0, 0, 0.25);
-            font-weight: 500;
-            line-height: 1.5;
-            position: relative;
-        }}
-
-        /* Bot message with improved readability - now transparent */
-        .bot-message {{
-            background: var(--surface-alt); /* Use transparent surface-alt */
-            color: var(--text-primary);
-            padding: 16px 20px;
-            border-radius: 20px 20px 20px 8px;
-            margin: 12px auto 12px 0;
-            max-width: 75%;
-            word-wrap: break-word;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 8px var(--shadow);
-            line-height: 1.6;
-            font-weight: 400;
-        }}
-
-        /* Welcome message - now transparent or with gradient */
-        .welcome-message {{
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.7) 0%, rgba(236, 72, 153, 0.7) 100%); /* Transparent gradient */
-            color: white;
-            padding: 24px;
-            border-radius: var(--radius-lg);
-            margin: 24px auto;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            font-weight: 500;
-            line-height: 1.6;
-        }}
-
-        /* Message time styling (ensure readability on image background) */
-        .message-time {{
-            font-size: 0.75 em;
-            opacity: 0.9; /* Make it a bit more opaque for readability */
-            margin-top: 8 px;
-            text-align: right;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.8); /* Lighter color for better contrast */
-        }}
-
-        /* Enhanced header - now transparent */
-        .main-header {{
-            text-align: center;
-            padding: 32 px 24 px;
-            background: var(--surface); /* Use transparent surface color */
-            color: var(--text-primary);
-            border-radius: var(--radius-lg);
-            margin-bottom: 24 px;
-            box-shadow: 0 8 px 32 px var(--shadow-lg);
-            border: 1 px solid var(--border-light);
-            position: relative;
-            overflow: hidden;
-        }}
-
-        .main-header::before {{
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4 px;
-            background: linear-gradient(90 deg, var(--primary-color), var(--secondary-color));
-        }}
-
-        .main-header h1 {{
-            margin: 0 0 8 px 0;
-            font-size: 2.5 em;
-            font-weight: 700;
-            background: linear-gradient(135 deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }}
-
-        .main-header p {{
-            margin: 0;
-            font-size: 1.2 em;
-            color: var(--text-primary); /* Keep text readable */
-            font-weight: 500;
-        }}
-
-        /* Emergency button with better accessibility - can keep current or adjust opacity */
-        .emergency-button {{
-            background: linear-gradient(135 deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%); /* Slightly transparent */
-            color: white;
-            padding: 18 px 24 px;
-            border-radius: var(--radius);
-            text-align: center;
-            margin-bottom: 20 px;
-            box-shadow: 0 4 px 16 px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.3 s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 600;
-            font-size: 1.1 em;
-            border: none;
-        }}
-
-        .emergency-button:hover {{
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.9) 0%, rgba(185, 28, 28, 0.9) 100%);
-        }}
-
-        /* Sidebar content styling - now transparent */
-        .sidebar-content {{
-            background: var(--surface); /* Use transparent surface color */
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 16px var(--shadow);
-            border: 1px solid var(--border-light);
-        }}
-
-        /* Button improvements - now transparent */
-        .stButton > button {{
-            background: rgba(255, 255, 255, 0.1); /* Slightly transparent button background */
-            color: var(--text-primary); /* Keep text readable */
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 12px 16px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            width: 100%;
-            font-family: 'Inter', sans-serif;
-        }}
-
-        .stButton > button:hover {{
-            background: rgba(255, 255, 255, 0.2); /* Slightly more opaque on hover */
-            border-color: var(--primary-color);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
             color: var(--primary-color);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--shadow);
         }}
-
-        /* Target the specific sidebar toggle button by its key or a specific ancestor */
-        .stButton button[key="persistent_sidebar_toggle"] {{
-            background: rgba(99, 102, 241, 0.8); /* Transparent primary color */
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            margin: 0;
-            padding: 0;
-            line-height: 1;
-        }}
-
-        .stButton button[key="persistent_sidebar_toggle"]:hover {{
-            background: white /* Slightly more opaque on hover */
-            transform: scale(1.1);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
-        }}
-
-        /* Form input styling - now transparent */
-        .stTextInput > div > div > input {{
-            background: var(--surface); /* Transparent background for input */
 
         /* Form input styling - now transparent */
         .stTextInput > div > div > input {{
@@ -577,8 +361,8 @@ def apply_custom_css():
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Add subtle text shadow */
         }}
 
-        p, label, .stMarkdown, .stText {{ /* Target common text elements */
-            color: black; /* Make paragraphs white for contrast */
+        p, label, .stMarkdown, .stText, .stMarkdown p {{ /* Target common text elements more broadly */
+            color: white; /* Make paragraphs white for contrast */
             line-height: 1.6;
             text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3); /* Add subtle text shadow */
         }}
