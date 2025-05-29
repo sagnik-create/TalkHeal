@@ -256,6 +256,227 @@ def apply_custom_css():
 
         /* Target the specific sidebar toggle button by its key or a specific ancestor */
         .stButton button[key="persistent_sidebar_toggle"] {{
+            background: white; /* Transparent primary color */
+            color: black;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+        }}
+
+        .stButton button[key="persistent_sidebar_toggle"]:hover {{
+            background: white /* Slightly more opaque on hover */
+            transform: scale(1.1);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+        }}
+
+def apply_custom_css():
+    """Applies custom CSS to the Streamlit application for enhanced styling."""
+
+    # Path to your background image (adjust this path if your image is in a different folder)
+    background_image_path = "Background.jpg" # Assuming 'images' folder in your root
+
+    # Encode the image to base64
+    base64_image = get_base64_of_bin_file(background_image_path)
+
+    st.markdown(f"""
+    <style>
+        /* Global styles - Set the background image */
+        .stApp {{
+            background-image: url("data:image/jpeg;base64,{base64_image}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Keeps background fixed when scrolling */
+            background-position: center center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+        }}
+
+        /* Apply an overlay to slightly fade the background image */
+        .stApp::before {{
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3); /* Dark overlay, adjust opacity as needed */
+            z-index: -1; /* Place behind content */
+        }}
+
+        /* Chat container with improved styling - now transparent */
+        .chat-container {{
+            background: var(--surface); /* Use transparent surface color */
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 4px 24px var(--shadow-lg);
+            min-height: 500px;
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+            scroll-behavior: smooth;
+            position: relative;
+        }}
+
+        /* User message with better contrast (can keep gradient or make transparent) */
+        .user-message {{
+            background: rgba(99, 102, 241, 0.7); /* Slightly transparent primary color */
+            color: white;
+            padding: 16px 20px;
+            border-radius: 20px 20px 8px 20px;
+            margin: 12px 0 12px auto;
+            max-width: 75%;
+            word-wrap: break-word;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+            font-weight: 500;
+            line-height: 1.5;
+            position: relative;
+        }}
+
+        /* Bot message with improved readability - now transparent */
+        .bot-message {{
+            background: var(--surface-alt); /* Use transparent surface-alt */
+            color: var(--text-primary);
+            padding: 16px 20px;
+            border-radius: 20px 20px 20px 8px;
+            margin: 12px auto 12px 0;
+            max-width: 75%;
+            word-wrap: break-word;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+            line-height: 1.6;
+            font-weight: 400;
+        }}
+
+        /* Welcome message - now transparent or with gradient */
+        .welcome-message {{
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.7) 0%, rgba(236, 72, 153, 0.7) 100%); /* Transparent gradient */
+            color: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin: 24px auto;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            line-height: 1.6;
+        }}
+
+        /* Message time styling (ensure readability on image background) */
+        .message-time {{
+            font-size: 0.75em;
+            opacity: 0.9; /* Make it a bit more opaque for readability */
+            margin-top: 8px;
+            text-align: right;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8); /* Lighter color for better contrast */
+        }}
+
+        /* Enhanced header - now transparent */
+        .main-header {{
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--surface); /* Use transparent surface color */
+            color: var(--text-primary);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }}
+
+        .main-header::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }}
+
+        .main-header h1 {{
+            margin: 0 0 8px 0;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+
+        .main-header p {{
+            margin: 0;
+            font-size: 1.2em;
+            color: var(--text-primary); /* Keep text readable */
+            font-weight: 500;
+        }}
+
+        /* Emergency button with better accessibility - can keep current or adjust opacity */
+        .emergency-button {{
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%); /* Slightly transparent */
+            color: white;
+            padding: 18px 24px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 1.1em;
+            border: none;
+        }}
+
+        .emergency-button:hover {{
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.9) 0%, rgba(185, 28, 28, 0.9) 100%);
+        }}
+
+        /* Sidebar content styling - now transparent */
+        .sidebar-content {{
+            background: var(--surface); /* Use transparent surface color */
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px var(--shadow);
+            border: 1px solid var(--border-light);
+        }}
+
+        /* Button improvements - now transparent */
+        .stButton > button {{
+            background: rgba(255, 255, 255, 0.1); /* Slightly transparent button background */
+            color: var(--text-primary); /* Keep text readable */
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }}
+
+        .stButton > button:hover {{
+            background: rgba(255, 255, 255, 0.2); /* Slightly more opaque on hover */
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }}
+
+        /* Target the specific sidebar toggle button by its key or a specific ancestor */
+        .stButton button[key="persistent_sidebar_toggle"] {{
             background: rgba(99, 102, 241, 0.8); /* Transparent primary color */
             color: white;
             border: none;
@@ -279,6 +500,9 @@ def apply_custom_css():
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
         }}
 
+        /* Form input styling - now transparent */
+        .stTextInput > div > div > input {{
+            background: var(--surface); /* Transparent background for input */
 
         /* Form input styling - now transparent */
         .stTextInput > div > div > input {{
