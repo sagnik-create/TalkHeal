@@ -24,243 +24,118 @@ st.set_page_config(
 # --- Enhanced Custom CSS ---
 st.markdown("""
 <style>
-    /* Import modern fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    /* Global styles */
-    * {
-        font-family: 'Inter', sans-serif;
+    /* Chat container styling */
+    .chat-container {
+        background-color: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 10px 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        min-height: 500px;
+        max-height: 600px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
     }
     
-    /* Main app background */
-    .stApp {
+    /* User message styling */
+    .user-message {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #2c3e50;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 18px 18px 5px 18px;
+        margin: 10px 0 10px auto;
+        max-width: 80%;
+        word-wrap: break-word;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     
-    /* Sidebar styling */
-    [data-testid=stSidebar] {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-right: none;
-        box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+    /* Bot message styling */
+    .bot-message {
+        background: #f8f9fa;
+        color: #333;
+        padding: 12px 16px;
+        border-radius: 18px 18px 18px 5px;
+        margin: 10px auto 10px 0;
+        max-width: 80%;
+        word-wrap: break-word;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     
-    /* Main content container */
-    .main-container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 2rem;
-        margin: 1rem;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    /* Welcome message styling */
+    .welcome-message {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 15px;
+        margin: 20px auto;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Message time styling */
+    .message-time {
+        font-size: 0.75em;
+        opacity: 0.7;
+        margin-top: 5px;
+        text-align: right;
     }
     
     /* Header styling */
-    .app-header {
+    .main-header {
         text-align: center;
-        margin-bottom: 2rem;
-    }
-    
-    .app-title {
-        font-size: 3rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 0.5rem;
-    }
-    
-    .app-subtitle {
-        font-size: 1.2rem;
-        color: #7f8c8d;
-        font-weight: 400;
-    }
-    
-    /* Chat container */
-    .chat-container {
-        background: rgba(255, 255, 255, 0.8);
+        padding: 20px 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
         border-radius: 15px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        height: 400px;
-        overflow-y: auto;
-        border: 1px solid rgba(102, 126, 234, 0.2);
-        box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.1);
     }
     
-    /* Message bubbles */
-    .user-message {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 20px 20px 5px 20px;
-        margin: 1rem 0;
-        max-width: 75%;
-        margin-left: auto;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        animation: slideInRight 0.3s ease-out;
-    }
-    
-    .bot-message {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        color: #2c3e50;
-        padding: 1rem 1.5rem;
-        border-radius: 20px 20px 20px 5px;
-        margin: 1rem 0;
-        max-width: 75%;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        animation: slideInLeft 0.3s ease-out;
-    }
-    
-    @keyframes slideInRight {
-        from { opacity: 0; transform: translateX(20px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    
-    @keyframes slideInLeft {
-        from { opacity: 0; transform: translateX(-20px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    
-    /* Input styling */
-    .stTextInput > div > div > input {
-        border-radius: 25px;
-        border: 2px solid rgba(102, 126, 234, 0.3);
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-    
-    .stTextInput > div > div > input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-    }
-    
-    /* Button styling */
-    .stButton > button {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 0.8rem 2rem;
+    .main-header h1 {
+        margin: 0;
+        font-size: 2.2em;
         font-weight: 600;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
     
-    .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    .main-header p {
+        margin: 5px 0 0 0;
+        font-size: 1.1em;
+        opacity: 0.9;
     }
     
-    /* Feature cards */
-    .feature-card {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border: 1px solid rgba(102, 126, 234, 0.2);
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        border-color: #667eea;
-    }
-    
-    /* Emergency button */
+    /* Emergency button styling */
     .emergency-button {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
         color: white;
-        padding: 1rem;
+        padding: 15px;
+        border-radius: 10px;
         text-align: center;
-        border-radius: 15px;
-        font-weight: bold;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 10px rgba(255,65,108,0.3);
         cursor: pointer;
-        margin: 1rem 0;
-        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         transition: all 0.3s ease;
     }
     
     .emergency-button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        box-shadow: 0 5px 15px rgba(255,65,108,0.4);
     }
     
-    /* Conversation items */
-    .convo-item {
-        padding: 1rem;
-        border-radius: 10px;
-        margin-bottom: 0.5rem;
-        background: rgba(255, 255, 255, 0.8);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: 1px solid transparent;
-    }
-    
-    .convo-item:hover {
-        background: rgba(102, 126, 234, 0.1);
-        border-color: #667eea;
-        transform: translateX(5px);
-    }
-    
-    .convo-item.active {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-    }
-    
-    /* Message time */
-    .message-time {
-        font-size: 0.75rem;
-        opacity: 0.7;
-        margin-top: 0.5rem;
-        text-align: right;
-    }
-    
-    /* Hide Streamlit elements */
+    /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    .stDeployButton {display: none;}
-    
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: rgba(0,0,0,0.1);
-        border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 10px;
-    }
-    
-    /* Expander styling */
-    .streamlit-expanderHeader {
-        background: rgba(102, 126, 234, 0.1);
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    
+    header {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
 # Initialize session state variables
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
-
 if "conversations" not in st.session_state:
     st.session_state.conversations = []
-
 if "active_conversation" not in st.session_state:
     st.session_state.active_conversation = -1
-
 if "mental_disorders" not in st.session_state:
     st.session_state.mental_disorders = [
         "Depression & Mood Disorders",
@@ -368,9 +243,9 @@ with col1:
 with col2:
     # Header
     st.markdown("""
-    <div class="app-header">
-        <div class="app-title">PeacePulse</div>
-        <div class="app-subtitle">Your Mental Health Companion 💙</div>
+    <div class="main-header">
+        <h1>PeacePulse</h1>
+        <p>Your Mental Health Companion 💙</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -378,38 +253,42 @@ with col2:
     if not st.session_state.conversations:
         create_new_conversation()
     
-    # Display chat messages
-    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+    # Create chat container
+    chat_container = st.container()
     
-    if st.session_state.active_conversation >= 0:
-        active_convo = st.session_state.conversations[st.session_state.active_conversation]
+    with chat_container:
+        st.markdown('<div class="chat-container">', unsafe_allow_html=True)
         
-        if not active_convo["messages"]:
-            st.markdown(f"""
-            <div class="bot-message">
-                Hello! I'm PeacePulse, your mental health companion. I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
-                <div class="message-time">{get_current_time()}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        # Display conversation messages
-        for msg in active_convo["messages"]:
-            if msg["sender"] == "user":
+        if st.session_state.active_conversation >= 0:
+            active_convo = st.session_state.conversations[st.session_state.active_conversation]
+            
+            if not active_convo["messages"]:
                 st.markdown(f"""
-                <div class="user-message">
-                    {msg["message"]}
-                    <div class="message-time">{msg["time"]}</div>
+                <div class="welcome-message">
+                    <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
+                    I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
+                    <div class="message-time">{get_current_time()}</div>
                 </div>
                 """, unsafe_allow_html=True)
-            else:
-                st.markdown(f"""
-                <div class="bot-message">
-                    {msg["message"]}
-                    <div class="message-time">{msg["time"]}</div>
-                </div>
-                """, unsafe_allow_html=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Display conversation messages
+            for msg in active_convo["messages"]:
+                if msg["sender"] == "user":
+                    st.markdown(f"""
+                    <div class="user-message">
+                        {msg["message"]}
+                        <div class="message-time">{msg["time"]}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    st.markdown(f"""
+                    <div class="bot-message">
+                        {msg["message"]}
+                        <div class="message-time">{msg["time"]}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Chat input area
     st.markdown("---")
@@ -463,7 +342,7 @@ with col2:
 with col3:
     # Emergency Help Button
     st.markdown("""
-    <div class="emergency-button" onclick="alert('In case of emergency, please call 911 or your local emergency services immediately.')">
+    <div class="emergency-button">
         🚨 Emergency Help
     </div>
     """, unsafe_allow_html=True)
@@ -537,12 +416,12 @@ with col3:
 # Auto-scroll chat to bottom (JavaScript injection)
 st.markdown("""
 <script>
-function scrollToBottom() {
-    var chatContainer = document.querySelector('.chat-container');
-    if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+    function scrollToBottom() {
+        var chatContainer = document.querySelector('.chat-container');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
     }
-}
-setTimeout(scrollToBottom, 100);
+    setTimeout(scrollToBottom, 100);
 </script>
 """, unsafe_allow_html=True)
