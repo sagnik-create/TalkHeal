@@ -1,3 +1,14 @@
+import streamlit as st
+import webbrowser
+from datetime import datetime
+from core.utils import create_new_conversation
+
+# Emergency contacts and resources
+emergency_resources = { "Crisis Hotlines": [ "National Suicide Prevention Lifeline: 988", "Crisis Text Line: Text HOME to 741741", "SAMHSA National Helpline: 1-800-662-4357"],
+"International": [ "India: 9152987821 (AASRA)","UK: 116 123 (Samaritans)","Australia: 13 11 14 (Lifeline)"]
+
+}
+
 def render_sidebar():
     """Renders the left and right sidebars."""
     with st.sidebar:
