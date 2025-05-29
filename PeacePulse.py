@@ -59,90 +59,12 @@ st.markdown("""
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         min-height: 100vh;
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
-    
-    .stApp > header {
-    display: none !important;
     }
     
     .main .block-container {
         padding-top: 0rem;
         padding-bottom: 2rem;
         max-width: 1200px;
-        margin-top: 0;
-    }
-    
-    .main .block-container > div:first-child {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    }
-    
-    /* Sidebar toggle button */
-    .sidebar-toggle {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1000;
-        background: var(--surface);
-        border: 2px solid var(--primary-color);
-        border-radius: 50%;
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 16px var(--shadow-lg);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-size: 20px;
-        color: var(--primary-color);
-    }
-    
-    .sidebar-toggle:hover {
-        transform: scale(1.1);
-        background: var(--primary-color);
-        color: white;
-        box-shadow: 0 6px 24px var(--shadow-lg);
-    }
-    
-    /* Collapsible sidebar container */
-    .sidebar-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 300px;
-        background: var(--surface);
-        z-index: 999;
-        transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 4px 0 24px var(--shadow-lg);
-        overflow-y: auto;
-        padding: 80px 20px 20px 20px;
-    }
-    
-    .sidebar-container.open {
-        transform: translateX(0);
-    }
-    
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 998;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .sidebar-overlay.open {
-        opacity: 1;
-        visibility: visible;
     }
     
     /* Chat container with improved styling */
@@ -303,26 +225,6 @@ st.markdown("""
         border: 1px solid var(--border-light);
     }
     
-    .stColumns {
-    margin-top: 0 !important;
-    }
-    
-    div[data-testid="stAppViewContainer"] {
-        padding-top: 0 !important;
-    }
-
-    div[data-testid="stHeader"] {
-        display: none !important;
-    }
-
-    div[data-testid="stToolbar"] {
-        display: none !important;
-    }
-
-    section[data-testid="stSidebar"] + section {
-        padding-top: 0 !important;
-    }
-    
     /* Button improvements */
     .stButton > button {
         background: var(--surface);
@@ -376,13 +278,12 @@ st.markdown("""
         border-radius: var(--radius);
         margin-bottom: 12px;
         box-shadow: 0 2px 8px var(--shadow);
-        color: #000000;
     }
     
     .streamlit-expander > summary {
         background: var(--surface-alt);
-        color: #ffffff;
-        font-weight: 1600;
+        color: var(--text-primary);
+        font-weight: 600;
         padding: 16px;
         border-radius: var(--radius);
     }
@@ -396,7 +297,7 @@ st.markdown("""
     
     .stInfo {
         background: rgba(99, 102, 241, 0.1);
-        color: #000000;
+        color: var(--text-primary);
     }
     
     .stSuccess {
@@ -417,7 +318,7 @@ st.markdown("""
     }
     
     p {
-        color: #000000;
+        color: var(--text-primary);
         line-height: 1.6;
     }
     
@@ -446,10 +347,49 @@ st.markdown("""
             max-height: 500px;
             padding: 16px;
         }
-        
-        .sidebar-container {
-            width: 280px;
-        }
+    }
+    
+    /* Hide default Streamlit elements */
+    .stApp > header {
+        display: none !important;
+    }
+    
+    div[data-testid="stToolbar"] {
+        display: none !important;
+    }
+    
+    .stApp [data-testid="stSidebar"] {
+        background: var(--surface);
+        border-right: 1px solid var(--border-light);
+        box-shadow: 4px 0 24px var(--shadow-lg);
+    }
+    
+    /* Custom sidebar toggle button */
+    .sidebar-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: var(--surface);
+        border: 2px solid var(--primary-color);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 16px var(--shadow-lg);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 20px;
+        color: var(--primary-color);
+    }
+    
+    .sidebar-toggle:hover {
+        transform: scale(1.1);
+        background: var(--primary-color);
+        color: white;
+        box-shadow: 0 6px 24px var(--shadow-lg);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -534,204 +474,148 @@ emergency_resources = {
     ]
 }
 
-# Sidebar Toggle Button and Container
-st.markdown(f"""
-<div class="sidebar-toggle" onclick="toggleSidebar()">
-    {"☰" if not st.session_state.sidebar_collapsed else "✕"}
+# Sidebar Toggle Button
+st.markdown("""
+<div class="sidebar-toggle" onclick="parent.document.querySelector('[data-testid=stSidebar] button').click()">
+    ☰
 </div>
-
-<div class="sidebar-overlay {'open' if not st.session_state.sidebar_collapsed else ''}" onclick="closeSidebar()"></div>
-
-<div class="sidebar-container {'open' if not st.session_state.sidebar_collapsed else ''}">
-    <div id="sidebar-content"></div>
-</div>
-
-<script>
-function toggleSidebar() {{
-    window.parent.postMessage({{
-        type: 'streamlit:setComponentValue',
-        key: 'sidebar_toggle',
-        value: true
-    }}, '*');
-}}
-
-function closeSidebar() {{
-    window.parent.postMessage({{
-        type: 'streamlit:setComponentValue', 
-        key: 'sidebar_close',
-        value: true
-    }}, '*');
-}}
-</script>
 """, unsafe_allow_html=True)
 
-# Check for sidebar toggle events
-if st.button("", key="sidebar_toggle_hidden", help="Hidden toggle"):
-    st.session_state.sidebar_collapsed = not st.session_state.sidebar_collapsed
-    st.rerun()
-
-# Dynamic layout based on sidebar state
-if st.session_state.sidebar_collapsed:
-    # Full width layout when sidebar is collapsed
-    col1, col2 = st.columns([7, 3])
-    sidebar_col = None
-else:
-    # Three column layout when sidebar is open
-    col1, col2, col3 = st.columns([2.5, 6, 2.5])
-    sidebar_col = col1
-
-# Collapsible Left Sidebar: Conversation History
-if not st.session_state.sidebar_collapsed and sidebar_col:
-    with sidebar_col:
-        st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-        st.markdown("### 💬 Conversations")
-        
-        # Sidebar toggle button
-        if st.button("◀️ Hide", key="hide_sidebar", use_container_width=True):
-            st.session_state.sidebar_collapsed = True
-            st.rerun()
-        
-        # New conversation button
-        if st.button("➕ New Chat", key="new_chat", use_container_width=True):
-            create_new_conversation()
-            st.rerun()
-        
-        st.markdown("---")
-        
-        # Display conversation history
-        if st.session_state.conversations:
-            for i, convo in enumerate(st.session_state.conversations):
-                button_style = "🟢" if i == st.session_state.active_conversation else "📝"
-                
-                if st.button(
-                    f"{button_style} {convo['title'][:22]}...", 
-                    key=f"convo_{i}",
-                    help=f"Started: {convo['date']}",
-                    use_container_width=True
-                ):
-                    st.session_state.active_conversation = i
-                    st.rerun()
-        else:
-            st.info("No conversations yet. Start a new chat!")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-
-# Main Chat Area
-main_col = col1 if st.session_state.sidebar_collapsed else col2
-
-with main_col:
-    # Show sidebar toggle when collapsed
-    if st.session_state.sidebar_collapsed:
-        if st.button("☰ Show Conversations", key="show_sidebar"):
-            st.session_state.sidebar_collapsed = False
-            st.rerun()
+# Left Sidebar: Conversation History
+with st.sidebar:
+    st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
+    st.markdown("### 💬 Conversations")
     
-    # Header
-    st.markdown("""
-    <div class="main-header">
-        <h1>PeacePulse</h1>
-        <p>Your Mental Health Companion 💙</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Ensure we have at least one conversation
-    if not st.session_state.conversations:
+    # New conversation button
+    if st.button("➕ New Chat", key="new_chat", use_container_width=True):
         create_new_conversation()
+        st.rerun()
     
-    # Create chat container
-    chat_container = st.container()
-    
-    with chat_container:
-        html = '<div class="chat-container">'
-
-        if st.session_state.active_conversation >= 0:
-            active_convo = st.session_state.conversations[st.session_state.active_conversation]
-
-            if not active_convo["messages"]:
-                html += f"""
-                <div class="welcome-message">
-                    <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
-                    I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
-                    <div class="message-time">{get_current_time()}</div>
-                </div>
-                """
-            
-            for msg in active_convo["messages"]:
-                if msg["sender"] == "user":
-                    html += f"""
-                    <div class="user-message">
-                        {msg["message"]}
-                        <div class="message-time">{msg["time"]}</div>
-                    </div>
-                    """
-                else:
-                    html += f"""
-                    <div class="bot-message">
-                        {msg["message"]}
-                        <div class="message-time">{msg["time"]}</div>
-                    </div>
-                    """
-
-        html += '</div>'
-        st.markdown(html, unsafe_allow_html=True)
-
-    # Chat input area
     st.markdown("---")
     
-    # Use a form to handle input properly
-    with st.form(key="chat_form", clear_on_submit=True):
-        input_col, send_col = st.columns([5, 1])
-        
-        with input_col:
-            user_input = st.text_input(
-                "Share your thoughts...", 
-                key="message_input", 
-                label_visibility="collapsed",
-                placeholder="Type your message here..."
-            )
-        
-        with send_col:
-            send_pressed = st.form_submit_button("Send", use_container_width=True)
+    # Display conversation history
+    if st.session_state.conversations:
+        for i, convo in enumerate(st.session_state.conversations):
+            button_style = "🟢" if i == st.session_state.active_conversation else "📝"
+            
+            if st.button(
+                f"{button_style} {convo['title'][:22]}...", 
+                key=f"convo_{i}",
+                help=f"Started: {convo['date']}",
+                use_container_width=True
+            ):
+                st.session_state.active_conversation = i
+                st.rerun()
+    else:
+        st.info("No conversations yet. Start a new chat!")
     
-    # Handle message sending
-    if send_pressed and user_input.strip():
-        if st.session_state.active_conversation >= 0:
-            current_time = get_current_time()
-            active_convo = st.session_state.conversations[st.session_state.active_conversation]
-            
-            # Add user message
-            active_convo["messages"].append({
-                "sender": "user", 
-                "message": user_input.strip(), 
-                "time": current_time
-            })
-            
-            # Update conversation title if it's the first message
-            if len(active_convo["messages"]) == 1:
-                active_convo["title"] = user_input[:30] + "..." if len(user_input) > 30 else user_input
-            
-            # Generate and add AI response
-            with st.spinner("PeacePulse is thinking..."):
-                ai_response = get_ai_response(user_input.strip())
-            
-            active_convo["messages"].append({
-                "sender": "bot", 
-                "message": ai_response, 
-                "time": get_current_time()
-            })
-            
-            # Refresh the page
-            st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Main Chat Area
+# Header
+st.markdown("""
+<div class="main-header">
+    <h1>PeacePulse</h1>
+    <p>Your Mental Health Companion 💙</p>
+</div>
+""", unsafe_allow_html=True)
+
+# Ensure we have at least one conversation
+if not st.session_state.conversations:
+    create_new_conversation()
+
+# Create chat container
+chat_container = st.container()
+
+with chat_container:
+    html = '<div class="chat-container">'
+
+    if st.session_state.active_conversation >= 0:
+        active_convo = st.session_state.conversations[st.session_state.active_conversation]
+
+        if not active_convo["messages"]:
+            html += f"""
+            <div class="welcome-message">
+                <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
+                I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
+                <div class="message-time">{get_current_time()}</div>
+            </div>
+            """
+        
+        for msg in active_convo["messages"]:
+            if msg["sender"] == "user":
+                html += f"""
+                <div class="user-message">
+                    {msg["message"]}
+                    <div class="message-time">{msg["time"]}</div>
+                </div>
+                """
+            else:
+                html += f"""
+                <div class="bot-message">
+                    {msg["message"]}
+                    <div class="message-time">{msg["time"]}</div>
+                </div>
+                """
+
+    html += '</div>'
+    st.markdown(html, unsafe_allow_html=True)
+
+# Chat input area
+st.markdown("---")
+
+# Use a form to handle input properly
+with st.form(key="chat_form", clear_on_submit=True):
+    input_col, send_col = st.columns([5, 1])
+    
+    with input_col:
+        user_input = st.text_input(
+            "Share your thoughts...", 
+            key="message_input", 
+            label_visibility="collapsed",
+            placeholder="Type your message here..."
+        )
+    
+    with send_col:
+        send_pressed = st.form_submit_button("Send", use_container_width=True)
+
+# Handle message sending
+if send_pressed and user_input.strip():
+    if st.session_state.active_conversation >= 0:
+        current_time = get_current_time()
+        active_convo = st.session_state.conversations[st.session_state.active_conversation]
+        
+        # Add user message
+        active_convo["messages"].append({
+            "sender": "user", 
+            "message": user_input.strip(), 
+            "time": current_time
+        })
+        
+        # Update conversation title if it's the first message
+        if len(active_convo["messages"]) == 1:
+            active_convo["title"] = user_input[:30] + "..." if len(user_input) > 30 else user_input
+        
+        # Generate and add AI response
+        with st.spinner("PeacePulse is thinking..."):
+            ai_response = get_ai_response(user_input.strip())
+        
+        active_convo["messages"].append({
+            "sender": "bot", 
+            "message": ai_response, 
+            "time": get_current_time()
+        })
+        
+        # Refresh the page
+        st.rerun()
 
 # Right Sidebar: Resources and Tools
-right_col = col2 if st.session_state.sidebar_collapsed else col3
-
-with right_col:
+with st.sidebar:
     st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
     
     # Emergency Help Button
     st.markdown("""
-    <div class="emergency-button">
+    <div class="emergency-button" onclick="window.open('https://www.mentalhealth.gov/get-help/immediate-help', '_blank')">
         🚨 Emergency Help
     </div>
     """, unsafe_allow_html=True)
