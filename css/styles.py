@@ -354,7 +354,7 @@ def apply_custom_css():
         }}
 
         p, label, .stMarkdown, .stText {{ /* Target common text elements */
-            color: white; /* Make paragraphs white for contrast */
+            color: black; /* Make paragraphs white for contrast */
             line-height: 1.6;
             text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3); /* Add subtle text shadow */
         }}
