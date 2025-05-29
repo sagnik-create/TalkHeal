@@ -314,7 +314,7 @@ st.markdown("""
     }
     
     p {
-        color: #ffffff;
+        color: #000000;
         line-height: 1.6;
     }
     
