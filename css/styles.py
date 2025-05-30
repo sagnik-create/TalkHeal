@@ -229,14 +229,14 @@ def apply_custom_css():
         }}
 
         /* Sidebar section styling - now transparent and dark text */
-        .sidebar-section { /* Changed from .sidebar-content */
+        .sidebar-section {{ /* Changed from .sidebar-content */
             background: var(--surface); /* Use transparent surface color */
             border-radius: var(--radius-lg);
             padding: 20px;
             margin-bottom: 16px;
             box-shadow: 0 4px 16px var(--shadow);
             border: 1px solid var(--border-light);
-        }
+        }}
 
         /* General Button improvements for light transparency */
         .stButton > button {{
