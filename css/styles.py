@@ -43,7 +43,7 @@ def apply_custom_css():
             --radius-lg: 16px;
 
             /* Define specific light transparent colors for buttons/sidebar elements */
-            --light-transparent-bg: rgba(255, 255, 255, 0.4); /* Light background, 40% opaque */
+            --light-transparent-bg: rgba(255, 255, 255, 0.1); /* Light background, 40% opaque */
             --light-transparent-bg-hover: rgba(255, 255, 255, 0.6); /* Lighter on hover, 60% opaque */
             --light-transparent-border: rgba(255, 255, 255, 0.5); /* Light border */
         }}
