@@ -229,14 +229,14 @@ def apply_custom_css():
         }}
 
         /* Sidebar section styling - now transparent and dark text */
-        .sidebar-section {{
-            background: var(--surface);
+        .sidebar-section { /* Changed from .sidebar-content */
+            background: var(--surface); /* Use transparent surface color */
             border-radius: var(--radius-lg);
             padding: 20px;
             margin-bottom: 16px;
             box-shadow: 0 4px 16px var(--shadow);
             border: 1px solid var(--border-light);
-        }}
+        }
 
         /* General Button improvements for light transparency */
         .stButton > button {{
@@ -382,6 +382,17 @@ def apply_custom_css():
         /* Ensure specific dark text for buttons in the sidebar */
         .stApp [data-testid="stSidebar"] .stButton > button {{
             color: var(--text-primary); /* Explicitly set dark text for sidebar buttons */
+            background: var(--light-transparent-bg); /* Apply light transparent background to all sidebar buttons */
+            border: 1px solid var(--light-transparent-border);
+        }}
+
+        /* Hover state for sidebar buttons */
+        .stApp [data-testid="stSidebar"] .stButton > button:hover {{
+            background: var(--light-transparent-bg-hover); /* Lighter on hover */
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow);
         }}
 
 
