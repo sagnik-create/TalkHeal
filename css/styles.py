@@ -205,10 +205,10 @@ def apply_custom_css():
             font-weight: 500;
         }}
 
-        /* Emergency button - UPDATED to light transparent */
+        /* Emergency button - RED styling */
         .emergency-button {{
-            background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
+            color: white !important;
             padding: 18px 24px;
             border-radius: var(--radius);
             text-align: center;
@@ -218,14 +218,14 @@ def apply_custom_css():
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 600;
             font-size: 1.1em;
-            border: 1px solid var(--light-transparent-border) !important;
+            border: 1px solid rgba(239, 68, 68, 0.8) !important;
         }}
 
         .emergency-button:hover {{
             transform: translateY(-3px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            background: var(--light-transparent-bg-hover) !important;
-            color: var(--primary-color) !important;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 1) 0%, rgba(185, 28, 28, 1) 100%) !important;
+            color: white !important;
         }}
 
         /* Sidebar section styling - now transparent and dark text */
@@ -302,7 +302,7 @@ def apply_custom_css():
         /* Sidebar Toggle button specific styling */
         .stApp [data-testid="stSidebarToggleButton"] button {{
             background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important;
+            color: var(--text-primary) !important; /* DARK TEXT */
             border: 1px solid var(--light-transparent-border) !important;
             border-radius: 50% !important;
             width: 40px !important;
@@ -311,6 +311,7 @@ def apply_custom_css():
             align-items: center !important;
             justify-content: center !important;
             font-size: 20px !important;
+            font-weight: bold !important; /* Make the ☰ symbol more visible */
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
             transition: all 0.3s ease !important;
             margin: 0 !important;
@@ -322,7 +323,7 @@ def apply_custom_css():
             background: var(--light-transparent-bg-hover) !important;
             transform: scale(1.1) !important;
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
-            color: var(--primary-color) !important;
+            color: var(--primary-color) !important; /* Primary color on hover */
         }}
 
         /* Sidebar buttons specifically */
@@ -351,24 +352,30 @@ def apply_custom_css():
             transform: translateY(-1px) !important;
         }}
 
-        /* Active/Selected buttons in sidebar */
+        /* Active/Selected buttons in sidebar - ENHANCED HIGHLIGHTING */
         .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
-            background: rgba(99, 102, 241, 0.5) !important;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(129, 140, 248, 0.8) 100%) !important;
             color: white !important;
-            border-color: var(--primary-color) !important;
+            border: 2px solid var(--primary-color) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3) !important;
+            font-weight: 600 !important;
+            transform: translateX(4px) !important; /* Slight indent to show it's active */
         }}
 
         .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
-            background: rgba(99, 102, 241, 0.7) !important;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(129, 140, 248, 0.9) 100%) !important;
+            transform: translateX(4px) translateY(-1px) !important;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
         }}
 
-        /* Chat input submit button */
+        /* Chat input submit button - DARK TEXT */
         .stChatInput button,
         .stChatInput [data-baseweb="button"] {{
             background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important;
+            color: var(--text-primary) !important; /* DARK TEXT for "Send" */
             border: 1px solid var(--light-transparent-border) !important;
             border-radius: var(--radius) !important;
+            font-weight: 600 !important; /* Make "Send" text more visible */
         }}
 
         .stChatInput button:hover,
@@ -376,6 +383,15 @@ def apply_custom_css():
             background: var(--light-transparent-bg-hover) !important;
             color: var(--primary-color) !important;
             border-color: var(--primary-color) !important;
+        }}
+
+        /* Additional targeting for send button specifically */
+        [data-testid="stChatInput"] button,
+        [data-testid="stChatInput"] [data-baseweb="button"],
+        .stChatInput form button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important; /* DARK TEXT */
+            font-weight: 600 !important;
         }}
 
         /* File uploader buttons */
