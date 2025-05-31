@@ -24,15 +24,20 @@ def render_sidebar():
         st.markdown("---")
 
         # Display conversation history
+# In sidebar.py, update the conversation history section:
+
+        # Display conversation history
         if st.session_state.conversations:
             for i, convo in enumerate(st.session_state.conversations):
                 button_style = "🟢" if i == st.session_state.active_conversation else "📝"
-
+                
+                # Use kind="primary" for active conversation to apply special styling
                 if st.button(
                     f"{button_style} {convo['title'][:22]}...",
                     key=f"convo_{i}",
                     help=f"Started: {convo['date']}",
-                    use_container_width=True
+                    use_container_width=True,
+                    type="primary" if i == st.session_state.active_conversation else "secondary"
                 ):
                     st.session_state.active_conversation = i
                     st.rerun()
