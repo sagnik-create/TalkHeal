@@ -14,306 +14,777 @@ def apply_custom_css():
     
     # Encode the image to base64
     base64_image = get_base64_of_bin_file(background_image_path)
+    
+    st.markdown(f"""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* Root variables for consistent theming */
+        :root {{
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary-color: #ec4899;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            /* Update surface colors to be transparent with a slight tint */
+            --surface: rgba(255, 255, 255, 0.2); /* Slightly transparent white */
+            --surface-alt: rgba(255, 255, 255, 0.1); /* Even more transparent for subtle distinction */
+            --text-primary: #1e293b; /* Keep text readable, dark */
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.3); /* Transparent border */
+            --border-light: rgba(255, 255, 255, 0.15); /* Lighter transparent border */
+            --shadow: rgba(0, 0, 0, 0.1); /* Darker shadow for distinction */
+            --shadow-lg: rgba(0, 0, 0, 0.2);
+            --radius: 12px;
+            --radius-lg: 16px;
+            /* Define specific light transparent colors for buttons/sidebar elements */
+            --light-transparent-bg: rgba(255, 255, 255, 0.4); /* Light background, 40% opaque */
+            --light-transparent-bg-hover: rgba(255, 255, 255, 0.6); /* Lighter on hover, 60% opaque */
+            --light-transparent-border: rgba(255, 255, 255, 0.5); /* Light border */
+            /* Active conversation specific colors */
+            --active-conversation-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(129, 140, 248, 0.9) 100%);
+            --active-conversation-border: rgba(99, 102, 241, 0.8);
+            --active-conversation-shadow: rgba(99, 102, 241, 0.4);
+        }}
 
-st.markdown(f"""
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        /* Global styles - Set the background image */
+        .stApp {{
+            background-image: url("data:image/jpeg;base64,{base64_image}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Keeps background fixed when scrolling */
+            background-position: center center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+        }}
 
-    /* Root variables for consistent theming */
-    :root {{
-        --primary-color: #6366f1;
-        --primary-light: #818cf8;
-        --primary-dark: #4f46e5;
-        --secondary-color: #ec4899;
-        --success-color: #10b981;
-        --warning-color: #f59e0b;
-        --danger-color: #ef4444;
-        --surface: rgba(255, 255, 255, 0.2);
-        --surface-alt: rgba(255, 255, 255, 0.1);
-        --text-primary: #1e293b;
-        --text-secondary: #64748b;
-        --text-muted: #94a3b8;
-        --border: rgba(255, 255, 255, 0.3);
-        --border-light: rgba(255, 255, 255, 0.15);
-        --shadow: rgba(0, 0, 0, 0.1);
-        --shadow-lg: rgba(0, 0, 0, 0.2);
-        --radius: 12px;
-        --radius-lg: 16px;
-        --button-bg: rgba(255, 255, 255, 0.3);
-        --button-hover: rgba(255, 255, 255, 0.5);
-        --button-active: rgba(255, 255, 255, 0.7);
-        --button-border: rgba(255, 255, 255, 0.4);
-        --button-text: #1e293b;
-        --button-primary-bg: rgba(99, 102, 241, 0.5);
-        --button-primary-hover: rgba(99, 102, 241, 0.7);
-        --active-conversation-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(129, 140, 248, 0.9) 100%);
-        --active-conversation-border: rgba(99, 102, 241, 0.8);
-        --active-conversation-shadow: rgba(99, 102, 241, 0.4);
-    }}
+        /* Apply an overlay to slightly fade the background image */
+        .stApp::before {{
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3); /* Dark overlay, adjust opacity as needed */
+            z-index: -1; /* Place behind content */
+        }}
 
-    /* Global styles */
-    .stApp {{
-        background-image: url("data:image/jpeg;base64,{base64_image}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center center;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        min-height: 100vh;
-    }}
-
-    .stApp::before {{
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.3);
-        z-index: -1;
-    }}
-
-    .main .block-container {{
-        padding-top: 0rem;
-        padding-bottom: 2rem;
-        max-width: 1200px;
-    }}
-
-    /* Chat container */
-    .chat-container {{
-        background: var(--surface);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        margin: 16px 0;
-        box-shadow: 0 4px 24px var(--shadow-lg);
-        min-height: 500px;
-        max-height: 600px;
-        overflow-y: auto;
-        border: 1px solid var(--border-light);
-        scroll-behavior: smooth;
-        position: relative;
-    }}
-
-    /* Message styles */
-    .user-message {{
-        background: rgba(99, 102, 241, 0.7);
-        color: white;
-        padding: 16px 20px;
-        border-radius: 20px 20px 8px 20px;
-        margin: 12px 0 12px auto;
-        max-width: 75%;
-        word-wrap: break-word;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
-        font-weight: 500;
-        line-height: 1.5;
-    }}
-
-    .bot-message {{
-        background: var(--surface-alt);
-        color: var(--text-primary);
-        padding: 16px 20px;
-        border-radius: 20px 20px 20px 8px;
-        margin: 12px auto 12px 0;
-        max-width: 75%;
-        word-wrap: break-word;
-        border: 1px solid var(--border);
-        box-shadow: 0 2px 8px var(--shadow);
-        line-height: 1.6;
-    }}
-
-    /* Header styles */
-    .main-header {{
-        text-align: center;
-        padding: 32px 24px;
-        background: var(--surface);
-        color: var(--text-primary);
-        border-radius: var(--radius-lg);
-        margin-bottom: 24px;
-        box-shadow: 0 8px 32px var(--shadow-lg);
-        border: 1px solid var(--border-light);
-        position: relative;
-        overflow: hidden;
-    }}
-
-    /* Emergency button - RED styling */
-    .emergency-button {{
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
-        color: white !important;
-        padding: 18px 24px;
-        border-radius: var(--radius);
-        text-align: center;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-weight: 600;
-        font-size: 1.1em;
-        border: 1px solid rgba(239, 68, 68, 0.8) !important;
-    }}
-
-    /* ================= BUTTON STYLES ================= */
-    /* Base button style - applies to ALL buttons */
-    button, 
-    .stButton > button,
-    .stDownloadButton > button,
-    .stFormSubmitButton > button,
-    .stFileUploader button,
-    [data-baseweb="button"],
-    [role="button"] {{
-        background: var(--button-bg) !important;
-        color: var(--button-text) !important;
-        border: 1px solid var(--button-border) !important;
-        border-radius: var(--radius) !important;
-        padding: 12px 16px !important;
-        font-weight: 500 !important;
-        transition: all 0.2s ease !important;
-        font-family: 'Inter', sans-serif !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-        backdrop-filter: blur(5px) !important;
-    }}
-
-    /* Button hover states */
-    button:hover, 
-    .stButton > button:hover,
-    .stDownloadButton > button:hover,
-    .stFormSubmitButton > button:hover,
-    .stFileUploader button:hover,
-    [data-baseweb="button"]:hover,
-    [role="button"]:hover {{
-        background: var(--button-hover) !important;
-        color: var(--primary-color) !important;
-        border-color: var(--primary-color) !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-    }}
-
-    /* Primary buttons */
-    .stButton > button[kind="primary"],
-    .stFormSubmitButton > button[kind="primary"],
-    [data-baseweb="button"][kind="primary"] {{
-        background: var(--button-primary-bg) !important;
-        color: white !important;
-        border-color: var(--primary-color) !important;
-    }}
-
-    /* Active conversation highlighting */
-    .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
-        background: var(--active-conversation-bg) !important;
-        color: white !important;
-        border: 2px solid var(--active-conversation-border) !important;
-        box-shadow: 0 6px 20px var(--active-conversation-shadow) !important;
-        font-weight: 700 !important;
-        transform: translateX(8px) scale(1.02) !important;
-        position: relative !important;
-    }}
-
-    /* Sidebar toggle button */
-    .stApp [data-testid="stSidebarToggleButton"] button,
-    button[data-testid="stSidebarToggleButton"],
-    .stApp [data-testid="stSidebarNav"] button {{
-        background: var(--button-bg) !important;
-        color: var(--button-text) !important;
-        border: 1px solid var(--button-border) !important;
-        border-radius: 50% !important;
-        width: 40px !important;
-        height: 40px !important;
-        font-size: 20px !important;
-        font-weight: 900 !important;
-    }}
-
-    /* Chat input send button */
-    .stChatInput button,
-    .stChatInput [data-baseweb="button"],
-    form[data-testid="stChatInput"] button,
-    [data-testid="stChatInput"] button,
-    .stFormSubmitButton > button {{
-        background: var(--button-bg) !important;
-        color: var(--button-text) !important;
-        border: 1px solid var(--button-border) !important;
-        font-weight: 700 !important;
-    }}
-
-    /* Form input styling */
-    .stTextInput > div > div > input {{
-        background: var(--surface);
-        border: 2px solid var(--border);
-        border-radius: var(--radius);
-        padding: 12px 16px;
-        font-size: 1em;
-        color: var(--text-primary);
-        font-family: 'Inter', sans-serif;
-        transition: all 0.2s ease;
-    }}
-
-    /* Typography improvements */
-    h1, h2, h3, h4, h5, h6 {{
-        color: white;
-        font-weight: 600;
-        line-height: 1.3;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    }}
-
-    /* Sidebar specific styles */
-    .stApp [data-testid="stSidebar"] {{
-        background: var(--surface);
-        border-right: 1px solid var(--border-light);
-        box-shadow: 4px 0 24px var(--shadow-lg);
-    }}
-
-    .stApp [data-testid="stSidebar"] * {{
-        color: var(--text-primary) !important;
-        text-shadow: none !important;
-    }}
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {{
         .main .block-container {{
-            padding: 1rem;
+            padding-top: 0rem;
+            padding-bottom: 2rem;
+            max-width: 1200px;
         }}
-        .user-message, .bot-message {{
-            max-width: 90%;
-            padding: 12px 16px;
-        }}
-        .main-header h1 {{
-            font-size: 2em;
-        }}
+
+        /* Chat container with improved styling - now transparent */
         .chat-container {{
-            min-height: 400px;
-            max-height: 500px;
-            padding: 16px;
+            background: var(--surface); /* Use transparent surface color */
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 4px 24px var(--shadow-lg);
+            min-height: 500px;
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+            scroll-behavior: smooth;
+            position: relative;
         }}
-    }}
 
-    /* Hide default Streamlit elements */
-    .stApp > header,
-    div[data-testid="stToolbar"] {{
-        display: none !important;
-    }}
+        .chat-container::-webkit-scrollbar {{
+            width: 6px;
+        }}
 
-    /* ======= ULTRA-SPECIFIC BUTTON OVERRIDES ======= */
-    /* Hamburger menu button */
-    .stApp > div > div > div > button,
-    .stApp header button,
-    button[aria-label*="sidebar"],
-    button[aria-label*="navigation"] {{
-        background: rgba(255, 255, 255, 0.6) !important;
-        color: #1a202c !important;
-        border: 2px solid rgba(255, 255, 255, 0.4) !important;
-        font-weight: 900 !important;
-    }}
+        .chat-container::-webkit-scrollbar-track {{
+            background: rgba(255, 255, 255, 0.1); /* Transparent scrollbar track */
+            border-radius: 3px;
+        }}
 
-    /* Send button */
-    form[data-testid="stForm"] button[type="submit"],
-    .stChatInput button,
-    [data-testid="stChatInput"] button {{
-        background: rgba(255, 255, 255, 0.7) !important;
-        color: #1a202c !important;
-        font-weight: 700 !important;
-    }}
+        .chat-container::-webkit-scrollbar-thumb {{
+            background: rgba(255, 255, 255, 0.4); /* Transparent scrollbar thumb */
+            border-radius: 3px;
+        }}
 
-    /* Force dark text for button content */
-    button:not(.emergency-button) * {{
-        color: inherit !important;
-    }}
-</style>
-""", unsafe_allow_html=True)
+        .chat-container::-webkit-scrollbar-thumb:hover {{
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 3px;
+        }}
+
+        /* User message with better contrast (can keep gradient or make transparent) */
+        .user-message {{
+            background: rgba(99, 102, 241, 0.7); /* Slightly transparent primary color */
+            color: white;
+            padding: 16px 20px;
+            border-radius: 20px 20px 8px 20px;
+            margin: 12px 0 12px auto;
+            max-width: 75%;
+            word-wrap: break-word;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+            font-weight: 500;
+            line-height: 1.5;
+            position: relative;
+        }}
+
+        /* Bot message with improved readability - now transparent */
+        .bot-message {{
+            background: var(--surface-alt); /* Use transparent surface-alt */
+            color: var(--text-primary);
+            padding: 16px 20px;
+            border-radius: 20px 20px 20px 8px;
+            margin: 12px auto 12px 0;
+            max-width: 75%;
+            word-wrap: break-word;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+            line-height: 1.6;
+            font-weight: 400;
+        }}
+
+        /* Welcome message - now transparent or with gradient */
+        .welcome-message {{
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.7) 0%, rgba(236, 72, 153, 0.7) 100%); /* Transparent gradient */
+            color: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin: 24px auto;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            line-height: 1.6;
+        }}
+
+        /* Message time styling (ensure readability on image background) */
+        .message-time {{
+            font-size: 0.75em;
+            opacity: 0.9; /* Make it a bit more opaque for readability */
+            margin-top: 8px;
+            text-align: right;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8); /* Lighter color for better contrast */
+        }}
+
+        /* Enhanced header - now transparent */
+        .main-header {{
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--surface); /* Use transparent surface color */
+            color: var(--text-primary);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }}
+
+        .main-header::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }}
+
+        .main-header h1 {{
+            margin: 0 0 8px 0;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+
+        .main-header p {{
+            margin: 0;
+            font-size: 1.2em;
+            color: var(--text-primary); /* Keep text readable */
+            font-weight: 500;
+        }}
+
+        /* Emergency button - RED styling */
+        .emergency-button {{
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
+            color: white !important;
+            padding: 18px 24px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 1.1em;
+            border: 1px solid rgba(239, 68, 68, 0.8) !important;
+        }}
+
+        .emergency-button:hover {{
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, rgba(220, 38, 38, 1) 0%, rgba(185, 28, 28, 1) 100%) !important;
+            color: white !important;
+        }}
+
+        /* Sidebar section styling - now transparent and dark text */
+        .sidebar-section {{ /* Changed from .sidebar-content */
+            background: rgba(255, 255, 255, 0.1) !important; /* Very light transparent background */
+            border-radius: var(--radius-lg);
+            padding: 16px !important;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(5px); /* Adds a subtle blur effect for better readability */
+        }}
+
+        /* COMPREHENSIVE BUTTON STYLING - ALL BUTTONS LIGHT TRANSPARENT */
+        
+        /* All Streamlit buttons - Base styling */
+        button, 
+        .stButton > button,
+        .stDownloadButton > button,
+        .stFormSubmitButton > button,
+        .stFileUploader button,
+        [data-baseweb="button"],
+        [role="button"] {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+            border-radius: var(--radius) !important;
+            padding: 12px 16px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            font-family: 'Inter', sans-serif !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            backdrop-filter: blur(5px) !important;
+        }}
+
+        /* All button hover states */
+        button:hover, 
+        .stButton > button:hover,
+        .stDownloadButton > button:hover,
+        .stFormSubmitButton > button:hover,
+        .stFileUploader button:hover,
+        [data-baseweb="button"]:hover,
+        [role="button"]:hover {{
+            background: var(--light-transparent-bg-hover) !important;
+            color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        }}
+
+        /* Primary buttons (special styling but still light transparent) */
+        .stButton > button[kind="primary"],
+        .stFormSubmitButton > button[kind="primary"],
+        [data-baseweb="button"][kind="primary"] {{
+            background: rgba(99, 102, 241, 0.5) !important; /* Slightly more opaque primary */
+            color: white !important;
+            border-color: var(--primary-color) !important;
+        }}
+
+        .stButton > button[kind="primary"]:hover,
+        .stFormSubmitButton > button[kind="primary"]:hover,
+        [data-baseweb="button"][kind="primary"]:hover {{
+            background: rgba(99, 102, 241, 0.7) !important;
+            color: white !important;
+        }}
+
+        /* Secondary buttons */
+        .stButton > button[kind="secondary"],
+        [data-baseweb="button"][kind="secondary"] {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+        }}
+
+        /* ======= ENHANCED ACTIVE CONVERSATION HIGHLIGHTING ======= */
+        /* Active/Selected conversation buttons in sidebar - MUCH MORE PROMINENT */
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
+            background: var(--active-conversation-bg) !important;
+            color: white !important;
+            border: 2px solid var(--active-conversation-border) !important;
+            box-shadow: 0 6px 20px var(--active-conversation-shadow) !important;
+            font-weight: 700 !important; /* Extra bold for active conversation */
+            transform: translateX(8px) scale(1.02) !important; /* More pronounced indent and slight scale */
+            position: relative !important;
+        }}
+
+        /* Add a glowing effect to active conversation */
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]::before {{
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--radius);
+            z-index: -1;
+            opacity: 0.6;
+            filter: blur(4px);
+        }}
+
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
+            background: linear-gradient(135deg, rgba(99, 102, 241, 1) 0%, rgba(129, 140, 248, 1) 100%) !important;
+            transform: translateX(8px) scale(1.05) translateY(-2px) !important;
+            box-shadow: 0 8px 25px var(--active-conversation-shadow) !important;
+        }}
+
+        /* Regular conversation buttons - clearer distinction */
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="secondary"] {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+            font-weight: 500 !important;
+            transform: translateX(0px) !important; /* No indent for inactive conversations */
+        }}
+
+        /* ======= HAMBURGER MENU AND SEND BUTTON DARK TEXT FIXES ======= */
+        
+        /* Sidebar Toggle button specific styling - DARK TEXT */
+        .stApp [data-testid="stSidebarToggleButton"] button,
+        button[data-testid="stSidebarToggleButton"],
+        .stApp [data-testid="stSidebarNav"] button {{
+            background: var(--light-transparent-bg) !important;
+            color: #1e293b !important; /* DARK TEXT for ☰ */
+            border: 1px solid var(--light-transparent-border) !important;
+            border-radius: 50% !important;
+            width: 40px !important;
+            height: 40px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 20px !important;
+            font-weight: 900 !important; /* Extra bold to make ☰ very visible */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+            transition: all 0.3s ease !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1 !important;
+        }}
+
+        .stApp [data-testid="stSidebarToggleButton"] button:hover,
+        button[data-testid="stSidebarToggleButton"]:hover,
+        .stApp [data-testid="stSidebarNav"] button:hover {{
+            background: var(--light-transparent-bg-hover) !important;
+            transform: scale(1.1) !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
+            color: var(--primary-color) !important; /* Primary color on hover but still visible */
+        }}
+
+        /* Additional targeting for hamburger menu */
+        .stApp > div > div > div > button[kind="header"],
+        .stApp header button,
+        button[aria-label*="sidebar"],
+        button[aria-label*="navigation"] {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important; /* DARK TEXT */
+            font-weight: 900 !important;
+        }}
+
+        /* ======= SEND BUTTON DARK TEXT FIX ======= */
+        
+        /* Chat input submit button - DARK TEXT */
+        .stChatInput button,
+        .stChatInput [data-baseweb="button"],
+        form[data-testid="stChatInput"] button,
+        [data-testid="stChatInput"] button,
+        .stFormSubmitButton > button {{
+            background: var(--light-transparent-bg) !important;
+            color: #1e293b !important; /* DARK TEXT for "Send" */
+            border: 1px solid var(--light-transparent-border) !important;
+            border-radius: var(--radius) !important;
+            font-weight: 700 !important; /* Extra bold to make "Send" text very visible */
+            font-size: 14px !important;
+            padding: 12px 20px !important;
+        }}
+
+        .stChatInput button:hover,
+        .stChatInput [data-baseweb="button"]:hover,
+        form[data-testid="stChatInput"] button:hover,
+        [data-testid="stChatInput"] button:hover,
+        .stFormSubmitButton > button:hover {{
+            background: var(--light-transparent-bg-hover) !important;
+            color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            font-weight: 700 !important;
+        }}
+
+        /* Target form submit buttons more specifically */
+        div[data-testid="stForm"] button[type="submit"],
+        form button[kind="formSubmit"],
+        .stForm button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important; /* DARK TEXT */
+            font-weight: 700 !important;
+        }}
+
+        /* Sidebar buttons specifically */
+        .stApp [data-testid="stSidebar"] button,
+        .stApp [data-testid="stSidebar"] .stButton > button,
+        .stApp [data-testid="stSidebar"] .stDownloadButton > button,
+        .stApp [data-testid="stSidebar"] .stFormSubmitButton > button {{
+            background: var(--light-transparent-bg) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+            color: var(--text-primary) !important;
+            border-radius: var(--radius) !important;
+            margin: 4px 0 !important;
+            transition: all 0.2s ease !important;
+            text-align: left !important;
+            padding: 10px 16px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        }}
+
+        .stApp [data-testid="stSidebar"] button:hover,
+        .stApp [data-testid="stSidebar"] .stButton > button:hover,
+        .stApp [data-testid="stSidebar"] .stDownloadButton > button:hover,
+        .stApp [data-testid="stSidebar"] .stFormSubmitButton > button:hover {{
+            background: var(--light-transparent-bg-hover) !important;
+            border-color: var(--primary-color) !important;
+            color: var(--primary-color) !important;
+            transform: translateY(-1px) !important;
+        }}
+
+        /* File uploader buttons */
+        .stFileUploader button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+        }}
+
+        /* Tab buttons */
+        .stTabs [data-baseweb="tab-list"] button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+            border-radius: var(--radius) var(--radius) 0 0 !important;
+        }}
+
+        .stTabs [data-baseweb="tab-list"] button:hover,
+        .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {{
+            background: var(--light-transparent-bg-hover) !important;
+            color: var(--primary-color) !important;
+        }}
+
+        /* Pagination buttons */
+        .stPagination button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+        }}
+
+        /* Form input styling - now transparent */
+        .stTextInput > div > div > input {{
+            background: var(--surface); /* Transparent background for input */
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            font-size: 1em;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }}
+
+        .stTextInput > div > div > input:focus {{
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }}
+
+        /* Select slider improvements - now transparent */
+        .stSelectSlider > div > div {{
+            background: var(--surface-alt); /* Transparent background */
+            border-radius: var(--radius);
+            padding: 8px;
+        }}
+
+        /* Expander styling - now transparent */
+        .streamlit-expander {{
+            background: var(--surface); /* Transparent background */
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px var(--shadow);
+        }}
+
+        .streamlit-expander > summary {{
+            background: var(--surface-alt); /* Transparent background for summary */
+            color: var(--text-primary); /* Dark text for expander title */
+            font-weight: 600;
+            padding: 16px;
+            border-radius: var(--radius);
+        }}
+
+        /* Info and success message styling - now transparent */
+        .stInfo, .stSuccess, .stWarning {{
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 500;
+            /* Adjust transparency as needed */
+        }}
+
+        .stInfo {{
+            background: rgba(99, 102, 241, 0.2); /* More transparent */
+            color: var(--text-primary); /* Dark text */
+        }}
+
+        .stSuccess {{
+            background: rgba(16, 185, 129, 0.2); /* More transparent */
+            color: #047857; /* Dark text */
+        }}
+
+        .stWarning {{
+            background: rgba(245, 158, 11, 0.2); /* More transparent */
+            color: #92400e; /* Dark text */
+        }}
+
+        /* Typography improvements - ensure readability on image background */
+        h1, h2, h3, h4, h5, h6 {{
+            color: white; /* Make headings white for contrast in main content */
+            font-weight: 600;
+            line-height: 1.3;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Add subtle text shadow */
+        }}
+
+        p, label, .stMarkdown, .stText, .stMarkdown p {{ /* Target common text elements more broadly */
+            color: white; /* Make paragraphs white for contrast in main content */
+            line-height: 1.6;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3); /* Add subtle text shadow */
+        }}
+
+        /* Target text inside sidebar sections specifically for dark text */
+        .stApp [data-testid="stSidebar"] h3,
+        .stApp [data-testid="stSidebar"] h4,
+        .stApp [data-testid="stSidebar"] p,
+        .stApp [data-testid="stSidebar"] div {{
+            color: var(--text-primary) !important;
+            text-shadow: none !important;
+        }}
+
+        .stApp [data-testid="stSidebar"] label,
+        .stApp [data-testid="stSidebar"] .stMarkdown,
+        .stApp [data-testid="stSidebar"] .stText,
+        .stApp [data-testid="stSidebar"] .stMarkdown p,
+        .stApp [data-testid="stSidebar"] .stSelectbox,
+        .stApp [data-testid="stSidebar"] .stRadio {{
+            color: var(--text-primary) !important; /* Dark text for primary content in sidebar */
+            text-shadow: none !important; /* Remove text shadow for better readability on light transparent background */
+        }}
+
+        /* Dark text for text inputs in sidebar */
+        .stApp [data-testid="stSidebar"] .stTextInput > div > div > input {{
+            color: var(--text-primary); /* Dark text for input */
+        }}
+
+        /* Dark text for info/success/warning messages in sidebar */
+        .stApp [data-testid="stSidebar"] .stInfo,
+        .stApp [data-testid="stSidebar"] .stSuccess,
+        .stApp [data-testid="stSidebar"] .stWarning {{
+            color: var(--text-primary) !important; /* Ensure dark text for these messages */
+        }}
+
+        /* Loading spinner */
+        .stSpinner > div {{
+            border-color: var(--primary-color) !important;
+        }}
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {{
+            .main .block-container {{
+                padding: 1rem;
+            }}
+            .user-message, .bot-message {{
+                max-width: 90%;
+                padding: 12px 16px;
+            }}
+            .main-header h1 {{
+                font-size: 2em;
+            }}
+            .chat-container {{
+                min-height: 400px;
+                max-height: 500px;
+                padding: 16px;
+            }}
+        }}
+
+        /* Hide default Streamlit elements */
+        .stApp > header {{
+            display: none !important;
+        }}
+
+        div[data-testid="stToolbar"] {{
+            display: none !important;
+        }}
+
+        /* Ensure sidebar styling applies to the actual Streamlit sidebar */
+        .stApp [data-testid="stSidebar"] {{
+            background: var(--surface); /* Use transparent surface color for sidebar */
+            border-right: 1px solid var(--border-light);
+            box-shadow: 4px 0 24px var(--shadow-lg);
+        }}
+        /* Add these enhanced CSS rules to your existing styles.py file */
+        /* Place these at the END of your CSS, just before the closing </style> tag for maximum specificity */
+
+        /* ======= ULTRA-SPECIFIC HAMBURGER MENU DARK TEXT FIXES ======= */
+
+        /* Target all possible hamburger menu button variations with maximum specificity */
+        .stApp button[kind="header"],
+        .stApp > div > div > div > button,
+        .stApp header button,
+        .stApp [data-testid="stHeader"] button,
+        button[aria-label*="sidebar"],
+        button[aria-label*="navigation"],
+        button[aria-label*="menu"],
+        button[title*="sidebar"],
+        button[title*="menu"],
+        .stApp [data-testid="stSidebarToggleButton"] button,
+        button[data-testid="stSidebarToggleButton"],
+        .stApp [data-testid="stSidebarNav"] button,
+        .stApp div[data-testid="stSidebarUserContent"] ~ div button,
+        .stApp > div:first-child button:first-child {{
+            background: rgba(255, 255, 255, 0.6) !important;
+            color: #1a202c !important; /* Very dark text */
+            border: 2px solid rgba(255, 255, 255, 0.4) !important;
+            border-radius: 8px !important;
+            font-weight: 900 !important;
+            font-size: 18px !important;
+            text-shadow: none !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            min-width: 40px !important;
+            min-height: 40px !important;
+        }}
+
+        .stApp button[kind="header"]:hover,
+        .stApp > div > div > div > button:hover,
+        .stApp header button:hover,
+        .stApp [data-testid="stHeader"] button:hover,
+        button[aria-label*="sidebar"]:hover,
+        button[aria-label*="navigation"]:hover,
+        button[aria-label*="menu"]:hover,
+        button[title*="sidebar"]:hover,
+        button[title*="menu"]:hover,
+        .stApp [data-testid="stSidebarToggleButton"] button:hover,
+        button[data-testid="stSidebarToggleButton"]:hover,
+        .stApp [data-testid="stSidebarNav"] button:hover,
+        .stApp div[data-testid="stSidebarUserContent"] ~ div button:hover,
+        .stApp > div:first-child button:first-child:hover {{
+            background: rgba(255, 255, 255, 0.8) !important;
+            color: #6366f1 !important; /* Primary color but still visible */
+            border-color: #6366f1 !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+        }}
+
+        /* ======= ULTRA-SPECIFIC SEND BUTTON DARK TEXT FIXES ======= */
+
+        /* Target all possible Send button variations with maximum specificity */
+        form[data-testid="stForm"] button[type="submit"],
+        form[data-testid="stForm"] .stFormSubmitButton button,
+        .stForm button[type="submit"],
+        .stForm .stFormSubmitButton button,
+        .stFormSubmitButton > button,
+        form button[kind="formSubmit"],
+        form .stButton button,
+        div[data-testid="stForm"] button,
+        div[data-testid="stForm"] .stButton button,
+        .stChatInput button,
+        .stChatInput [data-baseweb="button"],
+        form[data-testid="stChatInput"] button,
+        [data-testid="stChatInput"] button,
+        button[data-testid*="submit"],
+        button[type="submit"]:not([aria-label*="sidebar"]):not([aria-label*="menu"]) {{
+            background: rgba(255, 255, 255, 0.7) !important;
+            color: #1a202c !important; /* Very dark text for "Send" */
+            border: 2px solid rgba(255, 255, 255, 0.5) !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            padding: 10px 20px !important;
+            text-shadow: none !important;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25) !important;
+            backdrop-filter: blur(5px) !important;
+            transition: all 0.2s ease !important;
+        }}
+
+        form[data-testid="stForm"] button[type="submit"]:hover,
+        form[data-testid="stForm"] .stFormSubmitButton button:hover,
+        .stForm button[type="submit"]:hover,
+        .stForm .stFormSubmitButton button:hover,
+        .stFormSubmitButton > button:hover,
+        form button[kind="formSubmit"]:hover,
+        form .stButton button:hover,
+        div[data-testid="stForm"] button:hover,
+        div[data-testid="stForm"] .stButton button:hover,
+        .stChatInput button:hover,
+        .stChatInput [data-baseweb="button"]:hover,
+        form[data-testid="stChatInput"] button:hover,
+        [data-testid="stChatInput"] button:hover,
+        button[data-testid*="submit"]:hover,
+        button[type="submit"]:not([aria-label*="sidebar"]):not([aria-label*="menu"]):hover {{
+            background: rgba(255, 255, 255, 0.9) !important;
+            color: #6366f1 !important; /* Primary color on hover */
+            border-color: #6366f1 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35) !important;
+        }}
+
+        /* ======= ADDITIONAL FALLBACK RULES ======= */
+
+        /* Catch-all for any remaining button text visibility issues */
+        .stApp button:not(.emergency-button):not([data-testid*="sidebar"]) span,
+        .stApp button:not(.emergency-button):not([data-testid*="sidebar"]) p,
+        .stApp button:not(.emergency-button):not([data-testid*="sidebar"]) div {{
+            color: #1a202c !important;
+            font-weight: 600 !important;
+            text-shadow: none !important;
+        }}
+
+        /* Force text color for button content */
+        .stApp button:not(.emergency-button):not([data-testid*="sidebar"]) * {{
+            color: inherit !important;
+        }}
+
+        /* Specific targeting for button text nodes */
+        .stApp [data-baseweb="button"]:not(.emergency-button) {{
+            color: #1a202c !important;
+            font-weight: 600 !important;
+        }}
+
+        .stApp [data-baseweb="button"]:not(.emergency-button):hover {{
+            color: #6366f1 !important;
+        }}
+
+        /* ======= ENHANCED CONTRAST BOOST ======= */
+
+        /* Make sure the hamburger symbol ☰ is ultra-visible */
+        .stApp button[kind="header"]::before,
+        .stApp > div > div > div > button::before,
+        .stApp header button::before {{
+            content: "☰";
+            font-size: 20px !important;
+            font-weight: 900 !important;
+            color: #1a202c !important;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5) !important;
+        }}
+
+        /* Hide the original hamburger if it's an icon and replace with text */
+        .stApp button[kind="header"] svg,
+        .stApp > div > div > div > button svg,
+        .stApp header button svg {{
+            display: none !important;
+        }}
+
+        /* Make sure "Send" text is ultra-visible */
+        form button[type="submit"]::after {{
+            content: "";
+            font-weight: 900 !important;
+            color: #1a202c !important;
+            text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.3) !important;
+        }}
+    </style>
+    """, unsafe_allow_html=True)
