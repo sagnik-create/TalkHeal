@@ -91,3 +91,17 @@ st.markdown("""
     setTimeout(scrollToBottom, 100);
 </script>
 """, unsafe_allow_html=True)
+
+# Add this after apply_custom_css() in your main file
+st.markdown("""
+<style>
+/* Quick fix for button visibility */
+.stApp button[kind="header"],
+.stApp .stFormSubmitButton button {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #1a202c !important;
+    font-weight: 700 !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+}
+</style>
+""", unsafe_allow_html=True)
