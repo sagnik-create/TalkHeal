@@ -238,140 +238,150 @@ def apply_custom_css():
             backdrop-filter: blur(5px); /* Adds a subtle blur effect for better readability */
         }}
 
-        /* General Button improvements for light transparency */
-        .stButton > button {{
-            background: var(--light-transparent-bg); /* Use the new light transparent background */
-            color: black; /* Text color for light background */
-            border: 1px solid var(--light-transparent-border); /* Light transparent border */
-            border-radius: var(--radius); /* Rectangular buttons */
-            padding: 12px 16px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            width: 100%;
-            font-family: 'Inter', sans-serif;
+        /*
+         * UNIVERSAL BUTTON STYLING FOR TRANSPARENCY
+         * These rules target ALL Streamlit buttons.
+         */
+        .stButton > button,
+        .stApp [data-testid="stSidebar"] .stButton > button,
+        .stApp [data-testid="stSidebarToggleButton"] button {{
+            background-color: rgba(255, 255, 255, 0.3) !important; /* Light transparent white */
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            color: var(--text-primary) !important; /* Dark text for contrast */
+            border-radius: var(--radius) !important;
+            padding: 12px 16px !important; /* Ensure padding is consistent */
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            width: 100% !important; /* Make sure they fill their container */
+            font-family: 'Inter', sans-serif !important;
+            box-shadow: none !important; /* Remove any default button shadow */
         }}
 
-        .stButton > button:hover {{
-            background: var(--light-transparent-bg-hover); /* Lighter on hover */
-            border-color: var(--primary-color);
-            color: var(--primary-color); /* Primary color on hover */
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--shadow);
+        .stButton > button:hover,
+        .stApp [data-testid="stSidebar"] .stButton > button:hover,
+        .stApp [data-testid="stSidebarToggleButton"] button:hover {{
+            background-color: rgba(255, 255, 255, 0.5) !important; /* Lighter on hover */
+            border-color: var(--primary-color) !important;
+            color: var(--primary-color) !important; /* Primary color on hover */
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px var(--shadow) !important; /* Re-add a subtle shadow on hover */
         }}
 
-        /* Sidebar Toggle button specific styling for light transparency */
-        .stApp [data-testid="stSidebarToggleButton"] button {{ /* Target ONLY the sidebar toggle button here */
-            background: var(--light-transparent-bg); /* Apply light transparent background */
-            color: black; /* Text color for light background */
-            border: 1px solid var(--light-transparent-border);
-            border-radius: 50%; /* Keep it round if it's the toggle button */
-            width: 40px; /* Adjust size if needed */
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            margin: 0;
-            padding: 0;
-            line-height: 1;
+        /* Specific style for the sidebar toggle button to remain round */
+        .stApp [data-testid="stSidebarToggleButton"] button {{
+            border-radius: 50% !important; /* Keep it round */
+            width: 40px !important; /* Adjust size if needed */
+            height: 40px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 20px !important;
+            padding: 0 !important; /* Remove padding for round button */
+            margin: 0 !important;
         }}
 
-        .stApp [data-testid="stSidebarToggleButton"] button:hover {{ /* Hover for toggle button */
-            background: var(--light-transparent-bg-hover); /* Lighter on hover */
-            transform: scale(1.1);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-            color: var(--primary-color);
+        .stApp [data-testid="stSidebarToggleButton"] button:hover {{
+            transform: scale(1.1) !important;
+        }}
+
+        /* Active conversation button styling (primary type) */
+        .stButton > button[kind="primary"],
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
+            background-color: rgba(99, 102, 241, 0.5) !important; /* Slightly more opaque primary color */
+            color: white !important;
+            border-color: var(--primary-color) !important;
+        }}
+
+        .stButton > button[kind="primary"]:hover,
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
+            background-color: rgba(99, 102, 241, 0.7) !important;
         }}
 
         /* Form input styling - now transparent */
         .stTextInput > div > div > input {{
-            background: var(--surface); /* Transparent background for input */
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: 12px 16px;
-            font-size: 1em;
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s ease;
+            background: var(--surface) !important; /* Transparent background for input */
+            border: 2px solid var(--border) !important;
+            border-radius: var(--radius) !important;
+            padding: 12px 16px !important;
+            font-size: 1em !important;
+            color: var(--text-primary) !important;
+            font-family: 'Inter', sans-serif !important;
+            transition: all 0.2s ease !important;
         }}
 
         .stTextInput > div > div > input:focus {{
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-            outline: none;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+            outline: none !important;
         }}
 
         /* Select slider improvements - now transparent */
         .stSelectSlider > div > div {{
-            background: var(--surface-alt); /* Transparent background */
-            border-radius: var(--radius);
-            padding: 8px;
+            background: var(--surface-alt) !important; /* Transparent background */
+            border-radius: var(--radius) !important;
+            padding: 8px !important;
         }}
 
         /* Expander styling - now transparent */
         .streamlit-expander {{
-            background: var(--surface); /* Transparent background */
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px var(--shadow);
+            background: var(--surface) !important; /* Transparent background */
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius) !important;
+            margin-bottom: 12px !important;
+            box-shadow: 0 2px 8px var(--shadow) !important;
         }}
 
         .streamlit-expander > summary {{
-            background: var(--surface-alt); /* Transparent background for summary */
-            color: var(--text-primary); /* Dark text for expander title */
-            font-weight: 600;
-            padding: 16px;
-            border-radius: var(--radius);
+            background: var(--surface-alt) !important; /* Transparent background for summary */
+            color: var(--text-primary) !important; /* Dark text for expander title */
+            font-weight: 600 !important;
+            padding: 16px !important;
+            border-radius: var(--radius) !important;
         }}
 
         /* Info and success message styling - now transparent */
         .stInfo, .stSuccess, .stWarning {{
-            border-radius: var(--radius);
-            border: none;
-            font-weight: 500;
-            /* Adjust transparency as needed */
+            border-radius: var(--radius) !important;
+            border: none !important;
+            font-weight: 500 !important;
+            padding: 12px 16px !important;
+            margin-bottom: 1rem !important;
         }}
 
         .stInfo {{
-            background: rgba(99, 102, 241, 0.2); /* More transparent */
-            color: var(--text-primary); /* Dark text */
+            background: rgba(99, 102, 241, 0.2) !important; /* More transparent */
+            color: var(--text-primary) !important; /* Dark text */
         }}
 
         .stSuccess {{
-            background: rgba(16, 185, 129, 0.2); /* More transparent */
-            color: #047857; /* Dark text */
+            background: rgba(16, 185, 129, 0.2) !important; /* More transparent */
+            color: #047857 !important; /* Dark text */
         }}
 
         .stWarning {{
-            background: rgba(245, 158, 11, 0.2); /* More transparent */
-            color: #92400e; /* Dark text */
+            background: rgba(245, 158, 11, 0.2) !important; /* More transparent */
+            color: #92400e !important; /* Dark text */
         }}
 
         /* Typography improvements - ensure readability on image background */
         h1, h2, h3, h4, h5, h6 {{
-            color: white; /* Make headings white for contrast in main content */
-            font-weight: 600;
-            line-height: 1.3;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Add subtle text shadow */
+            color: white !important; /* Make headings white for contrast in main content */
+            font-weight: 600 !important;
+            line-height: 1.3 !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; /* Add subtle text shadow */
         }}
 
         p, label, .stMarkdown, .stText, .stMarkdown p {{ /* Target common text elements more broadly */
-            color: white; /* Make paragraphs white for contrast in main content */
-            line-height: 1.6;
-            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3); /* Add subtle text shadow */
+            color: white !important; /* Make paragraphs white for contrast in main content */
+            line-height: 1.6 !important;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3) !important; /* Add subtle text shadow */
         }}
 
-        /* Target text inside sidebar sections specifically for dark text */
+        /* Text inside sidebar sections specifically for dark text */
         .stApp [data-testid="stSidebar"] h3,
         .stApp [data-testid="stSidebar"] h4,
         .stApp [data-testid="stSidebar"] p,
-        .stApp [data-testid="stSidebar"] div {{
-            color: var(--text-primary) !important;
-            text-shadow: none !important;
-        }}
+        .stApp [data-testid="stSidebar"] div,
         .stApp [data-testid="stSidebar"] label,
         .stApp [data-testid="stSidebar"] .stMarkdown,
         .stApp [data-testid="stSidebar"] .stText,
@@ -382,38 +392,9 @@ def apply_custom_css():
             text-shadow: none !important; /* Remove text shadow for better readability on light transparent background */
         }}
 
-        .stApp [data-testid="stSidebar"] .stButton > button {{
-            background-color: rgba(255, 255, 255, 0.3) !important; /* Light transparent white */
-            border: 1px solid rgba(255, 255, 255, 0.4) !important;
-            color: var(--text-primary) !important; /* Dark text for contrast */
-            border-radius: var(--radius) !important;
-            margin: 4px 0 !important;
-            transition: all 0.2s ease !important;
-            text-align: left !important;
-            padding: 10px 16px !important;
-            box-shadow: none !important;
-        }}
-
-        .stApp [data-testid="stSidebar"] .stButton > button:hover {{
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            border-color: var(--primary-color) !important;
-            transform: translateY(-1px) !important;
-        }}
-
-        /* Active conversation button styling */
-        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
-            background-color: rgba(99, 102, 241, 0.5) !important; /* Slightly more opaque primary color */
-            color: white !important;
-            border-color: var(--primary-color) !important;
-        }}
-
-        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
-            background-color: rgba(99, 102, 241, 0.7) !important;
-        }}
-
         /* Dark text for text inputs in sidebar */
         .stApp [data-testid="stSidebar"] .stTextInput > div > div > input {{
-            color: var(--text-primary); /* Dark text for input */
+            color: var(--text-primary) !important; /* Dark text for input */
         }}
 
         /* Dark text for info/success/warning messages in sidebar */
