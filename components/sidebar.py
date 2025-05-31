@@ -14,7 +14,7 @@ def render_sidebar():
     with st.sidebar:
         # The content that belongs together under 'Conversations'
         st.markdown('<div class="sidebar-section">', unsafe_allow_html=True) # Changed class name for clarity
-        st.markdown("### 💬 Conversations")
+        st.markdown("### 💬 Conversation")
 
         # New conversation button
         if st.button("➕ New Chat", key="new_chat", use_container_width=True):
