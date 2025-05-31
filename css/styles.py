@@ -9,17 +9,16 @@ def get_base64_of_bin_file(bin_file):
 
 def apply_custom_css():
     """Applies custom CSS to the Streamlit application for enhanced styling."""
-
     # Path to your background image (adjust this path if your image is in a different folder)
     background_image_path = "Background.jpg" # Assuming 'Background.jpg' is in the same directory as your main app file
-
+    
     # Encode the image to base64
     base64_image = get_base64_of_bin_file(background_image_path)
-
+    
     st.markdown(f"""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
+        
         /* Root variables for consistent theming */
         :root {{
             --primary-color: #6366f1;
@@ -41,11 +40,14 @@ def apply_custom_css():
             --shadow-lg: rgba(0, 0, 0, 0.2);
             --radius: 12px;
             --radius-lg: 16px;
-
             /* Define specific light transparent colors for buttons/sidebar elements */
             --light-transparent-bg: rgba(255, 255, 255, 0.4); /* Light background, 40% opaque */
             --light-transparent-bg-hover: rgba(255, 255, 255, 0.6); /* Lighter on hover, 60% opaque */
             --light-transparent-border: rgba(255, 255, 255, 0.5); /* Light border */
+            /* Active conversation specific colors */
+            --active-conversation-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(129, 140, 248, 0.9) 100%);
+            --active-conversation-border: rgba(99, 102, 241, 0.8);
+            --active-conversation-shadow: rgba(99, 102, 241, 0.4);
         }}
 
         /* Global styles - Set the background image */
@@ -299,10 +301,56 @@ def apply_custom_css():
             border: 1px solid var(--light-transparent-border) !important;
         }}
 
-        /* Sidebar Toggle button specific styling */
-        .stApp [data-testid="stSidebarToggleButton"] button {{
+        /* ======= ENHANCED ACTIVE CONVERSATION HIGHLIGHTING ======= */
+        /* Active/Selected conversation buttons in sidebar - MUCH MORE PROMINENT */
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
+            background: var(--active-conversation-bg) !important;
+            color: white !important;
+            border: 2px solid var(--active-conversation-border) !important;
+            box-shadow: 0 6px 20px var(--active-conversation-shadow) !important;
+            font-weight: 700 !important; /* Extra bold for active conversation */
+            transform: translateX(8px) scale(1.02) !important; /* More pronounced indent and slight scale */
+            position: relative !important;
+        }}
+
+        /* Add a glowing effect to active conversation */
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]::before {{
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--radius);
+            z-index: -1;
+            opacity: 0.6;
+            filter: blur(4px);
+        }}
+
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
+            background: linear-gradient(135deg, rgba(99, 102, 241, 1) 0%, rgba(129, 140, 248, 1) 100%) !important;
+            transform: translateX(8px) scale(1.05) translateY(-2px) !important;
+            box-shadow: 0 8px 25px var(--active-conversation-shadow) !important;
+        }}
+
+        /* Regular conversation buttons - clearer distinction */
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="secondary"] {{
             background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important; /* DARK TEXT */
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+            font-weight: 500 !important;
+            transform: translateX(0px) !important; /* No indent for inactive conversations */
+        }}
+
+        /* ======= HAMBURGER MENU AND SEND BUTTON DARK TEXT FIXES ======= */
+        
+        /* Sidebar Toggle button specific styling - DARK TEXT */
+        .stApp [data-testid="stSidebarToggleButton"] button,
+        button[data-testid="stSidebarToggleButton"],
+        .stApp [data-testid="stSidebarNav"] button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important; /* DARK TEXT for ☰ */
             border: 1px solid var(--light-transparent-border) !important;
             border-radius: 50% !important;
             width: 40px !important;
@@ -311,7 +359,7 @@ def apply_custom_css():
             align-items: center !important;
             justify-content: center !important;
             font-size: 20px !important;
-            font-weight: bold !important; /* Make the ☰ symbol more visible */
+            font-weight: 900 !important; /* Extra bold to make ☰ very visible */
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
             transition: all 0.3s ease !important;
             margin: 0 !important;
@@ -319,11 +367,60 @@ def apply_custom_css():
             line-height: 1 !important;
         }}
 
-        .stApp [data-testid="stSidebarToggleButton"] button:hover {{
+        .stApp [data-testid="stSidebarToggleButton"] button:hover,
+        button[data-testid="stSidebarToggleButton"]:hover,
+        .stApp [data-testid="stSidebarNav"] button:hover {{
             background: var(--light-transparent-bg-hover) !important;
             transform: scale(1.1) !important;
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
-            color: var(--primary-color) !important; /* Primary color on hover */
+            color: var(--primary-color) !important; /* Primary color on hover but still visible */
+        }}
+
+        /* Additional targeting for hamburger menu */
+        .stApp > div > div > div > button[kind="header"],
+        .stApp header button,
+        button[aria-label*="sidebar"],
+        button[aria-label*="navigation"] {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important; /* DARK TEXT */
+            font-weight: 900 !important;
+        }}
+
+        /* ======= SEND BUTTON DARK TEXT FIX ======= */
+        
+        /* Chat input submit button - DARK TEXT */
+        .stChatInput button,
+        .stChatInput [data-baseweb="button"],
+        form[data-testid="stChatInput"] button,
+        [data-testid="stChatInput"] button,
+        .stFormSubmitButton > button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important; /* DARK TEXT for "Send" */
+            border: 1px solid var(--light-transparent-border) !important;
+            border-radius: var(--radius) !important;
+            font-weight: 700 !important; /* Extra bold to make "Send" text very visible */
+            font-size: 14px !important;
+            padding: 12px 20px !important;
+        }}
+
+        .stChatInput button:hover,
+        .stChatInput [data-baseweb="button"]:hover,
+        form[data-testid="stChatInput"] button:hover,
+        [data-testid="stChatInput"] button:hover,
+        .stFormSubmitButton > button:hover {{
+            background: var(--light-transparent-bg-hover) !important;
+            color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            font-weight: 700 !important;
+        }}
+
+        /* Target form submit buttons more specifically */
+        div[data-testid="stForm"] button[type="submit"],
+        form button[kind="formSubmit"],
+        .stForm button {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important; /* DARK TEXT */
+            font-weight: 700 !important;
         }}
 
         /* Sidebar buttons specifically */
@@ -350,48 +447,6 @@ def apply_custom_css():
             border-color: var(--primary-color) !important;
             color: var(--primary-color) !important;
             transform: translateY(-1px) !important;
-        }}
-
-        /* Active/Selected buttons in sidebar - ENHANCED HIGHLIGHTING */
-        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(129, 140, 248, 0.8) 100%) !important;
-            color: white !important;
-            border: 2px solid var(--primary-color) !important;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3) !important;
-            font-weight: 600 !important;
-            transform: translateX(4px) !important; /* Slight indent to show it's active */
-        }}
-
-        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(129, 140, 248, 0.9) 100%) !important;
-            transform: translateX(4px) translateY(-1px) !important;
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
-        }}
-
-        /* Chat input submit button - DARK TEXT */
-        .stChatInput button,
-        .stChatInput [data-baseweb="button"] {{
-            background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important; /* DARK TEXT for "Send" */
-            border: 1px solid var(--light-transparent-border) !important;
-            border-radius: var(--radius) !important;
-            font-weight: 600 !important; /* Make "Send" text more visible */
-        }}
-
-        .stChatInput button:hover,
-        .stChatInput [data-baseweb="button"]:hover {{
-            background: var(--light-transparent-bg-hover) !important;
-            color: var(--primary-color) !important;
-            border-color: var(--primary-color) !important;
-        }}
-
-        /* Additional targeting for send button specifically */
-        [data-testid="stChatInput"] button,
-        [data-testid="stChatInput"] [data-baseweb="button"],
-        .stChatInput form button {{
-            background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important; /* DARK TEXT */
-            font-weight: 600 !important;
         }}
 
         /* File uploader buttons */
@@ -509,6 +564,7 @@ def apply_custom_css():
             color: var(--text-primary) !important;
             text-shadow: none !important;
         }}
+
         .stApp [data-testid="stSidebar"] label,
         .stApp [data-testid="stSidebar"] .stMarkdown,
         .stApp [data-testid="stSidebar"] .stText,
@@ -541,16 +597,13 @@ def apply_custom_css():
             .main .block-container {{
                 padding: 1rem;
             }}
-
             .user-message, .bot-message {{
                 max-width: 90%;
                 padding: 12px 16px;
             }}
-
             .main-header h1 {{
                 font-size: 2em;
             }}
-
             .chat-container {{
                 min-height: 400px;
                 max-height: 500px;
@@ -573,6 +626,5 @@ def apply_custom_css():
             border-right: 1px solid var(--border-light);
             box-shadow: 4px 0 24px var(--shadow-lg);
         }}
-
     </style>
     """, unsafe_allow_html=True)
