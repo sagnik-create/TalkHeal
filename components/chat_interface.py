@@ -3,14 +3,14 @@ from core.utils import get_current_time, get_ai_response
 
 def render_chat_interface():
     """Renders the main chat message display area."""
-    # Use a proper container with consistent styling
-    with st.container():
-        # Create the chat container wrapper
-        st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+    
+    if st.session_state.active_conversation >= 0:
+        active_convo = st.session_state.conversations[st.session_state.active_conversation]
         
-        if st.session_state.active_conversation >= 0:
-            active_convo = st.session_state.conversations[st.session_state.active_conversation]
-
+        # Create a container for the chat messages
+        chat_container = st.container()
+        
+        with chat_container:
             # Show welcome message if no messages exist
             if not active_convo["messages"]:
                 st.markdown(f"""
@@ -21,7 +21,7 @@ def render_chat_interface():
                 </div>
                 """, unsafe_allow_html=True)
             
-            # Render each message individually
+            # Render each message within the Streamlit container
             for msg in active_convo["messages"]:
                 if msg["sender"] == "user":
                     st.markdown(f"""
@@ -37,14 +37,10 @@ def render_chat_interface():
                         <div class="message-time">{msg["time"]}</div>
                     </div>
                     """, unsafe_allow_html=True)
-        
-        # Close the chat container
-        st.markdown('</div>', unsafe_allow_html=True)
 
 def handle_chat_input(model):
     """Handles the user input for the chat and generates AI responses."""
-    st.markdown("---")
-
+    
     # Create a form for chat input
     with st.form(key="chat_form", clear_on_submit=True):
         col1, col2 = st.columns([5, 1])
@@ -59,7 +55,7 @@ def handle_chat_input(model):
         
         with col2:
             send_pressed = st.form_submit_button("Send", use_container_width=True)
-
+    
     # Process the input when send is pressed
     if send_pressed and user_input.strip():
         if st.session_state.active_conversation >= 0:

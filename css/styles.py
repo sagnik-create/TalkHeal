@@ -46,7 +46,7 @@ def apply_custom_css():
             --active-conversation-border: rgba(99, 102, 241, 0.8);
             --active-conversation-shadow: rgba(99, 102, 241, 0.4);
         }}
-
+        
         /* Global styles - Set the background image */
         .stApp {{
             background-image: url("data:image/jpeg;base64,{base64_image}");
@@ -57,7 +57,7 @@ def apply_custom_css():
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
         }}
-
+        
         /* Apply an overlay to slightly fade the background image */
         .stApp::before {{
             content: '';
@@ -69,13 +69,43 @@ def apply_custom_css():
             background: rgba(0, 0, 0, 0.3);
             z-index: -1;
         }}
-
+        
         .main .block-container {{
             padding-top: 0rem;
             padding-bottom: 2rem;
             max-width: 1200px;
         }}
-
+        
+        /* Streamlit container that holds chat messages */
+        .main .block-container > div:has(.user-message, .bot-message, .welcome-message) {{
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 4px 24px var(--shadow-lg);
+            min-height: 500px;
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+            scroll-behavior: smooth;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }}
+        
+        /* Alternative targeting for chat container */
+        .element-container:has(.user-message) {{
+            background: var(--surface) !important;
+            border-radius: var(--radius-lg) !important;
+            padding: 24px !important;
+            margin: 16px 0 !important;
+            box-shadow: 0 4px 24px var(--shadow-lg) !important;
+            min-height: 500px !important;
+            max-height: 600px !important;
+            overflow-y: auto !important;
+            border: 1px solid var(--border-light) !important;
+            backdrop-filter: blur(10px) !important;
+        }}
+        
         /* Chat container with improved styling */
         .chat-container {{
             background: var(--surface);
@@ -91,25 +121,25 @@ def apply_custom_css():
             position: relative;
             backdrop-filter: blur(10px);
         }}
-
+        
         .chat-container::-webkit-scrollbar {{
             width: 6px;
         }}
-
+        
         .chat-container::-webkit-scrollbar-track {{
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
         }}
-
+        
         .chat-container::-webkit-scrollbar-thumb {{
             background: rgba(255, 255, 255, 0.4);
             border-radius: 3px;
         }}
-
+        
         .chat-container::-webkit-scrollbar-thumb:hover {{
             background: rgba(255, 255, 255, 0.6);
         }}
-
+        
         /* User message styling */
         .user-message {{
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(129, 140, 248, 0.8) 100%);
@@ -124,8 +154,9 @@ def apply_custom_css():
             line-height: 1.5;
             position: relative;
             backdrop-filter: blur(5px);
+            display: block;
         }}
-
+        
         /* Bot message styling */
         .bot-message {{
             background: var(--surface-alt);
@@ -140,8 +171,9 @@ def apply_custom_css():
             line-height: 1.6;
             font-weight: 500;
             backdrop-filter: blur(10px);
+            display: block;
         }}
-
+        
         /* Welcome message */
         .welcome-message {{
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(236, 72, 153, 0.8) 100%);
@@ -154,8 +186,9 @@ def apply_custom_css():
             font-weight: 500;
             line-height: 1.6;
             backdrop-filter: blur(10px);
+            display: block;
         }}
-
+        
         /* Message time styling */
         .message-time {{
             font-size: 0.75em;
@@ -164,15 +197,15 @@ def apply_custom_css():
             text-align: right;
             font-weight: 400;
         }}
-
+        
         .user-message .message-time {{
             color: rgba(255, 255, 255, 0.8);
         }}
-
+        
         .bot-message .message-time {{
             color: var(--text-secondary);
         }}
-
+        
         /* Enhanced header */
         .main-header {{
             text-align: center;
@@ -187,7 +220,7 @@ def apply_custom_css():
             overflow: hidden;
             backdrop-filter: blur(10px);
         }}
-
+        
         .main-header::before {{
             content: '';
             position: absolute;
@@ -197,7 +230,7 @@ def apply_custom_css():
             height: 4px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }}
-
+        
         .main-header h1 {{
             margin: 0 0 8px 0;
             font-size: 2.5em;
@@ -207,14 +240,14 @@ def apply_custom_css():
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }}
-
+        
         .main-header p {{
             margin: 0;
             font-size: 1.2em;
             color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
         }}
-
+        
         /* Emergency button */
         .emergency-button {{
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
@@ -231,13 +264,13 @@ def apply_custom_css():
             border: 1px solid rgba(239, 68, 68, 0.8) !important;
             backdrop-filter: blur(5px);
         }}
-
+        
         .emergency-button:hover {{
             transform: translateY(-3px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
             background: linear-gradient(135deg, rgba(220, 38, 38, 1) 0%, rgba(185, 28, 28, 1) 100%) !important;
         }}
-
+        
         /* Sidebar section styling */
         .sidebar-section {{
             background: var(--light-transparent-bg) !important;
@@ -247,7 +280,7 @@ def apply_custom_css():
             border: 1px solid var(--light-transparent-border) !important;
             backdrop-filter: blur(10px);
         }}
-
+        
         /* Button styling - comprehensive */
         button, 
         .stButton > button,
@@ -265,7 +298,7 @@ def apply_custom_css():
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             backdrop-filter: blur(5px) !important;
         }}
-
+        
         button:hover, 
         .stButton > button:hover,
         .stDownloadButton > button:hover,
@@ -277,7 +310,7 @@ def apply_custom_css():
             transform: translateY(-1px) !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
         }}
-
+        
         /* Primary buttons */
         .stButton > button[kind="primary"],
         .stFormSubmitButton > button[kind="primary"] {{
@@ -285,13 +318,13 @@ def apply_custom_css():
             color: white !important;
             font-weight: 700 !important;
         }}
-
+        
         .stButton > button[kind="primary"]:hover,
         .stFormSubmitButton > button[kind="primary"]:hover {{
             background: rgba(99, 102, 241, 0.9) !important;
             color: white !important;
         }}
-
+        
         /* Active conversation styling */
         .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
             background: var(--active-conversation-bg) !important;
@@ -301,7 +334,7 @@ def apply_custom_css():
             font-weight: 700 !important;
             transform: translateX(8px) scale(1.02) !important;
         }}
-
+        
         /* Sidebar toggle button */
         .stApp [data-testid="stSidebarToggleButton"] button,
         button[data-testid="stSidebarToggleButton"] {{
@@ -315,7 +348,7 @@ def apply_custom_css():
             font-weight: 900 !important;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
         }}
-
+        
         /* Form input styling */
         .stTextInput > div > div > input {{
             background: var(--surface) !important;
@@ -328,13 +361,13 @@ def apply_custom_css():
             transition: all 0.2s ease !important;
             backdrop-filter: blur(5px) !important;
         }}
-
+        
         .stTextInput > div > div > input:focus {{
             border-color: var(--primary-color) !important;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
             outline: none !important;
         }}
-
+        
         /* Sidebar styling */
         .stApp [data-testid="stSidebar"] {{
             background: var(--surface) !important;
@@ -342,7 +375,7 @@ def apply_custom_css():
             box-shadow: 4px 0 24px var(--shadow-lg) !important;
             backdrop-filter: blur(10px) !important;
         }}
-
+        
         /* Text in sidebar - dark for readability */
         .stApp [data-testid="stSidebar"] h1,
         .stApp [data-testid="stSidebar"] h2,
@@ -354,7 +387,7 @@ def apply_custom_css():
             color: var(--text-primary) !important;
             text-shadow: none !important;
         }}
-
+        
         /* Main content text - white for contrast against background */
         .stApp .main h1,
         .stApp .main h2,
@@ -365,47 +398,50 @@ def apply_custom_css():
             color: white !important;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
         }}
-
+        
         /* Info messages */
         .stInfo {{
             background: rgba(99, 102, 241, 0.2) !important;
             color: var(--text-primary) !important;
             border-radius: var(--radius) !important;
         }}
-
+        
         .stSuccess {{
             background: rgba(16, 185, 129, 0.2) !important;
             color: #047857 !important;
             border-radius: var(--radius) !important;
         }}
-
+        
         .stWarning {{
             background: rgba(245, 158, 11, 0.2) !important;
             color: #92400e !important;
             border-radius: var(--radius) !important;
         }}
-
+        
         /* Hide default Streamlit elements */
         .stApp > header {{
             display: none !important;
         }}
-
+        
         div[data-testid="stToolbar"] {{
             display: none !important;
         }}
-
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {{
             .main .block-container {{
                 padding: 1rem;
             }}
+            
             .user-message, .bot-message {{
                 max-width: 90%;
                 padding: 12px 16px;
             }}
+            
             .main-header h1 {{
                 font-size: 2em;
             }}
+            
             .chat-container {{
                 min-height: 400px;
                 max-height: 500px;

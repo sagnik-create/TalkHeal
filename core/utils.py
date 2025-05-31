@@ -3,7 +3,9 @@ import streamlit as st
 
 def get_current_time():
     """Returns the current time formatted as HH:MM AM/PM."""
-    return datetime.now().strftime("%I:%M %p")
+    now = datetime.now()
+    # Format: 2:30 PM (without leading zero for hours)
+    return now.strftime("%-I:%M %p") if hasattr(now, 'strftime') else now.strftime("%I:%M %p").lstrip('0')
 
 def create_new_conversation(initial_message=None):
     """
