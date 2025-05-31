@@ -379,23 +379,36 @@ def apply_custom_css():
             text-shadow: none !important; /* Remove text shadow for better readability on light transparent background */
         }}
 
-        /* Ensure specific dark text for buttons in the sidebar */
-        /* IMPORTANT: Targeted buttons within the sidebar specifically for light transparent background */
+        /*
+        * Specific rules for sidebar buttons to ensure transparency
+        * These are more specific to override Streamlit's defaults.
+        */
         .stApp [data-testid="stSidebar"] .stButton > button {{
-            color: var(--text-primary); /* Explicitly set dark text for sidebar buttons */
-            background: var(--light-transparent-bg); /* Apply light transparent background to all sidebar buttons */
-            border: 1px solid var(--light-transparent-border);
+            background-color: var(--light-transparent-bg) !important; /* Use !important for higher specificity */
+            border: 1px solid var(--light-transparent-border) !important;
+            color: var(--text-primary) !important; /* Ensure dark text */
+            box-shadow: none !important; /* Remove any default button shadow */
         }}
 
-        /* Hover state for sidebar buttons */
         .stApp [data-testid="stSidebar"] .stButton > button:hover {{
-            background: var(--light-transparent-bg-hover); /* Lighter on hover */
-            border-color: var(--primary-color);
-            color: var(--primary-color);
+            background-color: var(--light-transparent-bg-hover) !important; /* Lighter on hover */
+            border-color: var(--primary-color) !important;
+            color: var(--primary-color) !important;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--shadow);
+            box-shadow: 0 4px 12px var(--shadow) !important; /* Re-add a subtle shadow on hover */
         }}
 
+        /* Ensure current active conversation button is visible but still transparent */
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
+            background-color: var(--primary-light) !important; /* Use a slightly more opaque variant for active */
+            color: white !important; /* White text for active button */
+            border-color: var(--primary-color) !important;
+        }}
+
+        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }}
 
         /* Dark text for text inputs in sidebar */
         .stApp [data-testid="stSidebar"] .stTextInput > div > div > input {{
