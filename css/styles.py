@@ -230,12 +230,12 @@ def apply_custom_css():
 
         /* Sidebar section styling - now transparent and dark text */
         .sidebar-section {{ /* Changed from .sidebar-content */
-            background: var(--surface); /* Use transparent surface color */
+            background: rgba(255, 255, 255, 0.1) !important; /* Very light transparent background */
             border-radius: var(--radius-lg);
-            padding: 20px;
+            padding: 16px !important;
             margin-bottom: 16px;
-            box-shadow: 0 4px 16px var(--shadow);
-            border: 1px solid var(--border-light);
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(5px); /* Adds a subtle blur effect for better readability */
         }}
 
         /* General Button improvements for light transparency */
@@ -368,7 +368,10 @@ def apply_custom_css():
         .stApp [data-testid="stSidebar"] h3,
         .stApp [data-testid="stSidebar"] h4,
         .stApp [data-testid="stSidebar"] p,
-        .stApp [data-testid="stSidebar"] div,
+        .stApp [data-testid="stSidebar"] div {{
+            color: var(--text-primary) !important;
+            text-shadow: none !important;
+        }}
         .stApp [data-testid="stSidebar"] label,
         .stApp [data-testid="stSidebar"] .stMarkdown,
         .stApp [data-testid="stSidebar"] .stText,
@@ -379,35 +382,33 @@ def apply_custom_css():
             text-shadow: none !important; /* Remove text shadow for better readability on light transparent background */
         }}
 
-        /*
-        * Specific rules for sidebar buttons to ensure transparency
-        * These are more specific to override Streamlit's defaults.
-        */
         .stApp [data-testid="stSidebar"] .stButton > button {{
-            background-color: var(--light-transparent-bg) !important; /* Use !important for higher specificity */
-            border: 1px solid var(--light-transparent-border) !important;
-            color: var(--text-primary) !important; /* Ensure dark text */
-            box-shadow: none !important; /* Remove any default button shadow */
+            background-color: rgba(255, 255, 255, 0.3) !important; /* Light transparent white */
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            color: var(--text-primary) !important; /* Dark text for contrast */
+            border-radius: var(--radius) !important;
+            margin: 4px 0 !important;
+            transition: all 0.2s ease !important;
+            text-align: left !important;
+            padding: 10px 16px !important;
+            box-shadow: none !important;
         }}
 
         .stApp [data-testid="stSidebar"] .stButton > button:hover {{
-            background-color: var(--light-transparent-bg-hover) !important; /* Lighter on hover */
+            background-color: rgba(255, 255, 255, 0.5) !important;
             border-color: var(--primary-color) !important;
-            color: var(--primary-color) !important;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--shadow) !important; /* Re-add a subtle shadow on hover */
+            transform: translateY(-1px) !important;
         }}
 
-        /* Ensure current active conversation button is visible but still transparent */
+        /* Active conversation button styling */
         .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
-            background-color: var(--primary-light) !important; /* Use a slightly more opaque variant for active */
-            color: white !important; /* White text for active button */
+            background-color: rgba(99, 102, 241, 0.5) !important; /* Slightly more opaque primary color */
+            color: white !important;
             border-color: var(--primary-color) !important;
         }}
 
         .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
-            background-color: var(--primary-color) !important;
-            color: white !important;
+            background-color: rgba(99, 102, 241, 0.7) !important;
         }}
 
         /* Dark text for text inputs in sidebar */
