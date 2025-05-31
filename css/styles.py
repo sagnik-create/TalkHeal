@@ -350,7 +350,7 @@ def apply_custom_css():
         button[data-testid="stSidebarToggleButton"],
         .stApp [data-testid="stSidebarNav"] button {{
             background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important; /* DARK TEXT for ☰ */
+            color: #1e293b !important; /* DARK TEXT for ☰ */
             border: 1px solid var(--light-transparent-border) !important;
             border-radius: 50% !important;
             width: 40px !important;
@@ -395,7 +395,7 @@ def apply_custom_css():
         [data-testid="stChatInput"] button,
         .stFormSubmitButton > button {{
             background: var(--light-transparent-bg) !important;
-            color: var(--text-primary) !important; /* DARK TEXT for "Send" */
+            color: #1e293b !important; /* DARK TEXT for "Send" */
             border: 1px solid var(--light-transparent-border) !important;
             border-radius: var(--radius) !important;
             font-weight: 700 !important; /* Extra bold to make "Send" text very visible */
