@@ -3,50 +3,53 @@ from core.utils import get_current_time, get_ai_response
 
 def render_chat_interface():
     """Renders the main chat message display area."""
-    chat_container = st.container()
-
-    with chat_container:
-        html = '<div class="chat-container">'
-
+    # Use a proper container with consistent styling
+    with st.container():
+        # Create the chat container wrapper
+        st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+        
         if st.session_state.active_conversation >= 0:
             active_convo = st.session_state.conversations[st.session_state.active_conversation]
 
+            # Show welcome message if no messages exist
             if not active_convo["messages"]:
-                html += f"""
+                st.markdown(f"""
                 <div class="welcome-message">
                     <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
                     I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
                     <div class="message-time">{get_current_time()}</div>
                 </div>
-                """
+                """, unsafe_allow_html=True)
             
+            # Render each message individually
             for msg in active_convo["messages"]:
                 if msg["sender"] == "user":
-                    html += f"""
+                    st.markdown(f"""
                     <div class="user-message">
                         {msg["message"]}
                         <div class="message-time">{msg["time"]}</div>
                     </div>
-                    """
+                    """, unsafe_allow_html=True)
                 else:
-                    html += f"""
+                    st.markdown(f"""
                     <div class="bot-message">
                         {msg["message"]}
                         <div class="message-time">{msg["time"]}</div>
                     </div>
-                    """
-
-        html += '</div>'
-        st.markdown(html, unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
+        
+        # Close the chat container
+        st.markdown('</div>', unsafe_allow_html=True)
 
 def handle_chat_input(model):
     """Handles the user input for the chat and generates AI responses."""
     st.markdown("---")
 
+    # Create a form for chat input
     with st.form(key="chat_form", clear_on_submit=True):
-        input_col, send_col = st.columns([5, 1])
+        col1, col2 = st.columns([5, 1])
         
-        with input_col:
+        with col1:
             user_input = st.text_input(
                 "Share your thoughts...", 
                 key="message_input", 
@@ -54,9 +57,10 @@ def handle_chat_input(model):
                 placeholder="Type your message here..."
             )
         
-        with send_col:
+        with col2:
             send_pressed = st.form_submit_button("Send", use_container_width=True)
 
+    # Process the input when send is pressed
     if send_pressed and user_input.strip():
         if st.session_state.active_conversation >= 0:
             current_time = get_current_time()
@@ -71,17 +75,28 @@ def handle_chat_input(model):
             
             # Update conversation title if it's the first message
             if len(active_convo["messages"]) == 1:
-                active_convo["title"] = user_input[:30] + "..." if len(user_input) > 30 else user_input
+                title = user_input[:30] + "..." if len(user_input) > 30 else user_input
+                active_convo["title"] = title
             
-            # Generate and add AI response
+            # Generate AI response with spinner
             with st.spinner("PeacePulse is thinking..."):
-                ai_response = get_ai_response(user_input.strip(), model)
+                try:
+                    ai_response = get_ai_response(user_input.strip(), model)
+                    
+                    # Add AI response
+                    active_convo["messages"].append({
+                        "sender": "bot", 
+                        "message": ai_response, 
+                        "time": get_current_time()
+                    })
+                    
+                except Exception as e:
+                    # Handle errors gracefully
+                    active_convo["messages"].append({
+                        "sender": "bot", 
+                        "message": "I apologize, but I'm having trouble responding right now. Please try again in a moment.", 
+                        "time": get_current_time()
+                    })
             
-            active_convo["messages"].append({
-                "sender": "bot", 
-                "message": ai_response, 
-                "time": get_current_time()
-            })
-            
-            # Refresh the page
+            # Rerun to refresh the interface
             st.rerun()
