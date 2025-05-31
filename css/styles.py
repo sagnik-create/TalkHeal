@@ -43,7 +43,7 @@ def apply_custom_css():
             --radius-lg: 16px;
 
             /* Define specific light transparent colors for buttons/sidebar elements */
-            --light-transparent-bg: rgba(255, 255, 255, 0.8); /* Light background, 40% opaque */
+            --light-transparent-bg: rgba(255, 255, 255, 0.4); /* Light background, 40% opaque */
             --light-transparent-bg-hover: rgba(255, 255, 255, 0.6); /* Lighter on hover, 60% opaque */
             --light-transparent-border: rgba(255, 255, 255, 0.5); /* Light border */
         }}
@@ -240,7 +240,7 @@ def apply_custom_css():
 
         /* General Button improvements for light transparency */
         .stButton > button {{
-            background: var(--light-transparent-bg); /* Use the new light transparent background for all buttons */
+            background: var(--light-transparent-bg); /* Use the new light transparent background */
             color: black; /* Text color for light background */
             border: 1px solid var(--light-transparent-border); /* Light transparent border */
             border-radius: var(--radius); /* Rectangular buttons */
@@ -380,6 +380,7 @@ def apply_custom_css():
         }}
 
         /* Ensure specific dark text for buttons in the sidebar */
+        /* IMPORTANT: Targeted buttons within the sidebar specifically for light transparent background */
         .stApp [data-testid="stSidebar"] .stButton > button {{
             color: var(--text-primary); /* Explicitly set dark text for sidebar buttons */
             background: var(--light-transparent-bg); /* Apply light transparent background to all sidebar buttons */
