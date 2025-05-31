@@ -43,9 +43,9 @@ def apply_custom_css():
             --radius-lg: 16px;
 
             /* Define specific light transparent colors for buttons/sidebar elements */
-            --light-transparent-bg: rgba(255, 255, 255, 0.1); /* Light background, 40% opaque */
-            --light-transparent-bg-hover: rgba(255, 255, 255, 0.6); /* Lighter on hover, 60% opaque */
-            --light-transparent-border: rgba(255, 255, 255, 0.5); /* Light border */
+            /* --primary-light: rgba(255, 255, 255, 0.1); Light background, 40% opaque */
+            --primary-light: rgba(255, 255, 255, 0.6); /* Lighter on hover, 60% opaque */
+            --primary-light: rgba(255, 255, 255, 0.5); /* Light border */
         }}
 
         /* Global styles - Set the background image */
@@ -240,9 +240,9 @@ def apply_custom_css():
 
         /* General Button improvements for light transparency */
         .stButton > button {{
-            background: var(--light-transparent-bg); /* Use the new light transparent background */
+            background: var(--primary-light); /* Use the new light transparent background */
             color: black; /* Text color for light background */
-            border: 1px solid var(--light-transparent-border); /* Light transparent border */
+            border: 1px solid var(--primary-light); /* Light transparent border */
             border-radius: var(--radius); /* Rectangular buttons */
             padding: 12px 16px;
             font-weight: 500;
@@ -252,7 +252,7 @@ def apply_custom_css():
         }}
 
         .stButton > button:hover {{
-            background: var(--light-transparent-bg-hover); /* Lighter on hover */
+            background: var(--primary-light); /* Lighter on hover */
             border-color: var(--primary-color);
             color: var(--primary-color); /* Primary color on hover */
             transform: translateY(-1px);
@@ -261,9 +261,9 @@ def apply_custom_css():
 
         /* Sidebar Toggle button specific styling for light transparency */
         .stApp [data-testid="stSidebarToggleButton"] button {{ /* Target ONLY the sidebar toggle button here */
-            background: var(--light-transparent-bg); /* Apply light transparent background */
+            background: var(--primary-light); /* Apply light transparent background */
             color: black; /* Text color for light background */
-            border: 1px solid var(--light-transparent-border);
+            border: 1px solid var(--primary-light);
             border-radius: 50%; /* Keep it round if it's the toggle button */
             width: 40px; /* Adjust size if needed */
             height: 40px;
@@ -279,7 +279,7 @@ def apply_custom_css():
         }}
 
         .stApp [data-testid="stSidebarToggleButton"] button:hover {{ /* Hover for toggle button */
-            background: var(--light-transparent-bg-hover); /* Lighter on hover */
+            background: var(--primary-light); /* Lighter on hover */
             transform: scale(1.1);
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
             color: var(--primary-color);
@@ -382,13 +382,13 @@ def apply_custom_css():
         /* Ensure specific dark text for buttons in the sidebar */
         .stApp [data-testid="stSidebar"] .stButton > button {{
             color: var(--text-primary); /* Explicitly set dark text for sidebar buttons */
-            background: var(--light-transparent-bg); /* Apply light transparent background to all sidebar buttons */
-            border: 1px solid var(--light-transparent-border);
+            background: var(--primary-light); /* Apply light transparent background to all sidebar buttons */
+            border: 1px solid var(--primary-light);
         }}
 
         /* Hover state for sidebar buttons */
         .stApp [data-testid="stSidebar"] .stButton > button:hover {{
-            background: var(--light-transparent-bg-hover); /* Lighter on hover */
+            background: var(--primary-light); /* Lighter on hover */
             border-color: var(--primary-color);
             color: var(--primary-color);
             transform: translateY(-1px);
