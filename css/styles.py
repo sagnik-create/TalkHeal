@@ -229,7 +229,7 @@ def apply_custom_css():
         }}
 
         /* Sidebar section styling - now transparent and dark text */
-        .sidebar-section {{ /* Changed from .sidebar-content */
+        .sidebar-section {{
             background: rgba(255, 255, 255, 0.1) !important; /* Very light transparent background */
             border-radius: var(--radius-lg);
             padding: 16px !important;
@@ -239,62 +239,68 @@ def apply_custom_css():
         }}
 
         /*
-         * UNIVERSAL BUTTON STYLING FOR TRANSPARENCY
-         * These rules target ALL Streamlit buttons.
-         */
-        .stButton > button,
-        .stApp [data-testid="stSidebar"] .stButton > button,
-        .stApp [data-testid="stSidebarToggleButton"] button {{
-            background-color: rgba(255, 255, 255, 0.3) !important; /* Light transparent white */
-            border: 1px solid rgba(255, 255, 255, 0.4) !important;
-            color: var(--text-primary) !important; /* Dark text for contrast */
+        * GLOBAL BUTTON STYLES FOR LIGHT TRANSPARENCY
+        * This targets ALL Streamlit buttons to be light transparent.
+        */
+        .stButton > button {{
+            background-color: var(--light-transparent-bg) !important; /* Use the new light transparent background */
+            color: var(--text-primary) !important; /* Text color for light transparent background, force dark */
+            border: 1px solid var(--light-transparent-border) !important; /* Light transparent border */
             border-radius: var(--radius) !important;
-            padding: 12px 16px !important; /* Ensure padding is consistent */
+            padding: 12px 16px !important;
             font-weight: 500 !important;
             transition: all 0.2s ease !important;
-            width: 100% !important; /* Make sure they fill their container */
-            font-family: 'Inter', sans-serif !important;
+            width: auto !important; /* Let buttons size naturally unless overridden specifically */
+            min-width: 100px; /* Ensure a minimum width for better appearance */
+            text-align: center !important; /* Center text in buttons */
             box-shadow: none !important; /* Remove any default button shadow */
+            font-family: 'Inter', sans-serif;
         }}
 
-        .stButton > button:hover,
-        .stApp [data-testid="stSidebar"] .stButton > button:hover,
-        .stApp [data-testid="stSidebarToggleButton"] button:hover {{
-            background-color: rgba(255, 255, 255, 0.5) !important; /* Lighter on hover */
-            border-color: var(--primary-color) !important;
-            color: var(--primary-color) !important; /* Primary color on hover */
+        .stButton > button:hover {{
+            background-color: var(--light-transparent-bg-hover) !important; /* Lighter on hover */
+            border-color: var(--primary-color) !important; /* Primary color on hover */
+            color: var(--primary-color) !important; /* Primary color on hover for text */
             transform: translateY(-1px) !important;
             box-shadow: 0 4px 12px var(--shadow) !important; /* Re-add a subtle shadow on hover */
         }}
 
-        /* Specific style for the sidebar toggle button to remain round */
+        /* Specific styling for 'primary' kind buttons (e.g., active elements) */
+        .stButton > button[kind="primary"] {{
+            background-color: rgba(99, 102, 241, 0.6) !important; /* Slightly more opaque primary color */
+            color: white !important; /* White text for primary buttons */
+            border-color: var(--primary-color) !important;
+        }}
+
+        .stButton > button[kind="primary"]:hover {{
+            background-color: rgba(99, 102, 241, 0.8) !important; /* Even more opaque on hover */
+            color: white !important;
+        }}
+
+        /* Sidebar Toggle button specific styling (keep it round) */
         .stApp [data-testid="stSidebarToggleButton"] button {{
+            background-color: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
             border-radius: 50% !important; /* Keep it round */
-            width: 40px !important; /* Adjust size if needed */
+            width: 40px !important;
             height: 40px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             font-size: 20px !important;
-            padding: 0 !important; /* Remove padding for round button */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+            transition: all 0.3s ease !important;
             margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1 !important;
         }}
 
         .stApp [data-testid="stSidebarToggleButton"] button:hover {{
+            background-color: var(--light-transparent-bg-hover) !important;
             transform: scale(1.1) !important;
-        }}
-
-        /* Active conversation button styling (primary type) */
-        .stButton > button[kind="primary"],
-        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
-            background-color: rgba(99, 102, 241, 0.5) !important; /* Slightly more opaque primary color */
-            color: white !important;
-            border-color: var(--primary-color) !important;
-        }}
-
-        .stButton > button[kind="primary"]:hover,
-        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {{
-            background-color: rgba(99, 102, 241, 0.7) !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
+            color: var(--primary-color) !important;
         }}
 
         /* Form input styling - now transparent */
@@ -305,7 +311,7 @@ def apply_custom_css():
             padding: 12px 16px !important;
             font-size: 1em !important;
             color: var(--text-primary) !important;
-            font-family: 'Inter', sans-serif !important;
+            font-family: 'Inter', sans-serif;
             transition: all 0.2s ease !important;
         }}
 
@@ -344,8 +350,7 @@ def apply_custom_css():
             border-radius: var(--radius) !important;
             border: none !important;
             font-weight: 500 !important;
-            padding: 12px 16px !important;
-            margin-bottom: 1rem !important;
+            padding: 12px 16px !important; /* Ensure consistent padding */
         }}
 
         .stInfo {{
@@ -377,7 +382,7 @@ def apply_custom_css():
             text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3) !important; /* Add subtle text shadow */
         }}
 
-        /* Text inside sidebar sections specifically for dark text */
+        /* Target text inside sidebar sections specifically for dark text */
         .stApp [data-testid="stSidebar"] h3,
         .stApp [data-testid="stSidebar"] h4,
         .stApp [data-testid="stSidebar"] p,
@@ -442,9 +447,9 @@ def apply_custom_css():
 
         /* Ensure sidebar styling applies to the actual Streamlit sidebar */
         .stApp [data-testid="stSidebar"] {{
-            background: var(--surface); /* Use transparent surface color for sidebar */
-            border-right: 1px solid var(--border-light);
-            box-shadow: 4px 0 24px var(--shadow-lg);
+            background: var(--surface) !important; /* Use transparent surface color for sidebar */
+            border-right: 1px solid var(--border-light) !important;
+            box-shadow: 4px 0 24px var(--shadow-lg) !important;
         }}
 
     </style>
