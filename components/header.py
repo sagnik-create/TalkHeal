@@ -1,5 +1,5 @@
 import streamlit as st
-from sidebar import render_mood_tracker # Import the new function
+from components.sidebar import render_mood_tracker # Import the new function
 
 def render_header():
     """Renders the main header area, now containing the Mood Tracker."""
