@@ -108,9 +108,6 @@ def render_sidebar():
 
             st.markdown("---") # Separator after quick prompts
 
-
-        # Display conversation history with visual timeline elements
-        st.markdown("### Your Chat History")
         if st.session_state.conversations:
             # Add a search bar for conversations
             convo_search = st.text_input("Search chats...", key="convo_search", placeholder="Type to search...", label_visibility="collapsed")
