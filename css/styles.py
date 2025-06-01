@@ -340,7 +340,7 @@ def apply_custom_css():
         /* Form input styling */
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea {{ /* Added textarea for mood journal */
-            background: var(--primary-dark) !important;
+            background: purple !important;
             border: 2px solid var(--border) !important;
             border-radius: var(--radius) !important;
             padding: 12px 16px !important;
