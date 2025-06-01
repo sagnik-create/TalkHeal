@@ -7,38 +7,41 @@ def render_chat_interface():
     if st.session_state.active_conversation >= 0:
         active_convo = st.session_state.conversations[st.session_state.active_conversation]
         
-        # Create a single container with custom class for all messages
-        st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+        # Build the entire chat content as one HTML string
+        chat_html = '<div class="chat-container">'
         
         # Show welcome message if no messages exist
         if not active_convo["messages"]:
-            st.markdown(f"""
+            chat_html += f"""
             <div class="welcome-message">
                 <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
                 I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
-                <div class="message-time">{get_current_time()}</div>
+                <span class="message-time">{get_current_time()}</span>
             </div>
-            """, unsafe_allow_html=True)
+            """
         
-        # Render all messages in sequence within the same container
+        # Add all messages to the HTML string
         for msg in active_convo["messages"]:
             if msg["sender"] == "user":
-                st.markdown(f"""
+                chat_html += f"""
                 <div class="user-message">
                     {msg["message"]}
-                    <div class="message-time">{msg["time"]}</div>
+                    <span class="message-time">{msg["time"]}</span>
                 </div>
-                """, unsafe_allow_html=True)
+                """
             else:
-                st.markdown(f"""
+                chat_html += f"""
                 <div class="bot-message">
                     {msg["message"]}
-                    <div class="message-time">{msg["time"]}</div>
+                    <span class="message-time">{msg["time"]}</span>
                 </div>
-                """, unsafe_allow_html=True)
+                """
         
         # Close the chat container
-        st.markdown('</div>', unsafe_allow_html=True)
+        chat_html += '</div>'
+        
+        # Render the entire chat as one HTML block
+        st.markdown(chat_html, unsafe_allow_html=True)
 
 def handle_chat_input(model):
     """Handles the user input for the chat and generates AI responses."""

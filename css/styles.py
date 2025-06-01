@@ -170,6 +170,8 @@ def apply_custom_css():
             margin-top: 8px;
             text-align: right;
             font-weight: 400;
+            display: block;
+            margin-left: auto;
         }}
         
         .user-message .message-time {{
