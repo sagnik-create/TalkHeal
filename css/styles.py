@@ -217,6 +217,7 @@ def apply_custom_css():
         }}
         
         /* Sidebar section styling */
+        /* Note: Removed .sidebar-section class from Python, keeping styling for potential future use */
         .sidebar-section {{
             background: var(--light-transparent-bg) !important;
             border-radius: var(--radius-lg);
@@ -271,7 +272,8 @@ def apply_custom_css():
         }}
         
         /* Active conversation styling */
-        .stApp [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
+        /* This targets primary buttons specifically within the sidebar */
+        .stApp [data-testid="stSidebar"] .stButton button[data-testid*="stButton-primary"] {{
             background: var(--active-conversation-bg) !important;
             color: white !important;
             border: 2px solid var(--active-conversation-border) !important;
@@ -295,7 +297,8 @@ def apply_custom_css():
         }}
         
         /* Form input styling */
-        .stTextInput > div > div > input {{
+        .stTextInput > div > div > input,
+        .stTextArea > div > div > textarea {{ /* Added textarea for mood journal */
             background: var(--surface) !important;
             border: 2px solid var(--border) !important;
             border-radius: var(--radius) !important;
@@ -307,7 +310,8 @@ def apply_custom_css():
             backdrop-filter: blur(5px) !important;
         }}
         
-        .stTextInput > div > div > input:focus {{
+        .stTextInput > div > div > input:focus,
+        .stTextArea > div > div > textarea:focus {{
             border-color: var(--primary-color) !important;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
             outline: none !important;
@@ -393,5 +397,140 @@ def apply_custom_css():
                 padding: 16px;
             }}
         }}
+
+        /* New Chat button animation */
+        .stButton > button[key="new_chat"] {{
+            animation: pulse-glow 2s infinite ease-in-out;
+        }}
+
+        @keyframes pulse-glow {{
+            0% {{ box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }}
+            50% {{ box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }}
+            100% {{ box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }}
+        }}
+
+        /* Mood Selector Styling (st.radio) */
+        .stRadio > label {{
+            padding-bottom: 0px !important; /* Remove space below label */
+        }}
+        .stRadio div[data-testid="stOptions"] {{
+            display: flex; /* Make radio options horizontal */
+            justify-content: space-around;
+            gap: 5px; /* Adjust spacing between options */
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(3px);
+            margin-bottom: 15px; /* Space below the mood selector */
+        }}
+
+        /* Style for individual radio option containers */
+        .stRadio div[data-testid="stOption"] {{
+            flex: 1; /* Distribute space evenly */
+            text-align: center;
+            margin: 0 !important; /* Remove default margin */
+            padding: 0 !important;
+        }}
+
+        /* Style for the radio button and label inside each option */
+        .stRadio div[data-testid="stOption"] > label {{
+            display: flex;
+            flex-direction: column; /* Stack radio button and label */
+            align-items: center;
+            justify-content: center;
+            height: 100%; /* Ensure full height for clickable area */
+            padding: 8px 0px; /* Adjust padding */
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            font-weight: 500;
+        }}
+
+        .stRadio div[data-testid="stOption"] > label:hover {{
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }}
+
+        /* Style for the actual radio input (hide default circle) */
+        .stRadio input[type="radio"] {{
+            /* Hide the default radio circle */
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }}
+
+        /* Style for the label when the radio is checked */
+        .stRadio input[type="radio"]:checked + div > span {{
+            /* This span usually contains the text */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            /* Reset specific properties applied by Streamlit to the span directly */
+            -webkit-text-fill-color: unset !important;
+        }}
+
+        /* Target the parent label of the checked radio button for the background/border */
+        .stRadio input[type="radio"]:checked + div > label {{
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white !important; /* Ensure text is white */
+            border-color: var(--primary-color) !important;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }}
+
+        /* Make the text inside the radio button visible when checked */
+        .stRadio input[type="radio"]:checked + div > label > div > p {{
+            color: white !important;
+        }}
+
+
+        /* Resource Tabs Styling */
+        .stTabs [data-baseweb="tab-list"] {{
+            gap: 8px; /* Space between tabs */
+        }}
+
+        .stTabs [data-baseweb="tab"] {{
+            background: var(--light-transparent-bg) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+            border-radius: var(--radius) !important;
+            padding: 10px 15px !important;
+            transition: all 0.2s ease;
+            color: var(--text-primary) !important;
+            font-weight: 600;
+        }}
+
+        .stTabs [data-baseweb="tab"]:hover {{
+            background: var(--light-transparent-bg-hover) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }}
+
+        .stTabs [data-baseweb="tab"][aria-selected="true"] {{
+            background: var(--active-conversation-bg) !important;
+            color: white !important;
+            border-color: var(--active-conversation-border) !important;
+            box-shadow: 0 4px 12px var(--active-conversation-shadow) !important;
+            transform: scale(1.02);
+        }}
+
+        .stTabs [data-baseweb="tab-panel"] {{
+            background: var(--surface) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius) !important;
+            padding: 15px !important;
+            margin-top: 10px;
+            backdrop-filter: blur(8px);
+        }}
+
     </style>
     """, unsafe_allow_html=True)
