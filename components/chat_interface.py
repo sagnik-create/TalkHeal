@@ -2,41 +2,43 @@ import streamlit as st
 from core.utils import get_current_time, get_ai_response
 
 def render_chat_interface():
-    """Renders the main chat message display area."""
+    """Renders the main chat message display area in a single scrollable container."""
     
     if st.session_state.active_conversation >= 0:
         active_convo = st.session_state.conversations[st.session_state.active_conversation]
         
-        # Create a container for the chat messages
-        chat_container = st.container()
+        # Create a single container with custom class for all messages
+        st.markdown('<div class="chat-container">', unsafe_allow_html=True)
         
-        with chat_container:
-            # Show welcome message if no messages exist
-            if not active_convo["messages"]:
+        # Show welcome message if no messages exist
+        if not active_convo["messages"]:
+            st.markdown(f"""
+            <div class="welcome-message">
+                <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
+                I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
+                <div class="message-time">{get_current_time()}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # Render all messages in sequence within the same container
+        for msg in active_convo["messages"]:
+            if msg["sender"] == "user":
                 st.markdown(f"""
-                <div class="welcome-message">
-                    <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
-                    I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
-                    <div class="message-time">{get_current_time()}</div>
+                <div class="user-message">
+                    {msg["message"]}
+                    <div class="message-time">{msg["time"]}</div>
                 </div>
                 """, unsafe_allow_html=True)
-            
-            # Render each message within the Streamlit container
-            for msg in active_convo["messages"]:
-                if msg["sender"] == "user":
-                    st.markdown(f"""
-                    <div class="user-message">
-                        {msg["message"]}
-                        <div class="message-time">{msg["time"]}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
-                else:
-                    st.markdown(f"""
-                    <div class="bot-message">
-                        {msg["message"]}
-                        <div class="message-time">{msg["time"]}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div class="bot-message">
+                    {msg["message"]}
+                    <div class="message-time">{msg["time"]}</div>
+                </div>
+                """, unsafe_allow_html=True)
+        
+        # Close the chat container
+        st.markdown('</div>', unsafe_allow_html=True)
 
 def handle_chat_input(model):
     """Handles the user input for the chat and generates AI responses."""

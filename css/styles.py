@@ -76,37 +76,7 @@ def apply_custom_css():
             max-width: 1200px;
         }}
         
-        /* Streamlit container that holds chat messages */
-        .main .block-container > div:has(.user-message, .bot-message, .welcome-message) {{
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin: 16px 0;
-            box-shadow: 0 4px 24px var(--shadow-lg);
-            min-height: 500px;
-            max-height: 600px;
-            overflow-y: auto;
-            border: 1px solid var(--border-light);
-            scroll-behavior: smooth;
-            position: relative;
-            backdrop-filter: blur(10px);
-        }}
-        
-        /* Alternative targeting for chat container */
-        .element-container:has(.user-message) {{
-            background: var(--surface) !important;
-            border-radius: var(--radius-lg) !important;
-            padding: 24px !important;
-            margin: 16px 0 !important;
-            box-shadow: 0 4px 24px var(--shadow-lg) !important;
-            min-height: 500px !important;
-            max-height: 600px !important;
-            overflow-y: auto !important;
-            border: 1px solid var(--border-light) !important;
-            backdrop-filter: blur(10px) !important;
-        }}
-        
-        /* Chat container with improved styling */
+        /* Chat container with improved styling - SINGLE CONTAINER FOR ALL MESSAGES */
         .chat-container {{
             background: var(--surface);
             border-radius: var(--radius-lg);
@@ -155,6 +125,8 @@ def apply_custom_css():
             position: relative;
             backdrop-filter: blur(5px);
             display: block;
+            margin-left: auto;
+            margin-right: 0;
         }}
         
         /* Bot message styling */
@@ -163,7 +135,7 @@ def apply_custom_css():
             color: var(--text-primary);
             padding: 16px 20px;
             border-radius: 20px 20px 20px 8px;
-            margin: 12px auto 12px 0;
+            margin: 12px 0;
             max-width: 75%;
             word-wrap: break-word;
             border: 1px solid var(--border);
@@ -172,6 +144,8 @@ def apply_custom_css():
             font-weight: 500;
             backdrop-filter: blur(10px);
             display: block;
+            margin-left: 0;
+            margin-right: auto;
         }}
         
         /* Welcome message */
