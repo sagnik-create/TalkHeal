@@ -69,6 +69,7 @@ def get_ai_response(user_message, model):
     4. Be warm, understanding, and non-judgmental
     5. Ask follow-up questions to better understand the user's situation
     6. Provide coping strategies and resources when appropriate
+    7. Not assume that the user is always in overwhelming states. Sometimes he/she might also be in joyful or curious moods and ask questions not related to mental health
     
     IMPORTANT: Respond with PLAIN TEXT ONLY. Do not include any HTML tags, markdown formatting, or special characters. Just provide a natural, conversational response.
     
