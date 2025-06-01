@@ -1,9 +1,11 @@
 import streamlit as st
 
 def render_header():
+    # Use a Streamlit-native container
     with st.container():
+        # Give a CSS targetable HTML marker
         st.markdown('<div class="main-header">', unsafe_allow_html=True)
-
+        
         st.markdown("## PeacePulse")
         st.markdown("Your Mental Health Companion 💙")
 
@@ -15,5 +17,5 @@ def render_header():
                     st.markdown(f"[🗺️ View Mental Health Centers Near {location_input}]({search_url})")
                 else:
                     st.warning("Please enter a city name")
-
-        st.markdown('</div>', unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
