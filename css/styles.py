@@ -151,6 +151,48 @@ def apply_custom_css():
             color: var(--text-secondary);
         }}
         
+        /* Banner */
+        .banner {{
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--surface);
+            color: white;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }}
+        
+        .banner::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }}
+        
+        .banner h3 {{
+            margin: 0 0 8px 0;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+        
+        .banner p {{
+            margin: 0;
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }}
+        
         /* Enhanced header */
         .main-header {{
             text-align: center;

@@ -70,7 +70,7 @@ def render_sidebar():
     """Renders the left and right sidebars."""
     with st.sidebar:
         st.markdown(f"""
-        <div class="main-header">
+        <div class="banner">
             <h3>PeacePulse</h3>
             <p>Your Mental Health Companion 💙</p>
         </div>
