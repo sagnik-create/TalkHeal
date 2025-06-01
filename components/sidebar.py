@@ -65,12 +65,11 @@ mental_health_resources_full = {
     }
 }
 
-# --- NEW FUNCTION TO RENDER MOOD TRACKER ---
 def render_mood_tracker():
     """Renders the dynamic Mood Tracker & Micro-Journal."""
     # We will use a div with a custom class to apply the same styling as the old main-header
     st.markdown(f"""
-    <div class="main-header"> {/* Reusing main-header class for styling */}
+    <div class="main-header">
         <p style="margin-bottom: 8px; font-size: 1.2em; color: rgba(255, 255, 255, 0.9);">
             How are you feeling today?
         </p>
