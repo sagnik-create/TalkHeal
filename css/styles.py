@@ -235,8 +235,9 @@ def apply_custom_css():
         }}
         
         /* Emergency button */
-        .emergency-button {{
-            background: rgba(220, 38, 38, 0.9) !important;
+        /* Emergency button - Targeted by data-testid from its key */
+        .stButton button[data-testid="stButton-emergency_button"] {{ /* <-- CHANGE THIS LINE */
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
             color: white !important;
             padding: 18px 24px;
             border-radius: var(--radius);
@@ -250,8 +251,8 @@ def apply_custom_css():
             border: 1px solid rgba(239, 68, 68, 0.8) !important;
             backdrop-filter: blur(5px);
         }}
-        
-        .emergency-button:hover {{
+
+        .stButton button[data-testid="stButton-emergency_button"]:hover {{ /* <-- CHANGE THIS LINE for hover too */
             transform: translateY(-3px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
             background: linear-gradient(135deg, rgba(220, 38, 38, 1) 0%, rgba(185, 28, 28, 1) 100%) !important;
