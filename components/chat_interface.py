@@ -37,6 +37,14 @@ def render_chat_interface():
 def handle_chat_input(model):
     """Handles the user input for the chat and generates AI responses."""
     
+    # Initialize pre-filled input if not present
+    if "pre_filled_chat_input" not in st.session_state:
+        st.session_state.pre_filled_chat_input = ""
+    
+    # Use the pre-filled value if available, then clear it
+    initial_chat_value = st.session_state.pre_filled_chat_input
+    st.session_state.pre_filled_chat_input = "" # Clear it immediately after reading
+
     # Create a form for chat input
     with st.form(key="chat_form", clear_on_submit=True):
         col1, col2 = st.columns([5, 1])
@@ -46,14 +54,19 @@ def handle_chat_input(model):
                 "Share your thoughts...", 
                 key="message_input", 
                 label_visibility="collapsed",
-                placeholder="Type your message here..."
+                placeholder="Type your message here...",
+                value=initial_chat_value # Set the initial value here
             )
         
         with col2:
             send_pressed = st.form_submit_button("Send", use_container_width=True)
     
-    # Process the input when send is pressed
-    if send_pressed and user_input.strip():
+    # Process the input when send is pressed or if triggered by a sidebar button
+    if (send_pressed or st.session_state.get('send_chat_message', False)) and user_input.strip():
+        # Reset the flag after processing
+        if 'send_chat_message' in st.session_state:
+            st.session_state.send_chat_message = False
+
         if st.session_state.active_conversation >= 0:
             current_time = get_current_time()
             active_convo = st.session_state.conversations[st.session_state.active_conversation]
@@ -84,6 +97,7 @@ def handle_chat_input(model):
                     
                 except Exception as e:
                     # Handle errors gracefully
+                    st.error(f"An error occurred: {e}") # For debugging
                     active_convo["messages"].append({
                         "sender": "bot", 
                         "message": "I apologize, but I'm having trouble responding right now. Please try again in a moment.", 

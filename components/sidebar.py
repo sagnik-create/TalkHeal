@@ -1,7 +1,7 @@
 import streamlit as st
 import webbrowser
 from datetime import datetime
-from core.utils import create_new_conversation
+from core.utils import create_new_conversation, get_current_time # Import get_current_time if not already there
 
 # Emergency contacts and resources
 emergency_resources = {
@@ -75,6 +75,10 @@ def render_sidebar():
         # Initialize state for quick start prompts visibility
         if "show_quick_start_prompts" not in st.session_state:
             st.session_state.show_quick_start_prompts = False
+        if "pre_filled_chat_input" not in st.session_state:
+            st.session_state.pre_filled_chat_input = ""
+        if "send_chat_message" not in st.session_state:
+            st.session_state.send_chat_message = False
 
         if st.button("➕ New Chat", key="new_chat", use_container_width=True):
             create_new_conversation()
@@ -97,8 +101,8 @@ def render_sidebar():
             for i, prompt in enumerate(quick_prompts):
                 with qp_cols[i % 2]: # Distribute buttons across 2 columns
                     if st.button(f"✨ {prompt}", key=f"qp_{i}", use_container_width=True):
-                        # This sets a temporary value that can be read by chat_interface
                         st.session_state.pre_filled_chat_input = prompt
+                        st.session_state.send_chat_message = True # Indicate that a message should be sent
                         st.session_state.show_quick_start_prompts = False # Hide after selection
                         st.rerun() # Rerun to update the main chat input
 
@@ -120,38 +124,15 @@ def render_sidebar():
                 st.info("No matching conversations found.")
 
             for i, convo in enumerate(filtered_conversations):
-                # Using a dummy column to mimic a timeline dot/line if desired with CSS
-                # For direct Streamlit, we focus on styling the button itself
                 is_active = i == st.session_state.active_conversation
                 button_style_icon = "🟢" if is_active else "📝"
                 
-                # Apply custom class for timeline effect via CSS
-                btn_css_class = "timeline-active-convo" if is_active else "timeline-convo"
-
-                # Streamlit button needs to be wrapped in HTML to apply direct class
-                # This is a bit of a hack, consider custom components for cleaner HTML/JS bridge
-                button_html = f"""
-                    <div class="{btn_css_class}">
-                        <button class="stButton" style="width: 100%;" key="convo_html_{i}" 
-                            onclick="window.parent.postMessage({{
-                                type: 'streamlit:setComponentValue',
-                                key: 'convo_native_{i}',
-                                value: true
-                            }}, '*')"
-                        >
-                            {button_style_icon} {convo['title'][:22]}...
-                            <br><small style="font-size:0.7em; opacity:0.7;">Started: {convo['date']}</small>
-                        </button>
-                    </div>
-                """
-                # For simplicity and direct Streamlit interaction, let's use st.button with type
-                # and apply global CSS for 'primary' button on active conversation.
                 if st.button(
                     f"{button_style_icon} {convo['title'][:22]}...",
                     key=f"convo_{i}",
                     help=f"Started: {convo['date']}",
                     use_container_width=True,
-                    type="primary" if is_active else "secondary" # This triggers the active conversation CSS
+                    type="primary" if is_active else "secondary"
                 ):
                     st.session_state.active_conversation = i
                     st.rerun()
@@ -160,16 +141,13 @@ def render_sidebar():
         
         st.markdown("---") # Separator before emergency help
 
-        # --- 2. Emergency Help Button ---
-        st.markdown("""
-        <div class="emergency-button" onclick="window.open('https://www.mentalhealth.gov/get-help/immediate-help', '_blank')">
-            🚨 Emergency Help
-        </div>
-        """, unsafe_allow_html=True)
+        # --- 2. Emergency Help Button (Functional) ---
+        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True, type="danger"):
+            webbrowser.open("https://www.mentalhealth.gov/get-help/immediate-help")
 
         st.markdown("") # Add a little space
 
-        # --- 3. Dynamic Mood Tracker & Micro-Journal ---
+        # --- 3. Dynamic Mood Tracker & Micro-Journal (Fixed Tip & New Button) ---
         with st.expander("🧠 Mental Health Check"):
             st.markdown("**How are you feeling today?**")
             
@@ -208,6 +186,12 @@ def render_sidebar():
                 # Initialize journal entry for the current session
                 if "mood_journal_entry" not in st.session_state:
                     st.session_state.mood_journal_entry = ""
+                # Initialize state for displaying tips and status
+                if "mood_tip_display" not in st.session_state:
+                    st.session_state.mood_tip_display = ""
+                if "mood_entry_status" not in st.session_state:
+                    st.session_state.mood_entry_status = ""
+
 
                 st.text_area(
                     f"✏️ {journal_prompt_text}",
@@ -225,14 +209,38 @@ def render_sidebar():
                 }.get(st.session_state.current_mood_val, "A general tip for your mood.")
 
                 st.markdown("") # Small space
-                if st.button("Get Tip & Save Entry", key="save_mood_entry", use_container_width=True):
-                    st.success(tips_for_mood)
-                    # Here you would typically save this to a persistent store (database/file)
-                    # For this no-backend scenario, we'll just acknowledge.
-                    st.info(f"Your mood entry for '{selected_mood_label}' has been noted for this session.")
-                    st.session_state.mood_journal_entry = "" # Clear after "saving"
-                    st.session_state.current_mood_val = None # Reset mood selection visually
-                    st.rerun() # Rerun to clear inputs and reset state
+                
+                # Two buttons side-by-side
+                col_tip_save, col_ask_peacepulse = st.columns(2)
+
+                with col_tip_save:
+                    if st.button("Get Tip & Save Entry", key="save_mood_entry", use_container_width=True):
+                        st.session_state.mood_tip_display = tips_for_mood
+                        st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
+                        st.session_state.mood_journal_entry = "" # Clear after "saving"
+                        # No rerun here to keep the tip visible
+                
+                with col_ask_peacepulse:
+                    if st.button("Ask PeacePulse", key="ask_peacepulse_from_mood", use_container_width=True):
+                        if st.session_state.mood_journal_area.strip():
+                            st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area
+                            st.session_state.send_chat_message = True
+                            st.session_state.mood_journal_entry = "" # Clear the journal area
+                            st.session_state.mood_tip_display = "" # Clear any previous tip
+                            st.session_state.mood_entry_status = "" # Clear status
+                            st.rerun() # Rerun to switch to chat and send message
+                        else:
+                            st.warning("Please enter your thoughts before asking PeacePulse.")
+
+                # Display the stored tip and status outside the button logic
+                if st.session_state.mood_tip_display:
+                    st.success(st.session_state.mood_tip_display)
+                    # Clear it after display so it doesn't persist across unrelated interactions
+                    st.session_state.mood_tip_display = "" 
+                if st.session_state.mood_entry_status:
+                    st.info(st.session_state.mood_entry_status)
+                    # Clear it after display
+                    st.session_state.mood_entry_status = ""
 
         # --- 4. Resource Hub with Categories & Search ---
         with st.expander("📚 Resources & Knowledge Base"):
@@ -244,8 +252,8 @@ def render_sidebar():
             filtered_topics = [
                 topic for topic in mental_health_resources_full
                 if resource_search_query.lower() in topic.lower() or \
-                   any(resource_search_query.lower() in link['label'].lower() for link in mental_health_resources_full[topic]['links']) or \
-                   resource_search_query.lower() in mental_health_resources_full[topic]['description'].lower()
+                    any(resource_search_query.lower() in link['label'].lower() for link in mental_health_resources_full[topic]['links']) or \
+                    resource_search_query.lower() in mental_health_resources_full[topic]['description'].lower()
             ]
 
             if resource_search_query and not filtered_topics:
