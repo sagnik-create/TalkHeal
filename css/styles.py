@@ -235,8 +235,7 @@ def apply_custom_css():
         }}
         
         /* Emergency button */
-        /* Emergency button - Targeted by data-testid from its key */
-        .emergency_button {{ /* <-- CHANGE THIS LINE */
+        .emergency_button {{ 
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
             color: white !important;
             padding: 18px 24px;
@@ -252,7 +251,7 @@ def apply_custom_css():
             backdrop-filter: blur(5px);
         }}
 
-        .emergency_button:hover {{ /* <-- CHANGE THIS LINE for hover too */
+        .emergency_button:hover {{
             transform: translateY(-3px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
             background: linear-gradient(135deg, rgba(220, 38, 38, 1) 0%, rgba(185, 28, 28, 1) 100%) !important;
@@ -341,7 +340,7 @@ def apply_custom_css():
         /* Form input styling */
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea {{ /* Added textarea for mood journal */
-            background: var(--surface) !important;
+            background: var(--primary-dark) !important;
             border: 2px solid var(--border) !important;
             border-radius: var(--radius) !important;
             padding: 12px 16px !important;
