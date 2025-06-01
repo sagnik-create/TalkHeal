@@ -176,7 +176,7 @@ def apply_custom_css():
         }}
         
         .banner h3 {{
-            margin: 0 0 8px 0;
+            margin: 0 0 0 0;
             font-size: 2em;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
