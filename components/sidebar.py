@@ -69,6 +69,12 @@ mental_health_resources_full = {
 def render_sidebar():
     """Renders the left and right sidebars."""
     with st.sidebar:
+        st.markdown(f"""
+        <div class="main-header">
+            <h3>PeacePulse</h3>
+            <p>Your Mental Health Companion 💙</p>
+        </div>
+        """, unsafe_allow_html=True)
         # --- 1. Conversations & New Chat (with Quick Start Prompts) ---
         st.markdown("### 💬 Conversations")
 
