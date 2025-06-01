@@ -145,7 +145,7 @@ def render_sidebar():
         st.markdown("---") # Separator before emergency help
 
         # --- 2. Emergency Help Button (Functional) ---
-        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True):
+        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True, type="primary"):
             webbrowser.open("https://www.mentalhealth.gov/get-help/immediate-help")
 
         st.markdown("") # Add a little space
