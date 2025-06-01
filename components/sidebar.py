@@ -68,105 +68,116 @@ mental_health_resources_full = {
 def render_mood_tracker():
     """Renders the dynamic Mood Tracker & Micro-Journal."""
 
-    # Create a container. This container will visually hold all the mood tracker elements.
-    # We will then apply the 'main-header' styling to this container.
-    with st.container(border=True): # Use border=True for a visual indicator initially if needed
-        # Inject custom HTML/CSS to wrap the content and apply the 'main-header' class.
-        # This will create a div *around* the content of this container.
-        st.markdown(
-            f"""
-            <style>
-                .mood-tracker-container > div:first-child {{
-                    text-align: center;
-                    padding: 32px 24px;
-                    background: var(--surface);
-                    color: white;
-                    border-radius: var(--radius-lg);
-                    margin-bottom: 24px;
-                    box-shadow: 0 8px 32px var(--shadow-lg);
-                    border: 1px solid var(--border-light);
-                    position: relative;
-                    overflow: hidden;
-                    backdrop-filter: blur(10px);
-                }}
+    # Inject CSS to apply the 'main-header' class to the Streamlit container's parent div.
+    # Streamlit containers are often wrapped in a div with a data-testid.
+    # We can target a specific container by using a unique class on its parent.
+    st.markdown(
+        """
+        <style>
+            /* Target the specific Streamlit block that contains the mood tracker container */
+            /* This assumes the st.container() below creates a div that is the first child
+               of a custom wrapper div. Streamlit's internal DOM can vary, so this is a common
+               pattern to make sure your styles apply correctly without overwriting. */
+            .mood-tracker-wrapper > div:first-child { /* Target the container's direct parent */
+                /* Apply all the existing .main-header styles here.
+                   We are doing this by injecting the CSS here to ensure it applies
+                   to the correct Streamlit-generated parent element. */
+                text-align: center;
+                padding: 32px 24px;
+                background: var(--surface);
+                color: white;
+                border-radius: var(--radius-lg);
+                margin-bottom: 24px;
+                box-shadow: 0 8px 32px var(--shadow-lg);
+                border: 1px solid var(--border-light);
+                position: relative;
+                overflow: hidden;
+                backdrop-filter: blur(10px);
+            }
 
-                .mood-tracker-container > div:first-child::before {{
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    height: 4px;
-                    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-                }}
+            /* Add the ::before pseudo-element for the gradient line */
+            .mood-tracker-wrapper > div:first-child::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            }
 
-                .mood-tracker-container p {{
-                    margin: 0;
-                    font-size: 1.2em;
-                    color: rgba(255, 255, 255, 0.9);
-                    font-weight: 500;
-                }}
+            /* Ensure the <p> tag inside the container uses the correct style */
+            .mood-tracker-wrapper p {
+                margin: 0;
+                font-size: 1.2em;
+                color: rgba(255, 255, 255, 0.9);
+                font-weight: 500;
+            }
 
-                /* Add styles for Streamlit radio buttons to blend with your theme */
-                .stRadio > label > div[data-testid="stFlexGap"] {{
-                    justify-content: center; /* Center the radio options */
-                }}
-                .stRadio div[role="radio"] {{
-                    background-color: var(--background); /* Match your background or surface */
-                    border: 1px solid var(--border-light);
-                    border-radius: 8px;
-                    padding: 8px 12px;
-                    margin: 4px;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                }}
-                .stRadio div[role="radio"]:hover {{
-                    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
-                }}
-                .stRadio div[role="radio"][aria-checked="true"] {{
-                    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-                    color: white;
-                    border-color: var(--primary-color);
-                }}
-                .stRadio div[role="radio"][aria-checked="true"] p {{
-                    color: white !important; /* Ensure text color is white when selected */
-                }}
+            /* Custom styles for Streamlit widgets to match your theme */
+            /* These are necessary because Streamlit widgets have their own default styling */
+            .stRadio > label > div[data-testid="stFlexGap"] {
+                justify-content: center; /* Center the radio options */
+            }
+            .stRadio div[role="radio"] {
+                background-color: var(--background); /* Match your background or surface */
+                border: 1px solid var(--border-light);
+                border-radius: 8px;
+                padding: 8px 12px;
+                margin: 4px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .stRadio div[role="radio"]:hover {
+                background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+            }
+            .stRadio div[role="radio"][aria-checked="true"] {
+                background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+                color: white;
+                border-color: var(--primary-color);
+            }
+            .stRadio div[role="radio"][aria-checked="true"] p {
+                color: white !important; /* Ensure text color is white when selected */
+            }
 
-                /* Style for text area */
-                .stTextArea > label {{
-                    color: rgba(255, 255, 255, 0.9); /* Prompt text color */
-                }}
-                .stTextArea textarea {{
-                    background-color: var(--background-dark);
-                    border: 1px solid var(--border-light);
-                    color: white;
-                    border-radius: 8px;
-                }}
-                .stTextArea textarea::placeholder {{
-                    color: rgba(255, 255, 255, 0.6);
-                }}
+            /* Style for text area */
+            .stTextArea > label {
+                color: rgba(255, 255, 255, 0.9); /* Prompt text color */
+            }
+            .stTextArea textarea {
+                background-color: var(--background-dark);
+                border: 1px solid var(--border-light);
+                color: white;
+                border-radius: 8px;
+            }
+            .stTextArea textarea::placeholder {
+                color: rgba(255, 255, 255, 0.6);
+            }
 
-                /* Style for buttons */
-                .stButton > button {{
-                    background-color: var(--primary-color);
-                    color: white;
-                    border: none;
-                    border-radius: var(--radius-md);
-                    padding: 10px 20px;
-                    font-weight: 600;
-                    transition: all 0.2s ease;
-                }}
-                .stButton > button:hover {{
-                    background-color: var(--secondary-color);
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                }}
-            </style>
-            <div class="mood-tracker-container">
-            """,
-            unsafe_allow_html=True
-        )
-        
+            /* Style for buttons */
+            .stButton > button {
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: var(--radius-md);
+                padding: 10px 20px;
+                font-weight: 600;
+                transition: all 0.2s ease;
+            }
+            .stButton > button:hover {
+                background-color: var(--secondary-color);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Use a Streamlit container and give it a custom class via markdown just before it.
+    # This acts as the wrapper to apply the .main-header styles.
+    st.markdown('<div class="mood-tracker-wrapper">', unsafe_allow_html=True)
+    with st.container():
         # Content of the Mood Tracker
         st.markdown("""
             <p style="margin-bottom: 8px; font-size: 1.2em; color: rgba(255, 255, 255, 0.9);">
@@ -255,8 +266,7 @@ def render_mood_tracker():
                 st.info(st.session_state.mood_entry_status)
                 st.session_state.mood_entry_status = ""
 
-        # Close the custom div that wraps the content
-        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True) # Close the wrapper div
 
 def render_sidebar():
     """Renders the left and right sidebars."""
