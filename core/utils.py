@@ -1,5 +1,6 @@
 from datetime import datetime
 import streamlit as st
+import re
 
 def get_current_time():
     """Returns the current time formatted as HH:MM AM/PM."""
@@ -31,6 +32,27 @@ def create_new_conversation(initial_message=None):
     st.session_state.active_conversation = 0
     return 0
 
+def clean_ai_response(response_text):
+    """
+    Cleans the AI response by removing any HTML tags and unwanted formatting.
+    """
+    if not response_text:
+        return response_text
+    
+    # Remove HTML tags
+    response_text = re.sub(r'<[^>]+>', '', response_text)
+    
+    # Remove extra whitespace and newlines
+    response_text = re.sub(r'\s+', ' ', response_text).strip()
+    
+    # Remove any remaining HTML entities
+    response_text = response_text.replace('&nbsp;', ' ')
+    response_text = response_text.replace('&lt;', '<')
+    response_text = response_text.replace('&gt;', '>')
+    response_text = response_text.replace('&amp;', '&')
+    
+    return response_text
+
 def get_ai_response(user_message, model):
     """
     Generates an AI response using the configured Gemini model,
@@ -48,6 +70,8 @@ def get_ai_response(user_message, model):
     5. Ask follow-up questions to better understand the user's situation
     6. Provide coping strategies and resources when appropriate
     
+    IMPORTANT: Respond with PLAIN TEXT ONLY. Do not include any HTML tags, markdown formatting, or special characters. Just provide a natural, conversational response.
+    
     User message: {user_message}
     
     Respond in a caring, supportive manner (keep response under 150 words):
@@ -55,6 +79,8 @@ def get_ai_response(user_message, model):
     
     try:
         response = model.generate_content(mental_health_prompt)
-        return response.text
+        # Clean the response to remove any HTML or unwanted formatting
+        cleaned_response = clean_ai_response(response.text)
+        return cleaned_response
     except Exception as e:
         return "I'm here to listen and support you. Sometimes I have trouble connecting, but I want you to know that your feelings are valid and you're not alone. Would you like to share more about what you're experiencing?"
