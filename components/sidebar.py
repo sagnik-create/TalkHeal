@@ -65,6 +65,107 @@ mental_health_resources_full = {
     }
 }
 
+# --- NEW FUNCTION TO RENDER MOOD TRACKER ---
+def render_mood_tracker():
+    """Renders the dynamic Mood Tracker & Micro-Journal."""
+    # We will use a div with a custom class to apply the same styling as the old main-header
+    st.markdown(f"""
+    <div class="main-header"> {/* Reusing main-header class for styling */}
+        <p style="margin-bottom: 8px; font-size: 1.2em; color: rgba(255, 255, 255, 0.9);">
+            How are you feeling today?
+        </p>
+    """, unsafe_allow_html=True) # Close this div after the content
+
+    mood_options_map = {
+        "😔 Very Low": "very_low",
+        "😐 Low": "low",
+        "😊 Okay": "okay",
+        "😄 Good": "good",
+        "🌟 Great": "great"
+    }
+    mood_labels = list(mood_options_map.keys())
+
+    # Use st.radio for mood selection, styled horizontally
+    selected_mood_label = st.radio(
+        "Mood Scale",
+        options=mood_labels,
+        index=mood_labels.index("😊 Okay") if "😊 Okay" in mood_labels else 2, # Default to Okay
+        key="mood_selector_radio_main", # Changed key to avoid conflict if sidebar ever re-adds it
+        horizontal=True,
+        label_visibility="collapsed"
+    )
+
+    st.session_state.current_mood_val = mood_options_map[selected_mood_label]
+
+    # Conditional Journal Prompt based on selected mood
+    if st.session_state.current_mood_val:
+        st.markdown("") # Small space
+        journal_prompt_text = {
+            "very_low": "What's weighing on your mind today?",
+            "low": "What are your thoughts right now?",
+            "okay": "Anything specific on your mind today?",
+            "good": "What made you feel good today?",
+            "great": "What's making you shine today?"
+        }.get(st.session_state.current_mood_val, "Reflect on your mood:")
+
+        # Initialize journal entry for the current session
+        if "mood_journal_entry" not in st.session_state:
+            st.session_state.mood_journal_entry = ""
+        # Initialize state for displaying tips and status
+        if "mood_tip_display" not in st.session_state:
+            st.session_state.mood_tip_display = ""
+        if "mood_entry_status" not in st.session_state:
+            st.session_state.mood_entry_status = ""
+
+        st.text_area(
+            f"✏️ {journal_prompt_text}",
+            key="mood_journal_area_main", # Changed key
+            value=st.session_state.mood_journal_entry,
+            height=70
+        )
+
+        tips_for_mood = {
+            "very_low": "Remember, it's okay not to be okay. Consider connecting with a professional.",
+            "low": "Even small steps help. Try a brief mindful moment or gentle activity.",
+            "okay": "Keep nurturing your well-being. What's one thing you can do to maintain this?",
+            "good": "That's wonderful! Savor this feeling and perhaps share your positivity.",
+            "great": "Fantastic! How can you carry this energy forward into your day?"
+        }.get(st.session_state.current_mood_val, "A general tip for your mood.")
+
+        st.markdown("") # Small space
+
+        # Two buttons side-by-side
+        col_tip_save, col_ask_peacepulse = st.columns(2)
+
+        with col_tip_save:
+            if st.button("Get Tip & Save Entry", key="save_mood_entry_main", use_container_width=True): # Changed key
+                st.session_state.mood_tip_display = tips_for_mood
+                st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
+                st.session_state.mood_journal_entry = "" # Clear after "saving"
+                # No rerun here to keep the tip visible
+
+        with col_ask_peacepulse:
+            if st.button("Ask PeacePulse", key="ask_peace_pulse_from_mood_main", use_container_width=True): # Changed key
+                if st.session_state.mood_journal_area_main.strip():
+                    st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area_main
+                    st.session_state.send_chat_message = True
+                    st.session_state.mood_journal_entry = "" # Clear the journal area
+                    st.session_state.mood_tip_display = "" # Clear any previous tip
+                    st.session_state.mood_entry_status = "" # Clear status
+                    st.rerun() # Rerun to switch to chat and send message
+                else:
+                    st.warning("Please enter your thoughts before asking PeacePulse.")
+
+        # Display the stored tip and status outside the button logic
+        if st.session_state.mood_tip_display:
+            st.success(st.session_state.mood_tip_display)
+            # Clear it after display so it doesn't persist across unrelated interactions
+            st.session_state.mood_tip_display = ""
+        if st.session_state.mood_entry_status:
+            st.info(st.session_state.mood_entry_status)
+            # Clear it after display
+            st.session_state.mood_entry_status = ""
+    st.markdown("</div>", unsafe_allow_html=True) # Close the main-header div
 
 def render_sidebar():
     """Renders the left and right sidebars."""
@@ -145,106 +246,13 @@ def render_sidebar():
         st.markdown("---") # Separator before emergency help
 
         # --- 2. Emergency Help Button (Functional) ---
-        # --- 2. Emergency Help Button (Functional) ---
-        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True): # Removed type="primary"
+        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True):
             webbrowser.open("https://www.mentalhealth.gov/get-help/immediate-help")
 
         st.markdown("") # Add a little space
 
-        # --- 3. Dynamic Mood Tracker & Micro-Journal (Fixed Tip & New Button) ---
-        with st.expander("🧠 Mental Health Check"):
-            st.markdown("**How are you feeling today?**")
-
-            mood_options_map = {
-                "😔 Very Low": "very_low",
-                "😐 Low": "low",
-                "😊 Okay": "okay",
-                "😄 Good": "good",
-                "🌟 Great": "great"
-            }
-            mood_labels = list(mood_options_map.keys())
-
-            # Use st.radio for mood selection, styled horizontally
-            selected_mood_label = st.radio(
-                "Mood Scale",
-                options=mood_labels,
-                index=mood_labels.index("😊 Okay") if "😊 Okay" in mood_labels else 2, # Default to Okay
-                key="mood_selector_radio",
-                horizontal=True,
-                label_visibility="collapsed"
-            )
-
-            st.session_state.current_mood_val = mood_options_map[selected_mood_label]
-
-            # Conditional Journal Prompt based on selected mood
-            if st.session_state.current_mood_val:
-                st.markdown("") # Small space
-                journal_prompt_text = {
-                    "very_low": "What's weighing on your mind today?",
-                    "low": "What are your thoughts right now?",
-                    "okay": "Anything specific on your mind today?",
-                    "good": "What made you feel good today?",
-                    "great": "What's making you shine today?"
-                }.get(st.session_state.current_mood_val, "Reflect on your mood:")
-
-                # Initialize journal entry for the current session
-                if "mood_journal_entry" not in st.session_state:
-                    st.session_state.mood_journal_entry = ""
-                # Initialize state for displaying tips and status
-                if "mood_tip_display" not in st.session_state:
-                    st.session_state.mood_tip_display = ""
-                if "mood_entry_status" not in st.session_state:
-                    st.session_state.mood_entry_status = ""
-
-
-                st.text_area(
-                    f"✏️ {journal_prompt_text}",
-                    key="mood_journal_area",
-                    value=st.session_state.mood_journal_entry,
-                    height=70
-                )
-
-                tips_for_mood = {
-                    "very_low": "Remember, it's okay not to be okay. Consider connecting with a professional.",
-                    "low": "Even small steps help. Try a brief mindful moment or gentle activity.",
-                    "okay": "Keep nurturing your well-being. What's one thing you can do to maintain this?",
-                    "good": "That's wonderful! Savor this feeling and perhaps share your positivity.",
-                    "great": "Fantastic! How can you carry this energy forward into your day?"
-                }.get(st.session_state.current_mood_val, "A general tip for your mood.")
-
-                st.markdown("") # Small space
-
-                # Two buttons side-by-side
-                col_tip_save, col_ask_peacepulse = st.columns(2)
-
-                with col_tip_save:
-                    if st.button("Get Tip & Save Entry", key="save_mood_entry", use_container_width=True):
-                        st.session_state.mood_tip_display = tips_for_mood
-                        st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
-                        st.session_state.mood_journal_entry = "" # Clear after "saving"
-                        # No rerun here to keep the tip visible
-
-                with col_ask_peacepulse:
-                    if st.button("Ask PeacePulse", key="ask_peace_pulse_from_mood", use_container_width=True):
-                        if st.session_state.mood_journal_area.strip():
-                            st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area
-                            st.session_state.send_chat_message = True
-                            st.session_state.mood_journal_entry = "" # Clear the journal area
-                            st.session_state.mood_tip_display = "" # Clear any previous tip
-                            st.session_state.mood_entry_status = "" # Clear status
-                            st.rerun() # Rerun to switch to chat and send message
-                        else:
-                            st.warning("Please enter your thoughts before asking PeacePulse.")
-
-                # Display the stored tip and status outside the button logic
-                if st.session_state.mood_tip_display:
-                    st.success(st.session_state.mood_tip_display)
-                    # Clear it after display so it doesn't persist across unrelated interactions
-                    st.session_state.mood_tip_display = ""
-                if st.session_state.mood_entry_status:
-                    st.info(st.session_state.mood_entry_status)
-                    # Clear it after display
-                    st.session_state.mood_entry_status = ""
+        # --- 3. Removed Mood Tracker & Micro-Journal from here ---
+        # The content has been moved to render_mood_tracker() and will be called in header.py
 
         # --- 4. Resource Hub with Categories & Search ---
         with st.expander("📚 Resources & Knowledge Base"):
