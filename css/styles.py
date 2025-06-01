@@ -154,7 +154,7 @@ def apply_custom_css():
         /* Banner */
         .banner {{
             text-align: center;
-            padding: 32px 24px;
+            padding: 4px 4px;
             background: var(--surface);
             color: white;
             border-radius: var(--radius-lg);
@@ -178,7 +178,7 @@ def apply_custom_css():
         
         .banner h3 {{
             margin: 0 0 8px 0;
-            font-size: 2.5em;
+            font-size: 2em;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
@@ -188,7 +188,7 @@ def apply_custom_css():
         
         .banner p {{
             margin: 0;
-            font-size: 1.2em;
+            font-size: 0.7em;
             color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
         }}
