@@ -95,7 +95,7 @@ def render_sidebar():
                 "How to manage stress?",
                 "Tell me about anxiety"
             ]
-            
+
             # Use columns for a more compact layout of quick prompts
             qp_cols = st.columns(2)
             for i, prompt in enumerate(quick_prompts):
@@ -114,19 +114,19 @@ def render_sidebar():
         if st.session_state.conversations:
             # Add a search bar for conversations
             convo_search = st.text_input("Search chats...", key="convo_search", placeholder="Type to search...", label_visibility="collapsed")
-            
+
             filtered_conversations = [
-                convo for convo in st.session_state.conversations 
+                convo for convo in st.session_state.conversations
                 if convo_search.lower() in convo['title'].lower()
             ]
-            
+
             if not filtered_conversations:
                 st.info("No matching conversations found.")
 
             for i, convo in enumerate(filtered_conversations):
                 is_active = i == st.session_state.active_conversation
                 button_style_icon = "🟢" if is_active else "📝"
-                
+
                 if st.button(
                     f"{button_style_icon} {convo['title'][:22]}...",
                     key=f"convo_{i}",
@@ -138,11 +138,12 @@ def render_sidebar():
                     st.rerun()
         else:
             st.info("No conversations yet. Start a new chat!")
-        
+
         st.markdown("---") # Separator before emergency help
 
         # --- 2. Emergency Help Button (Functional) ---
-        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True, type="danger"):
+        # FIX: Changed type="danger" to type="primary"
+        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True, type="primary"):
             webbrowser.open("https://www.mentalhealth.gov/get-help/immediate-help")
 
         st.markdown("") # Add a little space
@@ -150,7 +151,7 @@ def render_sidebar():
         # --- 3. Dynamic Mood Tracker & Micro-Journal (Fixed Tip & New Button) ---
         with st.expander("🧠 Mental Health Check"):
             st.markdown("**How are you feeling today?**")
-            
+
             mood_options_map = {
                 "😔 Very Low": "very_low",
                 "😐 Low": "low",
@@ -169,7 +170,7 @@ def render_sidebar():
                 horizontal=True,
                 label_visibility="collapsed"
             )
-            
+
             st.session_state.current_mood_val = mood_options_map[selected_mood_label]
 
             # Conditional Journal Prompt based on selected mood
@@ -199,7 +200,7 @@ def render_sidebar():
                     value=st.session_state.mood_journal_entry,
                     height=70
                 )
-                
+
                 tips_for_mood = {
                     "very_low": "Remember, it's okay not to be okay. Consider connecting with a professional.",
                     "low": "Even small steps help. Try a brief mindful moment or gentle activity.",
@@ -209,7 +210,7 @@ def render_sidebar():
                 }.get(st.session_state.current_mood_val, "A general tip for your mood.")
 
                 st.markdown("") # Small space
-                
+
                 # Two buttons side-by-side
                 col_tip_save, col_ask_peacepulse = st.columns(2)
 
@@ -219,7 +220,7 @@ def render_sidebar():
                         st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
                         st.session_state.mood_journal_entry = "" # Clear after "saving"
                         # No rerun here to keep the tip visible
-                
+
                 with col_ask_peacepulse:
                     if st.button("Ask PeacePulse", key="ask_peacepulse_from_mood", use_container_width=True):
                         if st.session_state.mood_journal_area.strip():
@@ -236,7 +237,7 @@ def render_sidebar():
                 if st.session_state.mood_tip_display:
                     st.success(st.session_state.mood_tip_display)
                     # Clear it after display so it doesn't persist across unrelated interactions
-                    st.session_state.mood_tip_display = "" 
+                    st.session_state.mood_tip_display = ""
                 if st.session_state.mood_entry_status:
                     st.info(st.session_state.mood_entry_status)
                     # Clear it after display
@@ -245,9 +246,9 @@ def render_sidebar():
         # --- 4. Resource Hub with Categories & Search ---
         with st.expander("📚 Resources & Knowledge Base"):
             st.markdown("**Explore topics or search for help:**")
-            
+
             resource_search_query = st.text_input("Search resources...", key="resource_search", placeholder="e.g., 'anxiety tips', 'therapy'", label_visibility="collapsed")
-            
+
             # Filter resources based on search query
             filtered_topics = [
                 topic for topic in mental_health_resources_full
@@ -258,11 +259,11 @@ def render_sidebar():
 
             if resource_search_query and not filtered_topics:
                 st.info("No resources found matching your search.")
-            
+
             # Display topics using tabs or expanders
             if not resource_search_query: # Show tabs only if no search query
                 resource_tabs = st.tabs(list(mental_health_resources_full.keys()))
-                
+
                 for i, tab_title in enumerate(mental_health_resources_full.keys()):
                     with resource_tabs[i]:
                         topic_data = mental_health_resources_full[tab_title]
