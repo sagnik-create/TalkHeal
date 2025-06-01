@@ -72,7 +72,6 @@ def render_sidebar():
         st.markdown(f"""
         <div class="banner">
             <h3>PeacePulse</h3>
-            <p>Your Mental Health Companion 💙</p>
         </div>
         """, unsafe_allow_html=True)
         # --- 1. Conversations & New Chat (with Quick Start Prompts) ---
