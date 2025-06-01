@@ -215,18 +215,8 @@ def render_sidebar():
             st.markdown("---") # Separator after quick prompts
 
         if st.session_state.conversations:
-            # Add a search bar for conversations
-            convo_search = st.text_input("Search chats...", key="convo_search", placeholder="Search from History...", label_visibility="collapsed")
-
-            filtered_conversations = [
-                convo for convo in st.session_state.conversations
-                if convo_search.lower() in convo['title'].lower()
-            ]
-
-            if not filtered_conversations:
-                st.info("No matching conversations found.")
-
-            for i, convo in enumerate(filtered_conversations):
+            # Iterate directly over all conversations, no search filter
+            for i, convo in enumerate(st.session_state.conversations):
                 is_active = i == st.session_state.active_conversation
                 button_style_icon = "🟢" if is_active else "📝"
 
