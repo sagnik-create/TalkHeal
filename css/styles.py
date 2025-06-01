@@ -158,7 +158,7 @@ def apply_custom_css():
             background: var(--surface);
             color: white;
             border-radius: var(--radius-lg);
-            margin-bottom: 4px;
+            margin-bottom: 24px;
             box-shadow: 0 8px 32px var(--shadow-lg);
             border: 1px solid var(--border-light);
             position: relative;
