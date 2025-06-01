@@ -304,7 +304,7 @@ def apply_custom_css():
             border-radius: var(--radius) !important;
             padding: 12px 16px !important;
             font-size: 1em !important;
-            color: var(--text-primary) !important;
+            color: var(--text-secondary) !important;
             font-family: 'Inter', sans-serif !important;
             transition: all 0.2s ease !important;
             backdrop-filter: blur(5px) !important;
