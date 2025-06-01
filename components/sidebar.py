@@ -142,7 +142,6 @@ def render_sidebar():
         st.markdown("---") # Separator before emergency help
 
         # --- 2. Emergency Help Button (Functional) ---
-        # FIX: Changed type="danger" to type="primary"
         if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True, type="primary"):
             webbrowser.open("https://www.mentalhealth.gov/get-help/immediate-help")
 
@@ -257,11 +256,19 @@ def render_sidebar():
                     resource_search_query.lower() in mental_health_resources_full[topic]['description'].lower()
             ]
 
-            if resource_search_query and not filtered_topics:
-                st.info("No resources found matching your search.")
-
-            # Display topics using tabs or expanders
-            if not resource_search_query: # Show tabs only if no search query
+            if resource_search_query: # If there's a search query
+                if not filtered_topics:
+                    st.info("No resources found matching your search.")
+                else:
+                    st.markdown("---") # Add a separator for clarity
+                    st.markdown("**Matching Resources:**")
+                    for topic in filtered_topics:
+                        st.markdown(f"**{topic}:**")
+                        st.info(mental_health_resources_full[topic]['description'])
+                        for link in mental_health_resources_full[topic]['links']:
+                            st.markdown(f"• [{link['label']}]({link['url']})")
+                        st.markdown("---") # Separator between filtered topics
+            else: # If no search query, show tabs as before
                 resource_tabs = st.tabs(list(mental_health_resources_full.keys()))
 
                 for i, tab_title in enumerate(mental_health_resources_full.keys()):
@@ -272,14 +279,6 @@ def render_sidebar():
                         for link in topic_data['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
                         st.markdown("---") # Separator within tabs
-            else: # Show filtered results as expanders if there's a search query
-                for topic in filtered_topics:
-                    with st.expander(f"📚 {topic}"):
-                        topic_data = mental_health_resources_full[topic]
-                        st.info(topic_data['description'])
-                        for link in topic_data['links']:
-                            st.markdown(f"• [{link['label']}]({link['url']})")
-                        st.markdown("---")
 
         # Location-Based Centers (remains the same)
         with st.expander("📍 Find Help Nearby"):
@@ -312,11 +311,7 @@ def render_sidebar():
 
             **Remember:** This is not a substitute for professional mental health care.
 
-            ---
-
             **Created with ❤️ by Eccentric Explorer**
-
-            *"It's absolutely okay not to be okay :)"*
 
             📅 Enhanced Version - May 2025
             """)
