@@ -154,7 +154,6 @@ def apply_custom_css():
         /* Banner */
         .banner {{
             text-align: center;
-            padding: 4px 4px;
             background: var(--surface);
             color: white;
             border-radius: var(--radius-lg);
