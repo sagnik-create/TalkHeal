@@ -221,7 +221,7 @@ def render_sidebar():
                         # No rerun here to keep the tip visible
 
                 with col_ask_peacepulse:
-                    if st.button("Ask PeacePulse", key="ask_peacepulse_from_mood", use_container_width=True):
+                    if st.button("Ask PeacePulse", key="ask_peace_pulse_from_mood", use_container_width=True):
                         if st.session_state.mood_journal_area.strip():
                             st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area
                             st.session_state.send_chat_message = True
@@ -248,22 +248,22 @@ def render_sidebar():
 
             resource_search_query = st.text_input("Search resources...", key="resource_search", placeholder="e.g., 'anxiety tips', 'therapy'", label_visibility="collapsed")
 
-            # Filter resources based on search query
-            filtered_topics = [
-                topic for topic in mental_health_resources_full
-                if resource_search_query.lower() in topic.lower() or \
-                    any(resource_search_query.lower() in link['label'].lower() for link in mental_health_resources_full[topic]['links']) or \
-                    resource_search_query.lower() in mental_health_resources_full[topic]['description'].lower()
-            ]
-
             if resource_search_query: # If there's a search query
+                filtered_topics = [
+                    topic for topic in mental_health_resources_full
+                    if resource_search_query.lower() in topic.lower() or \
+                        any(resource_search_query.lower() in link['label'].lower() for link in mental_health_resources_full[topic]['links']) or \
+                        resource_search_query.lower() in mental_health_resources_full[topic]['description'].lower()
+                ]
+
                 if not filtered_topics:
                     st.info("No resources found matching your search.")
                 else:
                     st.markdown("---") # Add a separator for clarity
                     st.markdown("**Matching Resources:**")
                     for topic in filtered_topics:
-                        st.markdown(f"**{topic}:**")
+                        # DO NOT USE st.expander HERE. Just display the content directly.
+                        st.markdown(f"**{topic}**") # Use markdown for the topic title
                         st.info(mental_health_resources_full[topic]['description'])
                         for link in mental_health_resources_full[topic]['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
