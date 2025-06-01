@@ -76,38 +76,9 @@ def apply_custom_css():
             max-width: 1200px;
         }}
         
-        /* Chat container with improved styling - SINGLE CONTAINER FOR ALL MESSAGES */
-        .chat-container {{
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin: 16px 0;
-            box-shadow: 0 4px 24px var(--shadow-lg);
-            min-height: 500px;
-            max-height: 600px;
-            overflow-y: auto;
-            border: 1px solid var(--border-light);
+        /* Main chat area styling - no container wrapper */
+        .main .block-container {{
             scroll-behavior: smooth;
-            position: relative;
-            backdrop-filter: blur(10px);
-        }}
-        
-        .chat-container::-webkit-scrollbar {{
-            width: 6px;
-        }}
-        
-        .chat-container::-webkit-scrollbar-track {{
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }}
-        
-        .chat-container::-webkit-scrollbar-thumb {{
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 3px;
-        }}
-        
-        .chat-container::-webkit-scrollbar-thumb:hover {{
-            background: rgba(255, 255, 255, 0.6);
         }}
         
         /* User message styling */
@@ -170,8 +141,6 @@ def apply_custom_css():
             margin-top: 8px;
             text-align: right;
             font-weight: 400;
-            display: block;
-            margin-left: auto;
         }}
         
         .user-message .message-time {{
