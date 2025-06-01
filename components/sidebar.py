@@ -68,17 +68,106 @@ mental_health_resources_full = {
 def render_mood_tracker():
     """Renders the dynamic Mood Tracker & Micro-Journal."""
 
-    # Create a container for all mood tracker elements
-    with st.container():
-        # Open the main-header div. All subsequent Streamlit elements within this 'with' block
-        # will be visually contained by this div.
+    # Create a container. This container will visually hold all the mood tracker elements.
+    # We will then apply the 'main-header' styling to this container.
+    with st.container(border=True): # Use border=True for a visual indicator initially if needed
+        # Inject custom HTML/CSS to wrap the content and apply the 'main-header' class.
+        # This will create a div *around* the content of this container.
         st.markdown(
-            """
-            <div class="main-header">
+            f"""
+            <style>
+                .mood-tracker-container > div:first-child {{
+                    text-align: center;
+                    padding: 32px 24px;
+                    background: var(--surface);
+                    color: white;
+                    border-radius: var(--radius-lg);
+                    margin-bottom: 24px;
+                    box-shadow: 0 8px 32px var(--shadow-lg);
+                    border: 1px solid var(--border-light);
+                    position: relative;
+                    overflow: hidden;
+                    backdrop-filter: blur(10px);
+                }}
+
+                .mood-tracker-container > div:first-child::before {{
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 4px;
+                    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+                }}
+
+                .mood-tracker-container p {{
+                    margin: 0;
+                    font-size: 1.2em;
+                    color: rgba(255, 255, 255, 0.9);
+                    font-weight: 500;
+                }}
+
+                /* Add styles for Streamlit radio buttons to blend with your theme */
+                .stRadio > label > div[data-testid="stFlexGap"] {{
+                    justify-content: center; /* Center the radio options */
+                }}
+                .stRadio div[role="radio"] {{
+                    background-color: var(--background); /* Match your background or surface */
+                    border: 1px solid var(--border-light);
+                    border-radius: 8px;
+                    padding: 8px 12px;
+                    margin: 4px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }}
+                .stRadio div[role="radio"]:hover {{
+                    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+                }}
+                .stRadio div[role="radio"][aria-checked="true"] {{
+                    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+                    color: white;
+                    border-color: var(--primary-color);
+                }}
+                .stRadio div[role="radio"][aria-checked="true"] p {{
+                    color: white !important; /* Ensure text color is white when selected */
+                }}
+
+                /* Style for text area */
+                .stTextArea > label {{
+                    color: rgba(255, 255, 255, 0.9); /* Prompt text color */
+                }}
+                .stTextArea textarea {{
+                    background-color: var(--background-dark);
+                    border: 1px solid var(--border-light);
+                    color: white;
+                    border-radius: 8px;
+                }}
+                .stTextArea textarea::placeholder {{
+                    color: rgba(255, 255, 255, 0.6);
+                }}
+
+                /* Style for buttons */
+                .stButton > button {{
+                    background-color: var(--primary-color);
+                    color: white;
+                    border: none;
+                    border-radius: var(--radius-md);
+                    padding: 10px 20px;
+                    font-weight: 600;
+                    transition: all 0.2s ease;
+                }}
+                .stButton > button:hover {{
+                    background-color: var(--secondary-color);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }}
+            </style>
+            <div class="mood-tracker-container">
             """,
             unsafe_allow_html=True
         )
-
+        
+        # Content of the Mood Tracker
         st.markdown("""
             <p style="margin-bottom: 8px; font-size: 1.2em; color: rgba(255, 255, 255, 0.9);">
                 How are you feeling today?
@@ -94,7 +183,6 @@ def render_mood_tracker():
         }
         mood_labels = list(mood_options_map.keys())
 
-        # Use st.radio for mood selection, styled horizontally
         selected_mood_label = st.radio(
             "Mood Scale",
             options=mood_labels,
@@ -106,7 +194,6 @@ def render_mood_tracker():
 
         st.session_state.current_mood_val = mood_options_map[selected_mood_label]
 
-        # Conditional Journal Prompt based on selected mood
         if st.session_state.current_mood_val:
             st.markdown("") # Small space
             journal_prompt_text = {
@@ -117,10 +204,8 @@ def render_mood_tracker():
                 "great": "What's making you shine today?"
             }.get(st.session_state.current_mood_val, "Reflect on your mood:")
 
-            # Initialize journal entry for the current session
             if "mood_journal_entry" not in st.session_state:
                 st.session_state.mood_journal_entry = ""
-            # Initialize state for displaying tips and status
             if "mood_tip_display" not in st.session_state:
                 st.session_state.mood_tip_display = ""
             if "mood_entry_status" not in st.session_state:
@@ -143,7 +228,6 @@ def render_mood_tracker():
 
             st.markdown("") # Small space
 
-            # Two buttons side-by-side
             col_tip_save, col_ask_peacepulse = st.columns(2)
 
             with col_tip_save:
@@ -151,7 +235,6 @@ def render_mood_tracker():
                     st.session_state.mood_tip_display = tips_for_mood
                     st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
                     st.session_state.mood_journal_entry = ""
-                    # No rerun here to keep the tip visible
 
             with col_ask_peacepulse:
                 if st.button("Ask PeacePulse", key="ask_peace_pulse_from_mood_main", use_container_width=True):
@@ -165,7 +248,6 @@ def render_mood_tracker():
                     else:
                         st.warning("Please enter your thoughts before asking PeacePulse.")
 
-            # Display the stored tip and status outside the button logic
             if st.session_state.mood_tip_display:
                 st.success(st.session_state.mood_tip_display)
                 st.session_state.mood_tip_display = ""
@@ -173,7 +255,7 @@ def render_mood_tracker():
                 st.info(st.session_state.mood_entry_status)
                 st.session_state.mood_entry_status = ""
 
-        # Close the main-header div at the very end of the container's content
+        # Close the custom div that wraps the content
         st.markdown("</div>", unsafe_allow_html=True)
 
 def render_sidebar():
