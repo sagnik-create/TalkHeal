@@ -237,7 +237,7 @@ def apply_custom_css():
         /* Emergency button */
         /* Emergency button - Targeted by data-testid from its key */
         .stButton button[data-testid="stButton-emergency_button"] {{ /* <-- CHANGE THIS LINE */
-            background: red; !important;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
             color: white !important;
             padding: 18px 24px;
             border-radius: var(--radius);
