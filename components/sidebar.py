@@ -70,7 +70,8 @@ def render_mood_tracker():
 
     # Create a container for all mood tracker elements
     with st.container():
-        # Apply the main-header class to this container using markdown
+        # Open the main-header div. All subsequent Streamlit elements within this 'with' block
+        # will be visually contained by this div.
         st.markdown(
             """
             <div class="main-header">
@@ -172,7 +173,7 @@ def render_mood_tracker():
                 st.info(st.session_state.mood_entry_status)
                 st.session_state.mood_entry_status = ""
 
-        # Close the main-header div outside the conditional block to ensure it always closes
+        # Close the main-header div at the very end of the container's content
         st.markdown("</div>", unsafe_allow_html=True)
 
 def render_sidebar():
