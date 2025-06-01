@@ -218,13 +218,13 @@ def render_sidebar():
             # # Add a search bar for conversations
             # convo_search = st.text_input("Search chats...", key="convo_search", placeholder="Search from History...", label_visibility="collapsed")
 
-            # filtered_conversations = [
-            #     convo for convo in st.session_state.conversations
-            #     if convo_search.lower() in convo['title'].lower()
-            # ]
+            filtered_conversations = [
+                convo for convo in st.session_state.conversations
+                if convo_search.lower() in convo['title'].lower()
+            ]
 
-            # if not filtered_conversations:
-            #     st.info("No matching conversations found.")
+            if not filtered_conversations:
+                st.info("No matching conversations found.")
 
             for i, convo in enumerate(filtered_conversations):
                 is_active = i == st.session_state.active_conversation
