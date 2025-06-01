@@ -1,6 +1,11 @@
+# header.py:
 import streamlit as st
-from components.sidebar import render_mood_tracker # Import the new function
 
 def render_header():
-    """Renders the main header area, now containing the Mood Tracker."""
-    render_mood_tracker() # Call the mood tracker function here
+    """Renders the main header of the application."""
+    st.markdown("""
+    <div class="main-header">
+        <h1>PeacePulse</h1>
+        <p>Your Mental Health Companion 💙</p>
+    </div>
+    """, unsafe_allow_html=True)

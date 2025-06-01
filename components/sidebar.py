@@ -65,208 +65,6 @@ mental_health_resources_full = {
     }
 }
 
-def render_mood_tracker():
-    """Renders the dynamic Mood Tracker & Micro-Journal."""
-
-    # Inject CSS to apply the 'main-header' class to the Streamlit container's parent div.
-    # Streamlit containers are often wrapped in a div with a data-testid.
-    # We can target a specific container by using a unique class on its parent.
-    st.markdown(
-        """
-        <style>
-            /* Target the specific Streamlit block that contains the mood tracker container */
-            /* This assumes the st.container() below creates a div that is the first child
-               of a custom wrapper div. Streamlit's internal DOM can vary, so this is a common
-               pattern to make sure your styles apply correctly without overwriting. */
-            .mood-tracker-wrapper > div:first-child { /* Target the container's direct parent */
-                /* Apply all the existing .main-header styles here.
-                   We are doing this by injecting the CSS here to ensure it applies
-                   to the correct Streamlit-generated parent element. */
-                text-align: center;
-                padding: 32px 24px;
-                background: var(--surface);
-                color: white;
-                border-radius: var(--radius-lg);
-                margin-bottom: 24px;
-                box-shadow: 0 8px 32px var(--shadow-lg);
-                border: 1px solid var(--border-light);
-                position: relative;
-                overflow: hidden;
-                backdrop-filter: blur(10px);
-            }
-
-            /* Add the ::before pseudo-element for the gradient line */
-            .mood-tracker-wrapper > div:first-child::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 4px;
-                background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            }
-
-            /* Ensure the <p> tag inside the container uses the correct style */
-            .mood-tracker-wrapper p {
-                margin: 0;
-                font-size: 1.2em;
-                color: rgba(255, 255, 255, 0.9);
-                font-weight: 500;
-            }
-
-            /* Custom styles for Streamlit widgets to match your theme */
-            /* These are necessary because Streamlit widgets have their own default styling */
-            .stRadio > label > div[data-testid="stFlexGap"] {
-                justify-content: center; /* Center the radio options */
-            }
-            .stRadio div[role="radio"] {
-                background-color: var(--background); /* Match your background or surface */
-                border: 1px solid var(--border-light);
-                border-radius: 8px;
-                padding: 8px 12px;
-                margin: 4px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            .stRadio div[role="radio"]:hover {
-                background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
-            }
-            .stRadio div[role="radio"][aria-checked="true"] {
-                background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-                color: white;
-                border-color: var(--primary-color);
-            }
-            .stRadio div[role="radio"][aria-checked="true"] p {
-                color: white !important; /* Ensure text color is white when selected */
-            }
-
-            /* Style for text area */
-            .stTextArea > label {
-                color: rgba(255, 255, 255, 0.9); /* Prompt text color */
-            }
-            .stTextArea textarea {
-                background-color: var(--background-dark);
-                border: 1px solid var(--border-light);
-                color: white;
-                border-radius: 8px;
-            }
-            .stTextArea textarea::placeholder {
-                color: rgba(255, 255, 255, 0.6);
-            }
-
-            /* Style for buttons */
-            .stButton > button {
-                background-color: var(--primary-color);
-                color: white;
-                border: none;
-                border-radius: var(--radius-md);
-                padding: 10px 20px;
-                font-weight: 600;
-                transition: all 0.2s ease;
-            }
-            .stButton > button:hover {
-                background-color: var(--secondary-color);
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Use a Streamlit container and give it a custom class via markdown just before it.
-    # This acts as the wrapper to apply the .main-header styles.
-    st.markdown('<div class="mood-tracker-wrapper">', unsafe_allow_html=True)
-    with st.container():
-        # Content of the Mood Tracker
-        st.markdown("""
-            <p style="margin-bottom: 8px; font-size: 1.2em; color: rgba(255, 255, 255, 0.9);">
-                How are you feeling today?
-            </p>
-        """, unsafe_allow_html=True)
-
-        mood_options_map = {
-            "😔 Very Low": "very_low",
-            "😐 Low": "low",
-            "😊 Okay": "okay",
-            "😄 Good": "good",
-            "🌟 Great": "great"
-        }
-        mood_labels = list(mood_options_map.keys())
-
-        selected_mood_label = st.radio(
-            "Mood Scale",
-            options=mood_labels,
-            index=mood_labels.index("😊 Okay") if "😊 Okay" in mood_labels else 2,
-            key="mood_selector_radio_main",
-            horizontal=True,
-            label_visibility="collapsed"
-        )
-
-        st.session_state.current_mood_val = mood_options_map[selected_mood_label]
-
-        if st.session_state.current_mood_val:
-            st.markdown("") # Small space
-            journal_prompt_text = {
-                "very_low": "What's weighing on your mind today?",
-                "low": "What are your thoughts right now?",
-                "okay": "Anything specific on your mind today?",
-                "good": "What made you feel good today?",
-                "great": "What's making you shine today?"
-            }.get(st.session_state.current_mood_val, "Reflect on your mood:")
-
-            if "mood_journal_entry" not in st.session_state:
-                st.session_state.mood_journal_entry = ""
-            if "mood_tip_display" not in st.session_state:
-                st.session_state.mood_tip_display = ""
-            if "mood_entry_status" not in st.session_state:
-                st.session_state.mood_entry_status = ""
-
-            st.text_area(
-                f"✏️ {journal_prompt_text}",
-                key="mood_journal_area_main",
-                value=st.session_state.mood_journal_entry,
-                height=70
-            )
-
-            tips_for_mood = {
-                "very_low": "Remember, it's okay not to be okay. Consider connecting with a professional.",
-                "low": "Even small steps help. Try a brief mindful moment or gentle activity.",
-                "okay": "Keep nurturing your well-being. What's one thing you can do to maintain this?",
-                "good": "That's wonderful! Savor this feeling and perhaps share your positivity.",
-                "great": "Fantastic! How can you carry this energy forward into your day?"
-            }.get(st.session_state.current_mood_val, "A general tip for your mood.")
-
-            st.markdown("") # Small space
-
-            col_tip_save, col_ask_peacepulse = st.columns(2)
-
-            with col_tip_save:
-                if st.button("Get Tip & Save Entry", key="save_mood_entry_main", use_container_width=True):
-                    st.session_state.mood_tip_display = tips_for_mood
-                    st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
-                    st.session_state.mood_journal_entry = ""
-
-            with col_ask_peacepulse:
-                if st.button("Ask PeacePulse", key="ask_peace_pulse_from_mood_main", use_container_width=True):
-                    if st.session_state.mood_journal_area_main.strip():
-                        st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area_main
-                        st.session_state.send_chat_message = True
-                        st.session_state.mood_journal_entry = ""
-                        st.session_state.mood_tip_display = ""
-                        st.session_state.mood_entry_status = ""
-                        st.rerun()
-                    else:
-                        st.warning("Please enter your thoughts before asking PeacePulse.")
-
-            if st.session_state.mood_tip_display:
-                st.success(st.session_state.mood_tip_display)
-                st.session_state.mood_tip_display = ""
-            if st.session_state.mood_entry_status:
-                st.info(st.session_state.mood_entry_status)
-                st.session_state.mood_entry_status = ""
-
-    st.markdown('</div>', unsafe_allow_html=True) # Close the wrapper div
 
 def render_sidebar():
     """Renders the left and right sidebars."""
@@ -317,8 +115,18 @@ def render_sidebar():
             st.markdown("---") # Separator after quick prompts
 
         if st.session_state.conversations:
-            # Iterate directly over all conversations, no search filter
-            for i, convo in enumerate(st.session_state.conversations):
+            # Add a search bar for conversations
+            convo_search = st.text_input("Search chats...", key="convo_search", placeholder="Search from History...", label_visibility="collapsed")
+
+            filtered_conversations = [
+                convo for convo in st.session_state.conversations
+                if convo_search.lower() in convo['title'].lower()
+            ]
+
+            if not filtered_conversations:
+                st.info("No matching conversations found.")
+
+            for i, convo in enumerate(filtered_conversations):
                 is_active = i == st.session_state.active_conversation
                 button_style_icon = "🟢" if is_active else "📝"
 
@@ -337,13 +145,106 @@ def render_sidebar():
         st.markdown("---") # Separator before emergency help
 
         # --- 2. Emergency Help Button (Functional) ---
-        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True):
+        # --- 2. Emergency Help Button (Functional) ---
+        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True): # Removed type="primary"
             webbrowser.open("https://www.mentalhealth.gov/get-help/immediate-help")
 
         st.markdown("") # Add a little space
 
-        # --- 3. Removed Mood Tracker & Micro-Journal from here ---
-        # The content has been moved to render_mood_tracker() and will be called in header.py
+        # --- 3. Dynamic Mood Tracker & Micro-Journal (Fixed Tip & New Button) ---
+        with st.expander("🧠 Mental Health Check"):
+            st.markdown("**How are you feeling today?**")
+
+            mood_options_map = {
+                "😔 Very Low": "very_low",
+                "😐 Low": "low",
+                "😊 Okay": "okay",
+                "😄 Good": "good",
+                "🌟 Great": "great"
+            }
+            mood_labels = list(mood_options_map.keys())
+
+            # Use st.radio for mood selection, styled horizontally
+            selected_mood_label = st.radio(
+                "Mood Scale",
+                options=mood_labels,
+                index=mood_labels.index("😊 Okay") if "😊 Okay" in mood_labels else 2, # Default to Okay
+                key="mood_selector_radio",
+                horizontal=True,
+                label_visibility="collapsed"
+            )
+
+            st.session_state.current_mood_val = mood_options_map[selected_mood_label]
+
+            # Conditional Journal Prompt based on selected mood
+            if st.session_state.current_mood_val:
+                st.markdown("") # Small space
+                journal_prompt_text = {
+                    "very_low": "What's weighing on your mind today?",
+                    "low": "What are your thoughts right now?",
+                    "okay": "Anything specific on your mind today?",
+                    "good": "What made you feel good today?",
+                    "great": "What's making you shine today?"
+                }.get(st.session_state.current_mood_val, "Reflect on your mood:")
+
+                # Initialize journal entry for the current session
+                if "mood_journal_entry" not in st.session_state:
+                    st.session_state.mood_journal_entry = ""
+                # Initialize state for displaying tips and status
+                if "mood_tip_display" not in st.session_state:
+                    st.session_state.mood_tip_display = ""
+                if "mood_entry_status" not in st.session_state:
+                    st.session_state.mood_entry_status = ""
+
+
+                st.text_area(
+                    f"✏️ {journal_prompt_text}",
+                    key="mood_journal_area",
+                    value=st.session_state.mood_journal_entry,
+                    height=70
+                )
+
+                tips_for_mood = {
+                    "very_low": "Remember, it's okay not to be okay. Consider connecting with a professional.",
+                    "low": "Even small steps help. Try a brief mindful moment or gentle activity.",
+                    "okay": "Keep nurturing your well-being. What's one thing you can do to maintain this?",
+                    "good": "That's wonderful! Savor this feeling and perhaps share your positivity.",
+                    "great": "Fantastic! How can you carry this energy forward into your day?"
+                }.get(st.session_state.current_mood_val, "A general tip for your mood.")
+
+                st.markdown("") # Small space
+
+                # Two buttons side-by-side
+                col_tip_save, col_ask_peacepulse = st.columns(2)
+
+                with col_tip_save:
+                    if st.button("Get Tip & Save Entry", key="save_mood_entry", use_container_width=True):
+                        st.session_state.mood_tip_display = tips_for_mood
+                        st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
+                        st.session_state.mood_journal_entry = "" # Clear after "saving"
+                        # No rerun here to keep the tip visible
+
+                with col_ask_peacepulse:
+                    if st.button("Ask PeacePulse", key="ask_peace_pulse_from_mood", use_container_width=True):
+                        if st.session_state.mood_journal_area.strip():
+                            st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area
+                            st.session_state.send_chat_message = True
+                            st.session_state.mood_journal_entry = "" # Clear the journal area
+                            st.session_state.mood_tip_display = "" # Clear any previous tip
+                            st.session_state.mood_entry_status = "" # Clear status
+                            st.rerun() # Rerun to switch to chat and send message
+                        else:
+                            st.warning("Please enter your thoughts before asking PeacePulse.")
+
+                # Display the stored tip and status outside the button logic
+                if st.session_state.mood_tip_display:
+                    st.success(st.session_state.mood_tip_display)
+                    # Clear it after display so it doesn't persist across unrelated interactions
+                    st.session_state.mood_tip_display = ""
+                if st.session_state.mood_entry_status:
+                    st.info(st.session_state.mood_entry_status)
+                    # Clear it after display
+                    st.session_state.mood_entry_status = ""
 
         # --- 4. Resource Hub with Categories & Search ---
         with st.expander("📚 Resources & Knowledge Base"):
@@ -377,7 +278,7 @@ def render_sidebar():
                 for i, tab_title in enumerate(mental_health_resources_full.keys()):
                     with resource_tabs[i]:
                         topic_data = mental_health_resources_full[tab_title]
-                        st.markdown(f"**{tab_title}**")
+                        st.markdown(f"**{tab_title}")
                         st.info(topic_data['description'])
                         for link in topic_data['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
