@@ -12,8 +12,8 @@ emergency_resources = { "Crisis Hotlines": [ "National Suicide Prevention Lifeli
 def render_sidebar():
     """Renders the left and right sidebars."""
     with st.sidebar:
-        # The content that belongs together under 'Conversations'
-        st.markdown('<div class="sidebar-section">', unsafe_allow_html=True) # Changed class name for clarity
+        # Conversations Section
+        st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
         st.markdown("### 💬 Conversations")
 
         # New conversation button
@@ -22,9 +22,6 @@ def render_sidebar():
             st.rerun()
 
         st.markdown("---")
-
-        # Display conversation history
-# In sidebar.py, update the conversation history section:
 
         # Display conversation history
         if st.session_state.conversations:
@@ -43,9 +40,9 @@ def render_sidebar():
                     st.rerun()
         else:
             st.info("No conversations yet. Start a new chat!")
-        st.markdown('</div>', unsafe_allow_html=True) # Close the conversations section
+        st.markdown('</div>', unsafe_allow_html=True) # Close the conversations section properly
 
-        # Emergency Help Button and other resources will be in separate sections
+        # Emergency Help Button Section
         st.markdown('<div class="sidebar-section">', unsafe_allow_html=True) # New section for emergency button
         st.markdown("""
         <div class="emergency-button" onclick="window.open('https://www.mentalhealth.gov/get-help/immediate-help', '_blank')">
@@ -54,8 +51,7 @@ def render_sidebar():
         """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True) # Close emergency button section
 
-        # The rest of your expanders can stay as they are, or also be wrapped in sidebar-section if desired
-        # Quick Assessment
+        # Quick Assessment Expander
         with st.expander("🧠 Mental Health Check"):
             st.markdown("**How are you feeling today?**")
             mood = st.select_slider(
@@ -75,24 +71,24 @@ def render_sidebar():
                 }
                 st.success(tips[mood])
 
-        # Mental Health Resources
+        # Mental Health Resources Expander
         with st.expander("📚 Resources"):
             st.markdown("**Common Mental Health Topics:**")
             for disorder in st.session_state.mental_disorders:
                 if st.button(f"ℹ️ {disorder}", key=f"info_{disorder}", use_container_width=True):
                     st.info(f"Learn more about {disorder}. Consider speaking with a mental health professional for personalized guidance.")
 
-        # Location-Based Centers
+        # Location-Based Centers Expander
         with st.expander("📍 Find Help Nearby"):
             location_input = st.text_input("Enter your city", key="location_search")
             if st.button("🔍 Search Centers", key="search_nearby"):
                 if location_input:
-                    search_url = f"https://www.google.com/maps/search/mental+health+centers+near+{location_input.replace(' ', '+')}"
+                    search_url = f"http://google.com/maps/search/mental+health+centers+{location_input.replace(' ', '+')}"
                     st.markdown(f"[🗺️ View Mental Health Centers Near {location_input}]({search_url})")
                 else:
                     st.warning("Please enter a city name")
 
-        # Crisis Resources
+        # Crisis Resources Expander
         with st.expander("☎️ Crisis Support"):
             st.markdown("**24/7 Crisis Hotlines:**")
             for category, numbers in emergency_resources.items():
@@ -100,7 +96,7 @@ def render_sidebar():
                 for number in numbers:
                     st.markdown(f"• {number}")
 
-        # About Section
+        # About Section Expander
         with st.expander("ℹ️ About PeacePulse"):
             st.markdown("""
             **PeacePulse** is your compassionate mental health companion, designed to provide:
