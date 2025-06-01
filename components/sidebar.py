@@ -311,7 +311,11 @@ def render_sidebar():
 
             **Remember:** This is not a substitute for professional mental health care.
 
+            ---
+
             **Created with ❤️ by Eccentric Explorer**
+
+            *"It's absolutely okay not to be okay :)"*
 
             📅 Enhanced Version - May 2025
             """)
