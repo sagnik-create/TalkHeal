@@ -110,7 +110,7 @@ def render_sidebar():
 
         if st.session_state.conversations:
             # Add a search bar for conversations
-            convo_search = st.text_input("Search chats...", key="convo_search", placeholder="Type to search...", label_visibility="collapsed")
+            convo_search = st.text_input("Search chats...", key="convo_search", placeholder="Search from History...", label_visibility="collapsed")
 
             filtered_conversations = [
                 convo for convo in st.session_state.conversations
