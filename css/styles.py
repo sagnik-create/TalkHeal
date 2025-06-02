@@ -193,6 +193,34 @@ def apply_custom_css():
             font-weight: 500;
         }}
         
+        /* NEW: Styles for the st.container in header.py */
+        /* Target the st.container using its data-testid. 
+        You might need to inspect your deployed app's HTML to confirm the exact data-testid.
+        stVerticalBlock is a common one for st.container. */
+        [data-testid="stVerticalBlock"] > div:has(h2:contains("PeacePulse")) {{ /* Targets the container with "PeacePulse" heading */
+            text-align: center; 
+            padding: 32px 24px;
+            background: var(--surface);
+            color: white; /* Ensure text is visible */
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px var(--transparent-box-shadow);
+            border: 1px solid var(--transparent-box-border);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+        }}
+        
+        [data-testid="stVerticalBlock"] > div:has(h2:contains("PeacePulse"))::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }}
+        
         /* Enhanced header */
         .main-header {{
             text-align: center;
