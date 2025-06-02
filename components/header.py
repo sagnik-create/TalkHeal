@@ -1,7 +1,7 @@
 import streamlit as st
 
 def render_header():
-    with st.container(border=False): # Add border=False to remove Streamlit's default border
+    with st.container():
         st.markdown("## PeacePulse")
         st.markdown("Your Mental Health Companion 💙")
 
