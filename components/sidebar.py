@@ -273,15 +273,15 @@ def render_sidebar():
                         st.markdown("---") # Separator within tabs
 
         # Location-Based Centers (remains the same)
-        with st.expander("📍 Find Help Nearby"):
-            location_input = st.text_input("Enter your city", key="location_search")
-            if st.button("🔍 Search Centers", key="search_nearby"):
-                if location_input:
-                    # Using a more robust Google Maps search URL
-                    search_url = f"https://www.google.com/maps/search/mental+health+centers+near+{location_input.replace(' ', '+')}"
-                    st.markdown(f"[🗺️ View Mental Health Centers Near {location_input}]({search_url})")
-                else:
-                    st.warning("Please enter a city name")
+        # with st.expander("📍 Find Help Nearby"):
+        #     location_input = st.text_input("Enter your city", key="location_search")
+        #     if st.button("🔍 Search Centers", key="search_nearby"):
+        #         if location_input:
+        #             # Using a more robust Google Maps search URL
+        #             search_url = f"https://www.google.com/maps/search/mental+health+centers+near+{location_input.replace(' ', '+')}"
+        #             st.markdown(f"[🗺️ View Mental Health Centers Near {location_input}]({search_url})")
+        #         else:
+        #             st.warning("Please enter a city name")
 
         # Crisis Resources (remains the same)
         with st.expander("☎️ Crisis Support"):
