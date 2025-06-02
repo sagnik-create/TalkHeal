@@ -134,8 +134,11 @@ def render_sidebar():
 
         st.markdown("---") # Separator before emergency help
         
-        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True): # Removed type="primary"
-            webbrowser.open("https://www.mentalhealth.gov/get-help/immediate-help")
+        if st.button("🚨 Emergency Help", key="emergency_button", use_container_width=True):
+            # This block will still execute, but we don't need webbrowser.open here
+            pass # No action needed inside the if block for link_button
+
+        st.link_button("Go to Mental Health Resources", "https://www.mentalhealth.gov/get-help/immediate-help", help="Click to open immediate mental health resources in a new tab")
 
         st.markdown("") # Add a little space
 
