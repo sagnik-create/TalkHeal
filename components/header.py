@@ -2,8 +2,12 @@ import streamlit as st
 
 def render_header():
     with st.container():
-        st.markdown("## PeacePulse")
-        st.markdown("Your Mental Health Companion 💙")
+        st.markdown("""
+        <div class="main-header">
+            <h1>PeacePulse</h1>
+            <p>Your Mental Health Companion 💙</p>
+        </div>
+        """, unsafe_allow_html=True)
 
         with st.expander("📍 Find Help Nearby"):
             location_input = st.text_input("Enter your city", key="header_location_search")
