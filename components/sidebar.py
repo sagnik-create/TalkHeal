@@ -136,7 +136,7 @@ def render_sidebar():
         
         st.markdown(
             """
-            <a href="https://www.mentalhealth.gov/get-help/immediate-help" target="_blank" class="emergency_button">
+            <a href="#" target="_blank" class="emergency_button">
                 🚨 Emergency Help
             </a>
             """,

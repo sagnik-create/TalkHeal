@@ -265,7 +265,7 @@ def apply_custom_css():
         
         /* Emergency button */
         .emergency_button {{ 
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 20%, rgba(220, 38, 38, 0.9) 80%) !important;
             color: white !important;
             padding: 18px 24px;
             border-radius: var(--radius);
