@@ -71,7 +71,7 @@ def render_sidebar():
     with st.sidebar:
         st.markdown(f"""
         <div class="banner">
-            <h3>PeacePulse</h3>
+            <h3>TalkHeal</h3>
             <p>Your Mental Health Companion 💙</p>
         </div>
         """, unsafe_allow_html=True)
@@ -203,7 +203,7 @@ def render_sidebar():
                 st.markdown("") # Small space
 
                 # Two buttons side-by-side
-                col_tip_save, col_ask_peacepulse = st.columns(2)
+                col_tip_save, col_ask_TalkHeal = st.columns(2)
 
                 with col_tip_save:
                     if st.button("Get Tip & Save Entry", key="save_mood_entry", use_container_width=True):
@@ -212,8 +212,8 @@ def render_sidebar():
                         st.session_state.mood_journal_entry = "" # Clear after "saving"
                         # No rerun here to keep the tip visible
 
-                with col_ask_peacepulse:
-                    if st.button("Ask PeacePulse", key="ask_peace_pulse_from_mood", use_container_width=True):
+                with col_ask_TalkHeal:
+                    if st.button("Ask TalkHeal", key="ask_peace_pulse_from_mood", use_container_width=True):
                         if st.session_state.mood_journal_area.strip():
                             st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area
                             st.session_state.send_chat_message = True
@@ -222,7 +222,7 @@ def render_sidebar():
                             st.session_state.mood_entry_status = "" # Clear status
                             st.rerun() # Rerun to switch to chat and send message
                         else:
-                            st.warning("Please enter your thoughts before asking PeacePulse.")
+                            st.warning("Please enter your thoughts before asking TalkHeal.")
 
                 # Display the stored tip and status outside the button logic
                 if st.session_state.mood_tip_display:
@@ -292,9 +292,9 @@ def render_sidebar():
                     st.markdown(f"• {number}")
 
         # About Section (remains the same)
-        with st.expander("ℹ️ About PeacePulse"):
+        with st.expander("ℹ️ About TalkHeal"):
             st.markdown("""
-            **PeacePulse** is your compassionate mental health companion, designed to provide:
+            **TalkHeal** is your compassionate mental health companion, designed to provide:
 
             • 24/7 emotional support
             • Resource guidance

@@ -62,7 +62,7 @@ def get_ai_response(user_message, model):
         return "I'm sorry, I can't connect right now. Please check the API configuration."
 
     mental_health_prompt = f"""
-    You are a compassionate mental health support chatbot named PeacePulse. Your role is to:
+    You are a compassionate mental health support chatbot named TalkHeal. Your role is to:
     1. Provide empathetic, supportive responses
     2. Encourage professional help when needed
     3. Never diagnose or provide medical advice

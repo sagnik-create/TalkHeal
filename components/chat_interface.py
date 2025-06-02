@@ -11,7 +11,7 @@ def render_chat_interface():
         if not active_convo["messages"]:
             st.markdown(f"""
             <div class="welcome-message">
-                <strong>Hello! I'm PeacePulse, your mental health companion.</strong><br>
+                <strong>Hello! I'm TalkHeal, your mental health companion.</strong><br>
                 I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊
                 <div class="message-time">{get_current_time()}</div>
             </div>
@@ -84,7 +84,7 @@ def handle_chat_input(model):
                 active_convo["title"] = title
             
             # Generate AI response with spinner
-            with st.spinner("PeacePulse is thinking..."):
+            with st.spinner("TalkHeal is thinking..."):
                 try:
                     ai_response = get_ai_response(user_input.strip(), model)
                     

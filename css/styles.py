@@ -197,7 +197,7 @@ def apply_custom_css():
         /* Target the st.container using its data-testid. 
         You might need to inspect your deployed app's HTML to confirm the exact data-testid.
         stVerticalBlock is a common one for st.container. */
-        [data-testid="stVerticalBlock"] > div:has(h2:contains("PeacePulse")) {{ /* Targets the container with "PeacePulse" heading */
+        [data-testid="stVerticalBlock"] > div:has(h2:contains("TalkHeal")) {{ /* Targets the container with "TalkHeal" heading */
             text-align: center; 
             padding: 32px 24px;
             background: var(--surface);
@@ -211,7 +211,7 @@ def apply_custom_css():
             backdrop-filter: blur(10px); /* Frosted glass effect */
         }}
         
-        [data-testid="stVerticalBlock"] > div:has(h2:contains("PeacePulse"))::before {{
+        [data-testid="stVerticalBlock"] > div:has(h2:contains("TalkHeal"))::before {{
             content: '';
             position: absolute;
             top: 0;

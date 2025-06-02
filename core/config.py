@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 # Page configuration settings
 PAGE_CONFIG = {
-    "page_title": "PeacePulse - Mental Health Support",
+    "page_title": "TalkHeal - Mental Health Support",
     "page_icon": "💙",
     "layout": "wide",
     "initial_sidebar_state": "expanded",
