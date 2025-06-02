@@ -279,6 +279,7 @@ def apply_custom_css():
             font-size: 1.1em;
             border: 1px solid rgba(239, 68, 68, 0.8) !important;
             backdrop-filter: blur(5px);
+            text-decoration: none !important;
         }}
 
         .emergency_button:hover {{
