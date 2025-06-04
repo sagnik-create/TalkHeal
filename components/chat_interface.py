@@ -12,7 +12,7 @@ def render_chat_interface():
             st.markdown(f"""
             <div class="welcome-message">
                 <strong>Hello! I'm TalkHeal, your mental health companion</strong><br>
-                How are you feeling today? 😊 You can write it down here 👇🏻 or for a fresh start click on "➕ New Chat" on the left and choose a common topic                <div class="message-time">{get_current_time()}</div>
+                How are you feeling today? 😊 You can write it down below or for a fresh start click on "➕ New Chat" on the left and choose a common topic                <div class="message-time">{get_current_time()}</div>
             </div>
             """, unsafe_allow_html=True)
         
