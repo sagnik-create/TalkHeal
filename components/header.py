@@ -7,7 +7,7 @@ def render_header():
         st.markdown("""
         <div class="main-header">
             <h1>TalkHeal</h1>
-            <p>I'm here to listen, support, and help guide you toward the resources you need. How are you feeling today? 😊</p>
+            <p>Your Mental Health Companion 💙</p>
         </div>
         """, unsafe_allow_html=True)
 
