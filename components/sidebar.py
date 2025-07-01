@@ -311,7 +311,7 @@ def render_sidebar():
 
             ---
 
-            **Created with ❤️ by Eccentric Explorer**
+            **Created with ❤️ by [Eccentric Explorer](https://your-portfolio-link.com)**
 
             *"It's absolutely okay not to be okay :)"*
 
