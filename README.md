@@ -1,39 +1,50 @@
 <div align="center"><img src="src/TalkHealLogo.png" style="width: 220px; height: 220px;" /></div>
 
-# <div align="center">TalkHeal</div>
+# <div align="center">TALKHEAL</div>
 
-## Modern Budget Allocation & Financial Management System
+## 🧠 Your AI-Powered Mental Health Companion
 
-TalkHeal is a simple but comprehensive financial management application built with React that helps efficiently allocate and track budgets across departments. With intuitive visualisations and real-time updates, it provides complete financial oversight at a glance.
+**TalkHeal** is an empathetic, intelligent, and interactive mental health support assistant built using **Python** and **Streamlit**. Designed with compassion and care at its core, it offers 24/7 support, emotional journaling, resource guidance, and AI-powered conversations powered by Google’s Gemini Pro.
+
+---
 
 ## ✨ Features
 
-* **Interactive Budget Dashboard**:
-  * Real-time budget overview with remaining funds calculation
-  * Visual progress bars showing budget utilisation
-  * Currency conversion with multiple supported currencies
-  * Budget status indicators (healthy, warning, critical)
+### 🗣️ Conversational AI Support
 
-* **Department Allocation Management**:
-  * Add or reduce funds for any department
-  * Quick action buttons for common allocation amounts
-  * Custom allocation amounts with validation
-  * Department-specific icons and colors for visual identification
+* Gemini-powered chatbot for mental health companionship
+* Empathetic and encouraging tone—never clinical or diagnostic
+* Smart conversation history with multi-threaded support
 
-* **Comprehensive Financial Tracking**:
-  * Sortable and searchable department allocation table
-  * Quick adjustment buttons (+£10/-£10) for fast updates
-  * Reset department allocations with one click
-  * Visual indicators showing allocation proportions
+### 📘 Resource & Crisis Help
 
-* **Responsive & Modern UI**:
-  * Clean, intuitive interface with visual hierarchy
-  * Adaptive layout for all screen sizes
-  * Interactive form with validation and feedback
+* Mental health resource library with live search
+* International emergency contacts and helpline shortcuts
+* Quick access to location-based therapy centers via Google Maps
+
+### 💖 Mood Tracking & Journaling
+
+* Mood slider with five emotional states
+* AI-assisted coping tips based on mood
+* Micro-journaling support with reflection prompts
+
+### 📌 Smart Prompts
+
+* Instant-start suggestions like “Feeling overwhelmed” or “How to manage stress?”
+* Direct conversion of journal thoughts into chatbot prompts
+
+### 🎨 Clean, Minimal UI
+
+* Sidebar toggling for focus-driven interaction
+* 3D-inspired soft pink and magenta UI, best suited for a  mentally soothing and peaceful outlook
+* Smooth transitions and responsive design for mobile and desktop
+
+---
 
 ## 🚀 Live Demo
 
-Experience TalkHeal live here: [**TalkHeal**](https://www.google.com/search?q=https://TalkHeal.streamlit.app)
+Experience TalkHeal live here: 
+👉 [![**TalkHeal**](https://img.shields.io/badge/View-Live%20Demo-brightgreen?style=for-the-badge)](https://www.google.com/search?q=https://TalkHeal.streamlit.app)
 
  <div align="center">
  <p>
@@ -65,48 +76,53 @@ For a detailed walkthrough of TalkHeal's features and how to use them, check out
 
 **[Insert YouTube Video Link Here]**
 
+---
+
 ## 🛠️ Technologies Used
 
-* **React**: JavaScript library for building the user interface
-* **Context API**: For state management across components
-* **CSS Modules**: For scoped component styling
-* **Modern CSS**: Flexbox, Grid, and custom properties
+| Tech                  | Purpose                           |
+| --------------------- | --------------------------------- |
+| **Python**            | Core backend and AI logic         |
+| **Streamlit**         | UI and frontend integration       |
+| **Google Gemini API** | Generative AI Conversations       |
+| **Session State**     | Manage multi-threaded chat memory |
+| **CSS Variables**     | Theming and modern styling        |
+| **Streamlit Secrets** | Secure API key management         |
 
-Here's the corrected installation and setup section for your React app:
+---
 
-```markdown
 ## ⚙️ Installation and Setup
 
-To run TalkHeal locally:
+> Clone and run locally using Python and Streamlit.
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/eccentriccoder01/TalkHeal.git
    cd TalkHeal
    ```
 
 2. **Install dependencies:**
+
    ```bash
-   npm install
-   # or
-   yarn install
+   pip install -r requirements.txt
    ```
 
-3. **Start the development server:**
-   ```bash
-   npm start
-   # or
-   yarn start
-   ```
-   The app will automatically open in your default browser at `http://localhost:3000`
+3. **Set up API key:**
+   Go to your Streamlit [Secrets Settings](https://streamlit.io/cloud) and add:
 
-4. **For production build:**
-   ```bash
-   npm run build
-   # or
-   yarn build
+   ```toml
+   [gemini]
+   api_key = "YOUR_GOOGLE_GEMINI_API_KEY"
    ```
-   This creates an optimised production build in the `build` folder
+
+4. **Run the app:**
+
+   ```bash
+   streamlit run TalkHeal.py
+   ```
+
+---
 
 ## Issue Creation ✴
 Report bugs and  issues or propose improvements through our GitHub repository.
@@ -125,8 +141,8 @@ Report bugs and  issues or propose improvements through our GitHub repository.
     
 ## Contributing is fun🧡
 
-Enhance TalkHeal with your contributions! Whether you have innovative suggestions, spot bugs, or wish to introduce new features.
-Contributions of any kind from anyone are always welcome🌟❕
+We welcome all contributions and suggestions!
+Whether it's a new feature, design improvement, or a bug fix — your voice matters 💜
 
 Your insights are invaluable to us. Reach out to us team for any inquiries, feedback, or concerns.
 
