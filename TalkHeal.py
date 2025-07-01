@@ -41,7 +41,6 @@ apply_custom_css()
 
 model = configure_gemini()
 
-# --- Persistent Sidebar Toggle Button (outside of st.sidebar) ---
 col_toggle, col_main = st.columns([0.05, 0.95])
 
 with col_toggle:

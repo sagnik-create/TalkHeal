@@ -1,7 +1,7 @@
 import streamlit as st
 import webbrowser
 from datetime import datetime
-from core.utils import create_new_conversation, get_current_time # Import get_current_time if not already there
+from core.utils import create_new_conversation, get_current_time
 
 # Emergency contacts and resources
 emergency_resources = {
@@ -17,7 +17,6 @@ emergency_resources = {
     ]
 }
 
-# Define a broader set of resources with more details for filtering
 mental_health_resources_full = {
     "Depression & Mood Disorders": {
         "description": "Information on understanding and coping with depression, persistent depressive disorder, and other mood-related challenges.",
@@ -69,16 +68,7 @@ mental_health_resources_full = {
 def render_sidebar():
     """Renders the left and right sidebars."""
     with st.sidebar:
-        # st.markdown(f"""
-        # <div class="banner">
-        #     <h3>TalkHeal</h3>
-        #     <p>Your Mental Health Companion 💙</p>
-        # </div>
-        # """, unsafe_allow_html=True)
-        # --- 1. Conversations & New Chat (with Quick Start Prompts) ---
         st.markdown("### 💬 Conversations")
-
-        # Initialize state for quick start prompts visibility
         if "show_quick_start_prompts" not in st.session_state:
             st.session_state.show_quick_start_prompts = False
         if "pre_filled_chat_input" not in st.session_state:
@@ -88,10 +78,8 @@ def render_sidebar():
 
         if st.button("➕ New Chat", key="new_chat", use_container_width=True):
             create_new_conversation()
-            st.session_state.show_quick_start_prompts = True # Show prompts after new chat
+            st.session_state.show_quick_start_prompts = True
             st.rerun()
-
-        # Display quick start prompts if enabled
         if st.session_state.show_quick_start_prompts:
             st.markdown("---")
             st.markdown("**Start with a common topic:**")
@@ -101,21 +89,18 @@ def render_sidebar():
                 "How to manage stress?",
                 "Tell me about anxiety"
             ]
-
-            # Use columns for a more compact layout of quick prompts
             qp_cols = st.columns(2)
             for i, prompt in enumerate(quick_prompts):
-                with qp_cols[i % 2]: # Distribute buttons across 2 columns
+                with qp_cols[i % 2]:
                     if st.button(f"✨ {prompt}", key=f"qp_{i}", use_container_width=True):
                         st.session_state.pre_filled_chat_input = prompt
-                        st.session_state.send_chat_message = True # Indicate that a message should be sent
-                        st.session_state.show_quick_start_prompts = False # Hide after selection
-                        st.rerun() # Rerun to update the main chat input
+                        st.session_state.send_chat_message = True
+                        st.session_state.show_quick_start_prompts = False 
+                        st.rerun()
 
-            st.markdown("---") # Separator after quick prompts
+            st.markdown("---")
 
         if st.session_state.conversations:
-            # Iterate directly over all conversations, no search filter
             for i, convo in enumerate(st.session_state.conversations):
                 is_active = i == st.session_state.active_conversation
                 button_style_icon = "🟢" if is_active else "📝"
@@ -132,7 +117,7 @@ def render_sidebar():
         else:
             st.info("No conversations yet. Start a new chat!")
 
-        st.markdown("---") # Separator before emergency help
+        st.markdown("---")
         
         st.markdown(
             """
@@ -143,7 +128,7 @@ def render_sidebar():
             unsafe_allow_html=True
         )
 
-        st.markdown("") # Add a little space
+        st.markdown("")
 
         # --- 3. Dynamic Mood Tracker & Micro-Journal (Fixed Tip & New Button) ---
         with st.expander("🧠 Mental Health Check"):
@@ -158,21 +143,18 @@ def render_sidebar():
             }
             mood_labels = list(mood_options_map.keys())
 
-            # Use st.radio for mood selection, styled horizontally
             selected_mood_label = st.radio(
                 "Mood Scale",
                 options=mood_labels,
-                index=mood_labels.index("😊 Okay") if "😊 Okay" in mood_labels else 2, # Default to Okay
+                index=mood_labels.index("😊 Okay") if "😊 Okay" in mood_labels else 2,
                 key="mood_selector_radio",
                 horizontal=True,
                 label_visibility="collapsed"
             )
 
             st.session_state.current_mood_val = mood_options_map[selected_mood_label]
-
-            # Conditional Journal Prompt based on selected mood
             if st.session_state.current_mood_val:
-                st.markdown("") # Small space
+                st.markdown("")
                 journal_prompt_text = {
                     "very_low": "What's weighing on your mind today?",
                     "low": "What are your thoughts right now?",
@@ -206,38 +188,32 @@ def render_sidebar():
                     "great": "Fantastic! How can you carry this energy forward into your day?"
                 }.get(st.session_state.current_mood_val, "A general tip for your mood.")
 
-                st.markdown("") # Small space
-
-                # Two buttons side-by-side
+                st.markdown("")
                 col_tip_save, col_ask_TalkHeal = st.columns(2)
 
                 with col_tip_save:
                     if st.button("Get Tip & Save Entry", key="save_mood_entry", use_container_width=True):
                         st.session_state.mood_tip_display = tips_for_mood
                         st.session_state.mood_entry_status = f"Your mood entry for '{selected_mood_label}' has been noted for this session."
-                        st.session_state.mood_journal_entry = "" # Clear after "saving"
-                        # No rerun here to keep the tip visible
+                        st.session_state.mood_journal_entry = ""
 
                 with col_ask_TalkHeal:
                     if st.button("Ask TalkHeal", key="ask_peace_pulse_from_mood", use_container_width=True):
                         if st.session_state.mood_journal_area.strip():
                             st.session_state.pre_filled_chat_input = st.session_state.mood_journal_area
                             st.session_state.send_chat_message = True
-                            st.session_state.mood_journal_entry = "" # Clear the journal area
-                            st.session_state.mood_tip_display = "" # Clear any previous tip
-                            st.session_state.mood_entry_status = "" # Clear status
-                            st.rerun() # Rerun to switch to chat and send message
+                            st.session_state.mood_journal_entry = ""
+                            st.session_state.mood_tip_display = ""
+                            st.session_state.mood_entry_status = ""
+                            st.rerun()
                         else:
                             st.warning("Please enter your thoughts before asking TalkHeal.")
 
-                # Display the stored tip and status outside the button logic
                 if st.session_state.mood_tip_display:
                     st.success(st.session_state.mood_tip_display)
-                    # Clear it after display so it doesn't persist across unrelated interactions
                     st.session_state.mood_tip_display = ""
                 if st.session_state.mood_entry_status:
                     st.info(st.session_state.mood_entry_status)
-                    # Clear it after display
                     st.session_state.mood_entry_status = ""
 
         # --- 4. Resource Hub with Categories & Search ---
@@ -246,7 +222,7 @@ def render_sidebar():
 
             resource_search_query = st.text_input("Search resources...", key="resource_search", placeholder="e.g., 'anxiety tips', 'therapy'", label_visibility="collapsed")
 
-            if resource_search_query: # If there's a search query
+            if resource_search_query: 
                 filtered_topics = [
                     topic for topic in mental_health_resources_full
                     if resource_search_query.lower() in topic.lower() or \
@@ -257,16 +233,15 @@ def render_sidebar():
                 if not filtered_topics:
                     st.info("No resources found matching your search.")
                 else:
-                    st.markdown("---") # Add a separator for clarity
+                    st.markdown("---")
                     st.markdown("**Matching Resources:**")
                     for topic in filtered_topics:
-                        # DO NOT USE st.expander HERE. Just display the content directly.
-                        st.markdown(f"**{topic}**") # Use markdown for the topic title
+                        st.markdown(f"**{topic}**")
                         st.info(mental_health_resources_full[topic]['description'])
                         for link in mental_health_resources_full[topic]['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
-                        st.markdown("---") # Separator between filtered topics
-            else: # If no search query, show tabs as before
+                        st.markdown("---")
+            else:
                 resource_tabs = st.tabs(list(mental_health_resources_full.keys()))
 
                 for i, tab_title in enumerate(mental_health_resources_full.keys()):
@@ -276,20 +251,8 @@ def render_sidebar():
                         st.info(topic_data['description'])
                         for link in topic_data['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
-                        st.markdown("---") # Separator within tabs
+                        st.markdown("---")
 
-        # Location-Based Centers (remains the same)
-        # with st.expander("📍 Find Help Nearby"):
-        #     location_input = st.text_input("Enter your city", key="location_search")
-        #     if st.button("🔍 Search Centers", key="search_nearby"):
-        #         if location_input:
-        #             # Using a more robust Google Maps search URL
-        #             search_url = f"https://www.google.com/maps/search/mental+health+centers+near+{location_input.replace(' ', '+')}"
-        #             st.markdown(f"[🗺️ View Mental Health Centers Near {location_input}]({search_url})")
-        #         else:
-        #             st.warning("Please enter a city name")
-
-        # Crisis Resources (remains the same)
         with st.expander("☎️ Crisis Support"):
             st.markdown("**24/7 Crisis Hotlines:**")
             for category, numbers in emergency_resources.items():
@@ -297,7 +260,6 @@ def render_sidebar():
                 for number in numbers:
                     st.markdown(f"• {number}")
 
-        # About Section (remains the same)
         with st.expander("ℹ️ About TalkHeal"):
             st.markdown("""
             **TalkHeal** is your compassionate mental health companion, designed to provide:

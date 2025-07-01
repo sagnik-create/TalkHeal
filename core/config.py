@@ -1,23 +1,25 @@
 import streamlit as st
 import google.generativeai as genai
+from pathlib import Path
 
-# Page configuration settings
+logo_path = str(Path(__file__).resolve().parent.parent / "TalkHealLogo.png")
+
 PAGE_CONFIG = {
     "page_title": "TalkHeal - Mental Health Support",
-    "page_icon": "💙",
+    "page_icon": logo_path,
     "layout": "wide",
     "initial_sidebar_state": "expanded",
     "menu_items": None
 }
 
-# Configure Gemini API
 def configure_gemini():
-    """Configures the Gemini API with the provided API key."""
     try:
-        # Replace with your actual API key or use environment variable
-        genai.configure(api_key="AIzaSyBeulOMD_D6_AUVdf1MKG6wnjxQ_gaSYsw") 
+        api_key = st.secrets["GEMINI_API_KEY"]
+        genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-2.0-flash')
         return model
+    except KeyError:
+        st.error("Gemini API key not found in Streamlit secrets.")
     except Exception as e:
-        st.error("Failed to configure Gemini API. Please check your API key.")
-        return None
+        st.error(f"Failed to configure Gemini API: {e}")
+    return None

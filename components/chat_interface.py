@@ -1,9 +1,7 @@
 import streamlit as st
 from core.utils import get_current_time, get_ai_response
 
-def render_chat_interface():
-    """Renders the main chat message display area directly without any wrapper container."""
-    
+def render_chat_interface():    
     if st.session_state.active_conversation >= 0:
         active_convo = st.session_state.conversations[st.session_state.active_conversation]
         
@@ -33,18 +31,12 @@ def render_chat_interface():
                 </div>
                 """, unsafe_allow_html=True)
 
-def handle_chat_input(model):
-    """Handles the user input for the chat and generates AI responses."""
-    
-    # Initialize pre-filled input if not present
+def handle_chat_input(model):   
     if "pre_filled_chat_input" not in st.session_state:
         st.session_state.pre_filled_chat_input = ""
-    
-    # Use the pre-filled value if available, then clear it
     initial_chat_value = st.session_state.pre_filled_chat_input
-    st.session_state.pre_filled_chat_input = "" # Clear it immediately after reading
+    st.session_state.pre_filled_chat_input = "" 
 
-    # Create a form for chat input
     with st.form(key="chat_form", clear_on_submit=True):
         col1, col2 = st.columns([5, 1])
         
@@ -54,40 +46,31 @@ def handle_chat_input(model):
                 key="message_input", 
                 label_visibility="collapsed",
                 placeholder="Type your message here...",
-                value=initial_chat_value # Set the initial value here
+                value=initial_chat_value
             )
         
         with col2:
             send_pressed = st.form_submit_button("Send", use_container_width=True)
     
-    # Process the input when send is pressed or if triggered by a sidebar button
     if (send_pressed or st.session_state.get('send_chat_message', False)) and user_input.strip():
-        # Reset the flag after processing
         if 'send_chat_message' in st.session_state:
             st.session_state.send_chat_message = False
 
         if st.session_state.active_conversation >= 0:
             current_time = get_current_time()
             active_convo = st.session_state.conversations[st.session_state.active_conversation]
-            
-            # Add user message
             active_convo["messages"].append({
                 "sender": "user", 
                 "message": user_input.strip(), 
                 "time": current_time
             })
-            
-            # Update conversation title if it's the first message
             if len(active_convo["messages"]) == 1:
                 title = user_input[:30] + "..." if len(user_input) > 30 else user_input
                 active_convo["title"] = title
-            
-            # Generate AI response with spinner
             with st.spinner("TalkHeal is thinking..."):
                 try:
                     ai_response = get_ai_response(user_input.strip(), model)
                     
-                    # Add AI response
                     active_convo["messages"].append({
                         "sender": "bot", 
                         "message": ai_response, 
@@ -95,13 +78,10 @@ def handle_chat_input(model):
                     })
                     
                 except Exception as e:
-                    # Handle errors gracefully
-                    st.error(f"An error occurred: {e}") # For debugging
+                    st.error(f"An error occurred: {e}")
                     active_convo["messages"].append({
                         "sender": "bot", 
-                        "message": "I apologize, but I'm having trouble responding right now. Please try again in a moment.", 
+                        "message": "I apologise, but I'm having trouble responding right now. Please try again in a moment.", 
                         "time": get_current_time()
                     })
-            
-            # Rerun to refresh the interface
             st.rerun()

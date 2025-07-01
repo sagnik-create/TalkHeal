@@ -5,7 +5,6 @@ import re
 def get_current_time():
     """Returns the current time formatted as HH:MM AM/PM."""
     now = datetime.now()
-    # Format: 2:30 PM (without leading zero for hours)
     return now.strftime("%-I:%M %p") if hasattr(now, 'strftime') else now.strftime("%I:%M %p").lstrip('0')
 
 def create_new_conversation(initial_message=None):
@@ -33,19 +32,10 @@ def create_new_conversation(initial_message=None):
     return 0
 
 def clean_ai_response(response_text):
-    """
-    Cleans the AI response by removing any HTML tags and unwanted formatting.
-    """
     if not response_text:
         return response_text
-    
-    # Remove HTML tags
     response_text = re.sub(r'<[^>]+>', '', response_text)
-    
-    # Remove extra whitespace and newlines
     response_text = re.sub(r'\s+', ' ', response_text).strip()
-    
-    # Remove any remaining HTML entities
     response_text = response_text.replace('&nbsp;', ' ')
     response_text = response_text.replace('&lt;', '<')
     response_text = response_text.replace('&gt;', '>')
@@ -54,10 +44,6 @@ def clean_ai_response(response_text):
     return response_text
 
 def get_ai_response(user_message, model):
-    """
-    Generates an AI response using the configured Gemini model,
-    with a prompt tailored for mental health support.
-    """
     if model is None:
         return "I'm sorry, I can't connect right now. Please check the API configuration."
 

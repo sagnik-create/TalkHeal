@@ -3,13 +3,11 @@ import streamlit as st
 import base64
 
 def get_base64_of_bin_file(bin_file):
-    """Encodes a binary file (like an image) to base64."""
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
 
 def apply_custom_css():
-    """Applies custom CSS to the Streamlit application for enhanced styling."""
     # Path to your background image
     background_image_path = "Background.jpg"
     
@@ -77,7 +75,6 @@ def apply_custom_css():
             max-width: 1200px;
         }}
         
-        /* Main chat area styling - no container wrapper */
         .main .block-container {{
             scroll-behavior: smooth;
         }}
@@ -193,10 +190,6 @@ def apply_custom_css():
             font-weight: 500;
         }}
         
-        /* NEW: Styles for the st.container in header.py */
-        /* Target the st.container using its data-testid. 
-        You might need to inspect your deployed app's HTML to confirm the exact data-testid.
-        stVerticalBlock is a common one for st.container. */
         [data-testid="stVerticalBlock"] > div:has(h2:contains("TalkHeal")) {{ /* Targets the container with "TalkHeal" heading */
             text-align: center; 
             padding: 32px 24px;
@@ -221,7 +214,6 @@ def apply_custom_css():
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }}
         
-        /* Enhanced header */
         .main-header {{
             text-align: center;
             padding: 32px 24px;
@@ -289,7 +281,6 @@ def apply_custom_css():
         }}
         
         /* Sidebar section styling */
-        /* Note: Removed .sidebar-section class from Python, keeping styling for potential future use */
         .sidebar-section {{
             background: var(--light-transparent-bg) !important;
             border-radius: var(--radius-lg);
@@ -299,7 +290,7 @@ def apply_custom_css():
             backdrop-filter: blur(10px);
         }}
         
-        /* Button styling - comprehensive */
+        /* Button styling*/
         button, 
         .stButton > button,
         .stDownloadButton > button,
@@ -343,8 +334,6 @@ def apply_custom_css():
             color: white !important;
         }}
         
-        /* Active conversation styling */
-        /* This targets primary buttons specifically within the sidebar */
         .stApp [data-testid="stSidebar"] .stButton button[data-testid*="stButton-primary"] {{
             background: var(--active-conversation-bg) !important;
             color: white !important;
@@ -397,7 +386,7 @@ def apply_custom_css():
             backdrop-filter: blur(10px) !important;
         }}
         
-        /* Text in sidebar - dark for readability */
+        /* Text in sidebar*/
         .stApp [data-testid="stSidebar"] h1,
         .stApp [data-testid="stSidebar"] h2,
         .stApp [data-testid="stSidebar"] h3,
@@ -409,7 +398,7 @@ def apply_custom_css():
             text-shadow: none !important;
         }}
         
-        /* Main content text - white for contrast against background */
+        /* Main content text*/
         .stApp .main h1,
         .stApp .main h2,
         .stApp .main h3,
