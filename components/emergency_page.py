@@ -1,19 +1,20 @@
 import streamlit as st
 from geopy.geocoders import Nominatim
-from .sidebar import LOCAL_RESOURCES, GLOBAL_RESOURCES
+import urllib.parse
+from .sidebar import GLOBAL_RESOURCES  
 
 
 def render_emergency_page():
-    """Displays the full-screen emergency resources page using manual location search."""
+    """Displays emergency help page with dynamic search for local resources."""
 
-    # --- 1. Interactive Elements ---
+    # --- 1. Back Button ---
     if st.button("← Back to Chat"):
         st.session_state.show_emergency_page = False
         if 'location_info' in st.session_state:
-            del st.session_state['location_info']  # Clear location on exit
+            del st.session_state['location_info']
         st.rerun()
 
-    # --- 2. Static Header ---
+    # --- 2. Main Header ---
     st.markdown("""
     <div class="main-header">
         <h1>Help is Available</h1>
@@ -21,7 +22,7 @@ def render_emergency_page():
     </div>
     """, unsafe_allow_html=True)
 
-    # --- 3. Manual Search Logic ---
+    # --- 3. Manual Geolocation Search ---
     st.subheader("Find Local Resources Near You")
     geolocator = Nominatim(user_agent="talkheal_app")
     location_query = st.text_input(
@@ -47,44 +48,37 @@ def render_emergency_page():
         else:
             st.warning("Please enter a location to search.")
 
-    # --- 4. Build and Render HTML Output ---
+    # --- 4. Display Map and DYNAMIC Local Resource Link ---
     if 'location_info' in st.session_state and st.session_state.location_info:
         info = st.session_state.location_info
         lat = float(info['lat'])
         lon = float(info['lon'])
         display_name = info.get('display_name', 'your selected location')
 
-        # Build the OpenStreetMap URL
+        st.success(f"Showing results for: {display_name}")
+
+        # Display Embedded OpenStreetMap
         zoom_level = 0.05
         map_url = f"https://www.openstreetmap.org/export/embed.html?bbox={lon-zoom_level},{lat-zoom_level},{lon+zoom_level},{lat+zoom_level}&layer=mapnik&marker={lat},{lon}"
+        st.components.v1.iframe(map_url, height=400)
 
-        # Start building the HTML string
-        html_output = f'<div class="stAlert stSuccess">Showing results for: {display_name}</div>'
-        html_output += f'<iframe src="{map_url}" width="100%" height="400" style="border:1px solid #ccc; border-radius: 12px; margin-top: 16px;"></iframe>'
+        # --- DYNAMICALLY GENERATE SEARCH LINK ---
+        st.markdown("#### **Find Local Support**")
+        # Create a precise search query
+        search_term = f"mental health crisis support near {display_name}"
+        # URL-encode the search term to handle spaces and special characters
+        encoded_search = urllib.parse.quote_plus(search_term)
+        search_url = f"https://www.google.com/search?q={encoded_search}"
 
-        # Add Local Resources to HTML
-        if 'address' in info and 'country_code' in info['address']:
-            country_code = info['address']['country_code'].upper()
-            if country_code in LOCAL_RESOURCES:
-                resource = LOCAL_RESOURCES[country_code]
-                html_output += f"<h4><strong>{resource['name']}</strong></h4>"
-                html_output += f"<p>📞 <strong>Contact:</strong> {resource['contact']}</p>"
-                html_output += f'<p>🌐 <strong>Website:</strong> <a href="{resource["url"]}" target="_blank">{resource["url"]}</a></p>'
-            else:
-                html_output += '<div class="stAlert stInfo" style="margin-top: 16px;">We don\'t have specific resources for your country yet, but global help is always available below.</div>'
-        else:
-            html_output += '<div class="stAlert stWarning" style="margin-top: 16px;">Could not determine a country code from the location. Showing global resources.</div>'
+        st.markdown(f"""
+        <a href="{search_url}" target="_blank" class="emergency_button" style="display: block; text-align: center;">
+            🔍 Search for local crisis centers
+        </a>
+        """, unsafe_allow_html=True)
+        st.info("Click the button above to search for support centers in your area. Results will open in a new tab.")
 
-        # Add Global Resources to HTML using <details> tag to mimic an expander
-        html_output += """
-        <details open style="margin-top: 24px; padding: 16px; border: 1px solid #ccc; border-radius: 12px;">
-            <summary style="font-weight: 600; cursor: pointer;">View Global Crisis Hotlines</summary>
-            <div style="margin-top: 12px;">
-        """
+    # --- 5. Global Resources (Always Visible as a fallback) ---
+    with st.expander("View Global Crisis Hotlines", expanded=True):
         for resource in GLOBAL_RESOURCES:
-            html_output += f'<p><strong>{resource["name"]}:</strong> {resource["desc"]} <a href="{resource["url"]}" target="_blank">Visit Website</a></p>'
-
-        html_output += "</div></details>"
-
-        # Render the final HTML block
-        st.markdown(html_output, unsafe_allow_html=True)
+            st.markdown(
+                f"**{resource['name']}**: {resource['desc']} [Visit Website]({resource['url']})")

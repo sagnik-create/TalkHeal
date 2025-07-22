@@ -3,16 +3,7 @@ import webbrowser
 from datetime import datetime
 from core.utils import create_new_conversation, get_current_time
 
-# --- 1. NEW: Structured Emergency Resources ---
-# Keyed by ISO 2-letter country code (e.g., 'US', 'GB', 'IN').
-LOCAL_RESOURCES = {
-    "US": {"name": "988 Suicide & Crisis Lifeline (USA)", "contact": "Call or Text 988", "url": "https://988lifeline.org/"},
-    "GB": {"name": "Samaritans (UK)", "contact": "Call 116 123", "url": "https://www.samaritans.org/"},
-    "IN": {"name": "Vandrevala Foundation (India)", "contact": "Call 9999666555", "url": "https://www.vandrevalafoundation.com/"},
-    "CA": {"name": "Talk Suicide Canada", "contact": "Call 1.833.456.4566", "url": "https://talksuicide.ca/"},
-    "AU": {"name": "Lifeline Australia", "contact": "Call 13 11 14", "url": "https://www.lifeline.org.au/"}
-}
-
+# --- Structured Emergency Resources ---
 GLOBAL_RESOURCES = [
     {"name": "Befrienders Worldwide", "desc": "Emotional support to prevent suicide worldwide.",
         "url": "https://www.befrienders.org/"},
@@ -262,12 +253,6 @@ def render_sidebar():
                             st.markdown(f"• [{link['label']}]({link['url']})")
                         st.markdown("---")
 
-        # with st.expander("☎️ Crisis Support"):
-        #     st.markdown("**24/7 Crisis Hotlines:**")
-        #     for category, numbers in emergency_resources.items():
-        #         st.markdown(f"**{category}:**")
-        #         for number in numbers:
-        #             st.markdown(f"• {number}")
 
         with st.expander("ℹ️ About TalkHeal"):
             st.markdown("""
