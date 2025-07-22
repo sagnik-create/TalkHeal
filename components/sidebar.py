@@ -275,7 +275,7 @@ def render_sidebar():
                 for i, tab_title in enumerate(mental_health_resources_full.keys()):
                     with resource_tabs[i]:
                         topic_data = mental_health_resources_full[tab_title]
-                        st.markdown(f"**{tab_title}")
+                        st.markdown(f"**{tab_title}**")  # fixed typo
                         st.info(topic_data['description'])
                         for link in topic_data['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
