@@ -71,7 +71,7 @@ def handle_chat_input(model):
                 active_convo["title"] = title
             with st.spinner("TalkHeal is thinking..."):
                 try:
-                    def format_memory_for_prompt(convo_history, max_turns=5):
+                    def format_memory_for_prompt(convo_history, max_turns=10):
                         context = ""
                         for msg in convo_history[-max_turns*2:]:  # user+bot per turn
                             sender = "User" if msg["sender"] == "user" else "Bot"
