@@ -1,5 +1,6 @@
 import streamlit as st
 from core.utils import get_current_time, get_ai_response
+from core.utils import save_conversations
 
 def render_chat_interface():    
     if st.session_state.active_conversation >= 0:
@@ -64,12 +65,23 @@ def handle_chat_input(model):
                 "message": user_input.strip(), 
                 "time": current_time
             })
+            save_conversations(st.session_state.conversations)
             if len(active_convo["messages"]) == 1:
                 title = user_input[:30] + "..." if len(user_input) > 30 else user_input
                 active_convo["title"] = title
             with st.spinner("TalkHeal is thinking..."):
                 try:
-                    ai_response = get_ai_response(user_input.strip(), model)
+                    def format_memory_for_prompt(convo_history, max_turns=5):
+                        context = ""
+                        for msg in convo_history[-max_turns*2:]:  # user+bot per turn
+                            sender = "User" if msg["sender"] == "user" else "Bot"
+                            context += f"{sender}: {msg['message']}\n"
+                        return context
+
+                    context = format_memory_for_prompt(active_convo["messages"])
+                    full_prompt = context + f"User: {user_input.strip()}\nBot:"
+
+                    ai_response = get_ai_response(full_prompt, model)
                     
                     active_convo["messages"].append({
                         "sender": "bot", 
@@ -84,4 +96,5 @@ def handle_chat_input(model):
                         "message": "I apologise, but I'm having trouble responding right now. Please try again in a moment.", 
                         "time": get_current_time()
                     })
+                    save_conversations(st.session_state.conversations)
             st.rerun()

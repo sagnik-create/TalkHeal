@@ -1,6 +1,8 @@
 from datetime import datetime
 import streamlit as st
 import re
+import json
+import os
 
 def get_current_time():
     """Returns the current time formatted as HH:MM AM/PM."""
@@ -71,3 +73,17 @@ def get_ai_response(user_message, model):
         return cleaned_response
     except Exception as e:
         return "I'm here to listen and support you. Sometimes I have trouble connecting, but I want you to know that your feelings are valid and you're not alone. Would you like to share more about what you're experiencing?"
+
+#Saving and loading to/from JSON File
+MEMORY_FILE= "data/conversations.json"
+
+def save_conversations(conversations):
+    os.makedirs(os.path.dirname(MEMORY_FILE),exist_ok=True)
+    with open(MEMORY_FILE, 'w',encoding="utf-8") as f:
+        json.dump(conversations,f,indent=4)
+
+def load_conversations():
+    if not os.path.exists(MEMORY_FILE):
+        return []
+    with open(MEMORY_FILE,"r",encoding="utf-8") as f:
+        return json.load(f)
