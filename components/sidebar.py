@@ -102,19 +102,47 @@ def render_sidebar():
             st.markdown("---")
 
         if st.session_state.conversations:
-            for i, convo in enumerate(st.session_state.conversations):
-                is_active = i == st.session_state.active_conversation
-                button_style_icon = "🟢" if is_active else "📝"
+            if "delete_candidate" not in st.session_state:
+                for i, convo in enumerate(st.session_state.conversations):
+                    is_active = i == st.session_state.active_conversation
+                    button_style_icon = "🟢" if is_active else "📝"
 
-                if st.button(
-                    f"{button_style_icon} {convo['title'][:22]}...",
-                    key=f"convo_{i}",
-                    help=f"Started: {convo['date']}",
-                    use_container_width=True,
-                    type="primary" if is_active else "secondary"
-                ):
-                    st.session_state.active_conversation = i
+                    col1, col2 = st.columns([5, 1])
+                    with col1:
+                        if st.button(
+                            f"{button_style_icon} {convo['title'][:22]}...",
+                            key=f"convo_{i}",
+                            help=f"Started: {convo['date']}",
+                            use_container_width=True
+                        ):
+                            st.session_state.active_conversation = i
+                            st.rerun()
+                    with col2:
+                        if st.button("🗑️", key=f"delete_{i}"):
+                            st.session_state.delete_candidate = i
+                            st.rerun()
+
+            else:
+                st.warning("⚠️ Are you sure you want to delete this conversation?")
+                col_confirm, col_cancel = st.columns(2)
+
+                if col_confirm.button("Yes, delete", key="confirm_delete"):
+                    del st.session_state.conversations[st.session_state.delete_candidate]
+                    del st.session_state.delete_candidate
+                    st.session_state.active_conversation = -1
                     st.rerun()
+
+                if "cancel_clicked" not in st.session_state:
+                    st.session_state.cancel_clicked = False
+
+                if col_cancel.button("Cancel", key="cancel_delete"):
+                    if not st.session_state.cancel_clicked:
+                        st.session_state.cancel_clicked = True
+                        del st.session_state.delete_candidate
+                        st.rerun()
+                else:
+                    st.session_state.cancel_clicked = False
+
         else:
             st.info("No conversations yet. Start a new chat!")
 
