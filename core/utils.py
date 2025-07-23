@@ -1,13 +1,23 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import streamlit as st
 import re
 import json
 import os
 
 def get_current_time():
-    """Returns the current time formatted as HH:MM AM/PM."""
-    now = datetime.now()
-    return now.strftime("%-I:%M %p") if hasattr(now, 'strftime') else now.strftime("%I:%M %p").lstrip('0')
+    """Returns the user's local time formatted as HH:MM AM/PM."""
+    tz_offset = st.context.timezone_offset
+
+    if tz_offset is None:
+        # Default to UTC if timezone is not available (e.g., on Streamlit Cloud)
+        now = datetime.now()
+    else:
+        now_utc = datetime.now(timezone.utc)
+        now = now_utc + timedelta(minutes=-tz_offset)
+
+    return now.strftime("%I:%M %p").lstrip("0")
+
+
 
 def create_new_conversation(initial_message=None):
     """
