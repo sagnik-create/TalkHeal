@@ -8,7 +8,13 @@ GLOBAL_RESOURCES = [
     {"name": "Befrienders Worldwide", "desc": "Emotional support to prevent suicide worldwide.",
         "url": "https://www.befrienders.org/"},
     {"name": "International Association for Suicide Prevention (IASP)", "desc": "Find a crisis center anywhere in the world.",
-     "url": "https://www.iasp.info/resources/Crisis_Centres/"}
+     "url": "https://www.iasp.info/resources/Crisis_Centres/"},
+    {"name": "Crisis Text Line", "desc": "Text-based support available in the US, UK, Canada, and Ireland.",
+     "url": "https://www.crisistextline.org/"},
+    {"name": "The Trevor Project", "desc": "Crisis intervention and suicide prevention for LGBTQ young people.",
+     "url": "https://www.thetrevorproject.org/"},
+    {"name": "Child Helpline International", "desc": "A global network of child helplines for young people in need of help.",
+     "url": "https://www.childhelplineinternational.org/"}
 ]
 
 mental_health_resources_full = {
@@ -123,7 +129,8 @@ def render_sidebar():
                             st.rerun()
 
             else:
-                st.warning("⚠️ Are you sure you want to delete this conversation?")
+                st.warning(
+                    "⚠️ Are you sure you want to delete this conversation?")
                 col_confirm, col_cancel = st.columns(2)
 
                 if col_confirm.button("Yes, delete", key="confirm_delete"):
@@ -280,7 +287,6 @@ def render_sidebar():
                         for link in topic_data['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
                         st.markdown("---")
-
 
         with st.expander("ℹ️ About TalkHeal"):
             st.markdown("""
