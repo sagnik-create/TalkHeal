@@ -1,6 +1,44 @@
 import streamlit as st
 from core.utils import get_current_time, get_ai_response
 
+import streamlit.components.v1 as components
+import streamlit as st
+from datetime import datetime, timedelta
+import json
+
+def set_user_time_in_session():
+    if "user_time_offset" not in st.session_state:
+        # Embed JS to send local timezone offset in minutes
+        components.html("""
+            <script>
+            const offset = new Date().getTimezoneOffset(); // in minutes
+            const time = new Date().toLocaleString();      // full readable local time
+            const data = {offset: offset, time: time};
+            window.parent.postMessage({type: 'USER_TIME', data: data}, '*');
+            </script>
+        """, height=0)
+
+        st.markdown("""
+        <script>
+        window.addEventListener("message", (event) => {
+            if (event.data.type === "USER_TIME") {
+                const payload = JSON.stringify(event.data.data);
+                fetch("/", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: payload
+                }).then(() => location.reload());
+            }
+        });
+        </script>
+        """, unsafe_allow_html=True)
+
+    else:
+        # Already set, do nothing
+        pass
+
+set_user_time_in_session()
+
 def render_chat_interface():    
     if st.session_state.active_conversation >= 0:
         active_convo = st.session_state.conversations[st.session_state.active_conversation]
