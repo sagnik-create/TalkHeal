@@ -15,7 +15,7 @@ PAGE_CONFIG = {
 def configure_gemini():
     try:
         api_key = st.secrets["GEMINI_API_KEY"]
-        genai.configure(api_key=api_key)
+        genai.configure(api_key="GEMINI_API_KEY")
         model = genai.GenerativeModel('gemini-2.0-flash')
         return model
     except KeyError:
