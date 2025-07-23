@@ -25,7 +25,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-__pycache__/
+core/__pycache__/
+components/__pycache__/
 *.pyc
 
 # PyInstaller
