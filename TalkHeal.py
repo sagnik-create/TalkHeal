@@ -10,7 +10,6 @@ from components.chat_interface import render_chat_interface, handle_chat_input
 from components.emergency_page import render_emergency_page
 
 # --- 1. INITIALIZE SESSION STATE ---
-# This should be the very first thing in your app
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 if "conversations" not in st.session_state:
@@ -30,7 +29,6 @@ if "mental_disorders" not in st.session_state:
     ]
 
 # --- 2. SET PAGE CONFIG ---
-# Must be the first Streamlit command
 st.set_page_config(
     page_title=PAGE_CONFIG["page_title"],
     page_icon=PAGE_CONFIG["page_icon"],
@@ -43,7 +41,6 @@ apply_custom_css()
 model = configure_gemini()
 
 # --- 4. RENDER UI COMPONENTS ---
-# The sidebar is rendered ONCE and is available on all "pages"
 render_sidebar()
 
 # --- 5. PAGE ROUTING ---
