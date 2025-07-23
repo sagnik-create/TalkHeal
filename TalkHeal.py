@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+from core.utils import save_conversations, load_conversations
 
 from core.config import configure_gemini, PAGE_CONFIG
 from core.utils import get_current_time, create_new_conversation
@@ -13,7 +14,7 @@ from components.emergency_page import render_emergency_page
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 if "conversations" not in st.session_state:
-    st.session_state.conversations = []
+    st.session_state.conversations = load_conversations()
 if "active_conversation" not in st.session_state:
     st.session_state.active_conversation = -1
 if "show_emergency_page" not in st.session_state:
@@ -44,7 +45,19 @@ render_sidebar()
 
 # --- 5. PAGE ROUTING ---
 main_area = st.container()
+# handle loading conversations 
+if not st.session_state.conversations:
+    saved_conversations = load_conversations()
+    if saved_conversations:
+        st.session_state.conversations = saved_conversations
+        if st.session_state.active_conversation == -1:
+             st.session_state.active_conversation = 0
+    else:
+        create_new_conversation()
+        st.session_state.active_conversation = 0
+    st.rerun()
 
+# handle page routing 
 if st.session_state.get("show_emergency_page"):
     with main_area:
         render_emergency_page()
@@ -52,13 +65,6 @@ else:
     # Render the standard chat interface
     with main_area:
         render_header()
-
-        # Ensure a conversation exists before rendering the chat
-        if not st.session_state.conversations:
-            create_new_conversation()
-            st.session_state.active_conversation = 0
-            st.rerun()  # Rerun to reflect the new conversation immediately
-
         render_chat_interface()
         handle_chat_input(model)
 
