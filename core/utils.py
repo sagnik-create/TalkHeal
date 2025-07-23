@@ -83,6 +83,7 @@ def get_ai_response(user_message, model):
         cleaned_response = clean_ai_response(response.text)
         return cleaned_response
     except Exception as e:
+        print("DEBUG - AI connection failed:", e)
         return "I'm here to listen and support you. Sometimes I have trouble connecting, but I want you to know that your feelings are valid and you're not alone. Would you like to share more about what you're experiencing?"
 
 #IP Based isolation for every user
