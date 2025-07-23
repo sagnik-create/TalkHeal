@@ -4,7 +4,7 @@ from datetime import datetime
 from core.utils import create_new_conversation, get_current_time
 from core.theme import get_current_theme, toggle_theme, set_palette, PALETTES
 # --- Structured Emergency Resources ---
-GLOBAL_RESOURCES = {
+GLOBAL_RESOURCES = [
     {"name": "Befrienders Worldwide", "desc": "Emotional support to prevent suicide worldwide.",
         "url": "https://www.befrienders.org/"},
     {"name": "International Association for Suicide Prevention (IASP)", "desc": "Find a crisis center anywhere in the world.",
@@ -15,7 +15,7 @@ GLOBAL_RESOURCES = {
      "url": "https://www.thetrevorproject.org/"},
     {"name": "Child Helpline International", "desc": "A global network of child helplines for young people in need of help.",
      "url": "https://www.childhelplineinternational.org/"}
-}
+]
 
 mental_health_resources_full = {
     "Depression & Mood Disorders": {
@@ -290,28 +290,28 @@ def render_sidebar():
 
         with st.expander("☎️ Crisis Support"):
             st.markdown("**24/7 Crisis Hotlines:**")
-            for category, numbers in GLOBAL_RESOURCES.items():
-                st.markdown(f"**{category}:**")
-                for number in numbers:
-                    st.markdown(f"• {number}")
+            for resource in GLOBAL_RESOURCES:
+                st.markdown(
+                    f"**{resource['name']}**: {resource['desc']} [Visit Website]({resource['url']})")
 
         # Theme toggle in sidebar
         with st.expander("🎨 Theme Settings"):
             current_theme = get_current_theme()
             is_dark = current_theme["name"] == "Dark"
-            
+
             # Palette selector (only for light mode)
             if not is_dark:
                 palette_names = [p["name"] for p in PALETTES]
                 selected_palette = st.selectbox(
                     "Choose a soothing color palette:",
                     palette_names,
-                    index=palette_names.index(st.session_state.get("palette_name", "Light")),
+                    index=palette_names.index(
+                        st.session_state.get("palette_name", "Light")),
                     key="palette_selector",
                 )
                 if selected_palette != st.session_state.get("palette_name", "Light"):
                     set_palette(selected_palette)
-            
+
             # Current theme display with better styling
             st.markdown("""
             <div class="theme-info-box">
@@ -319,11 +319,11 @@ def render_sidebar():
                 <span>{} Mode</span>
             </div>
             """.format(current_theme['name']), unsafe_allow_html=True)
-            
+
             # Theme toggle button with better styling
             button_text = "🌙 Dark Mode" if not is_dark else "☀️ Light Mode"
             button_color = "primary" if not is_dark else "secondary"
-            
+
             if st.button(
                 button_text,
                 key="sidebar_theme_toggle",
@@ -331,7 +331,6 @@ def render_sidebar():
                 type=button_color
             ):
                 toggle_theme()
-            
 
         with st.expander("ℹ️ About TalkHeal"):
             st.markdown("""
