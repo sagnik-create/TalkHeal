@@ -42,16 +42,6 @@ apply_custom_css()
 
 model = configure_gemini()
 
-col_toggle, col_main = st.columns([0.05, 0.95])
-
-with col_toggle:
-    if st.button("☰", key="persistent_sidebar_toggle", help="Toggle Sidebar"):
-        if st.session_state.sidebar_state == "expanded":
-            st.session_state.sidebar_state = "collapsed"
-        else:
-            st.session_state.sidebar_state = "expanded"
-        st.rerun()
-
 render_sidebar()
 
 render_header()
