@@ -243,11 +243,9 @@ def apply_custom_css():
             color: white;
             border-radius: var(--radius-lg);
             margin-bottom: 24px;
-            box-shadow: 0 8px 32px var(--shadow-lg);
             border: 1px solid var(--border-light);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }}
         
         .main-header::before {{
@@ -257,17 +255,14 @@ def apply_custom_css():
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-color);
         }}
         
         .main-header h1 {{
             margin: 0 0 8px 0;
             font-size: 2.5em;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #921A40;
         }}
         
         .main-header p {{

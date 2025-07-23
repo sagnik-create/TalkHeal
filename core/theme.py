@@ -38,7 +38,7 @@ LIGHT_THEME = {
 # Additional soothing palettes
 CALM_BLUE = {
     "name": "Calm Blue",
-    "background_image": None,
+    "background_image": "blue.png",
     "background_gradient": "linear-gradient(135deg, #3674B5 0%, #578FCA 40%, #A1E3F9 75%, #D1F8EF 100%)",
     "primary": "#3674B5",
     "primary_light": "#578FCA",
@@ -72,7 +72,7 @@ CALM_BLUE = {
 
 MINT = {
     "name": "Mint",
-    "background_image": None,
+    "background_image": "mint.png",
     "background_gradient": "linear-gradient(135deg, #3D8D7A 0%, #B3D8A8 40%, #FBFFE4 75%, #A3D1C6 100%)",
     "primary": "#3D8D7A",
     "primary_light": "#B3D8A8",
@@ -97,16 +97,16 @@ MINT = {
     "active_conversation_border": "#3D8D7A",
     "active_conversation_shadow": "rgba(179, 216, 168, 0.2)",
     "background_overlay": "rgba(255, 255, 255, 0.2)",
-    "main_text_color": "#2d3436",
+    "main_text_color": "#2C3930",
     "sidebar_bg": "rgba(255, 255, 255, 0.25)",
-    "sidebar_text": "#2d3436",
+    "sidebar_text": "#2C3930",
     "input_bg": "#FBFFE4",
-    "input_text": "#2d3436"
+    "input_text": "#2C3930"
 }
 
 LAVENDER = {
     "name": "Lavender",
-    "background_image": None,
+    "background_image": "lavender.png",
     "background_gradient": "linear-gradient(135deg, #756AB6 0%, #AC87C5 40%, #E0AED0 75%, #FFE5E5 100%)",
     "primary": "#756AB6",
     "primary_light": "#AC87C5",
@@ -140,7 +140,7 @@ LAVENDER = {
 
 Pink = {
     "name": "Pink",
-    "background_image": None,
+    "background_image": "pink.png",
     "background_gradient": "linear-gradient(135deg, #921A40 0%, #C75B7A 40%, #D9ABAB 75%, #F4D9D0 100%)",
     "primary": "#921A40",
     "primary_light": "#C75B7A",
@@ -175,7 +175,7 @@ Pink = {
 # Dark theme
 DARK_THEME = {
     "name": "Dark",
-    "background_image": "Background_Dark.jpg",
+    "background_image": "dark.png",
     "primary": "#6366f1",
     "primary_light": "#818cf8",
     "primary_dark": "#4f46e5",
