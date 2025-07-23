@@ -128,6 +128,10 @@ def render_sidebar():
 
                 if col_confirm.button("Yes, delete", key="confirm_delete"):
                     del st.session_state.conversations[st.session_state.delete_candidate]
+
+                    from core.utils import save_conversations
+                    save_conversations(st.session_state.conversations)
+                    
                     del st.session_state.delete_candidate
                     st.session_state.active_conversation = -1
                     st.rerun()
