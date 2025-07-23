@@ -83,35 +83,19 @@ def get_ai_response(user_message, model):
         cleaned_response = clean_ai_response(response.text)
         return cleaned_response
     except Exception as e:
-        print("DEBUG - AI connection failed:", e)
         return "I'm here to listen and support you. Sometimes I have trouble connecting, but I want you to know that your feelings are valid and you're not alone. Would you like to share more about what you're experiencing?"
 
-#IP Based isolation for every user
-def get_user_ip():
-    try:
-        return requests.get("https://api.ipify.org").text
-    except:
-        return "unknown_ip"
-
-def get_memory_file():
-    ip = get_user_ip()
-    os.makedirs("data", exist_ok=True)
-    return f"data/conversations_{ip}.json"
 
 #Saving and loading to/from JSON File
-def get_memory_file():
-    ip = get_user_ip()
-    os.makedirs("data", exist_ok=True)
-    return f"data/conversations_{ip}.json"
+MEMORY_FILE= "data/conversations.json"
 
 def save_conversations(conversations):
-    memory_file = get_memory_file()
-    with open(memory_file, 'w', encoding="utf-8") as f:
-        json.dump(conversations, f, indent=4)
+    os.makedirs(os.path.dirname(MEMORY_FILE),exist_ok=True)
+    with open(MEMORY_FILE, 'w',encoding="utf-8") as f:
+        json.dump(conversations,f,indent=4)
 
 def load_conversations():
-    memory_file = get_memory_file()
-    if not os.path.exists(memory_file):
+    if not os.path.exists(MEMORY_FILE):
         return []
-    with open(memory_file, 'r', encoding="utf-8") as f:
+    with open(MEMORY_FILE,"r",encoding="utf-8") as f:
         return json.load(f)
