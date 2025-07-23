@@ -40,7 +40,6 @@ st.set_page_config(
 apply_custom_css()
 model = configure_gemini()
 
-# --- 4. RENDER UI COMPONENTS ---
 render_sidebar()
 
 # --- 5. PAGE ROUTING ---
