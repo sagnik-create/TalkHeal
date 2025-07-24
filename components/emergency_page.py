@@ -7,7 +7,7 @@ from .sidebar import GLOBAL_RESOURCES
 def render_emergency_page():
     """Displays emergency help page with a dynamic Google search link."""
 
-    if st.button("← Back to Chat"):
+    if st.button("← Back to Chat", type="primary"):
         st.session_state.show_emergency_page = False
         # Clean up session state on exit
         st.session_state.pop('location_info', None)
@@ -25,7 +25,7 @@ def render_emergency_page():
     location_query = st.text_input(
         "Enter your City, State, or Country", placeholder="e.g., London, UK")
 
-    if st.button("🔍 Search for Help"):
+    if st.button("🔍 Search for Help", type="primary"):
         if location_query:
             with st.spinner(f"Searching for '{location_query}'..."):
                 try:
