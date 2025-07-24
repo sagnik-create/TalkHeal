@@ -3,40 +3,43 @@ import webbrowser
 from datetime import datetime
 from core.utils import create_new_conversation, get_current_time
 from core.theme import get_current_theme, toggle_theme, set_palette, PALETTES
-
-# Emergency contacts and resources
-emergency_resources = {
-    "Crisis Hotlines": [
-        "National Suicide Prevention Lifeline: 988",
-        "Crisis Text Line: Text HOME to 741741",
-        "SAMHSA National Helpline: 1-800-662-4357"
-    ],
-    "International": [
-        "India: 9152987821 (AASRA)",
-        "UK: 116 123 (Samaritans)",
-        "Australia: 13 11 14 (Lifeline)"
-    ]
-}
+# --- Structured Emergency Resources ---
+GLOBAL_RESOURCES = [
+    {"name": "Befrienders Worldwide", "desc": "Emotional support to prevent suicide worldwide.",
+        "url": "https://www.befrienders.org/"},
+    {"name": "International Association for Suicide Prevention (IASP)", "desc": "Find a crisis center anywhere in the world.",
+     "url": "https://www.iasp.info/resources/Crisis_Centres/"},
+    {"name": "Crisis Text Line", "desc": "Text-based support available in the US, UK, Canada, and Ireland.",
+     "url": "https://www.crisistextline.org/"},
+    {"name": "The Trevor Project", "desc": "Crisis intervention and suicide prevention for LGBTQ young people.",
+     "url": "https://www.thetrevorproject.org/"},
+    {"name": "Child Helpline International", "desc": "A global network of child helplines for young people in need of help.",
+     "url": "https://www.childhelplineinternational.org/"}
+]
 
 mental_health_resources_full = {
     "Depression & Mood Disorders": {
         "description": "Information on understanding and coping with depression, persistent depressive disorder, and other mood-related challenges.",
         "links": [
-            {"label": "NIMH - Depression", "url": "https://www.nimh.nih.gov/health/topics/depression"},
-            {"label": "Mayo Clinic - Depression", "url": "https://www.mayoclinic.org/diseases-conditions/depression/symptoms-causes/syc-20356007"}
+            {"label": "NIMH - Depression",
+                "url": "https://www.nimh.nih.gov/health/topics/depression"},
+            {"label": "Mayo Clinic - Depression",
+                "url": "https://www.mayoclinic.org/diseases-conditions/depression/symptoms-causes/syc-20356007"}
         ]
     },
     "Anxiety & Panic Disorders": {
         "description": "Guidance on managing generalized anxiety, social anxiety, panic attacks, and phobias.",
         "links": [
             {"label": "ADAA - Anxiety & Depression", "url": "https://adaa.org/"},
-            {"label": "NIMH - Anxiety Disorders", "url": "https://www.nimh.nih.gov/health/topics/anxiety-disorders"}
+            {"label": "NIMH - Anxiety Disorders",
+                "url": "https://www.nimh.nih.gov/health/topics/anxiety-disorders"}
         ]
     },
     "Bipolar Disorder": {
         "description": "Understanding the complexities of bipolar disorder, including mood swings and treatment options.",
         "links": [
-            {"label": "NIMH - Bipolar Disorder", "url": "https://www.nimh.nih.gov/health/topics/bipolar-disorder"}
+            {"label": "NIMH - Bipolar Disorder",
+                "url": "https://www.nimh.nih.gov/health/topics/bipolar-disorder"}
         ]
     },
     "PTSD & Trauma": {
@@ -54,13 +57,15 @@ mental_health_resources_full = {
     "Coping Skills & Self-Care": {
         "description": "Practical strategies and techniques for stress management, emotional regulation, and daily well-being.",
         "links": [
-            {"label": "HelpGuide - Stress Management", "url": "https://www.helpguide.org/articles/stress/stress-management.htm"}
+            {"label": "HelpGuide - Stress Management",
+                "url": "https://www.helpguide.org/articles/stress/stress-management.htm"}
         ]
     },
     "Therapy & Treatment Options": {
         "description": "Overview of various therapeutic approaches, including CBT, DBT, and finding a therapist.",
         "links": [
-            {"label": "APA - Finding a Therapist", "url": "https://www.apa.org/helpcenter/choose-therapist"}
+            {"label": "APA - Finding a Therapist",
+                "url": "https://www.apa.org/helpcenter/choose-therapist"}
         ]
     }
 }
@@ -68,6 +73,7 @@ mental_health_resources_full = {
 
 def render_sidebar():
     """Renders the left and right sidebars."""
+
     with st.sidebar:
         st.markdown("### 💬 Conversations")
         if "show_quick_start_prompts" not in st.session_state:
@@ -77,7 +83,7 @@ def render_sidebar():
         if "send_chat_message" not in st.session_state:
             st.session_state.send_chat_message = False
 
-        if st.button("➕ New Chat", key="new_chat", use_container_width=True):
+        if st.button("➕ New Chat", key="new_chat", use_container_width=True, type="primary"):
             create_new_conversation()
             st.session_state.show_quick_start_prompts = True
             st.rerun()
@@ -96,7 +102,7 @@ def render_sidebar():
                     if st.button(f"✨ {prompt}", key=f"qp_{i}", use_container_width=True):
                         st.session_state.pre_filled_chat_input = prompt
                         st.session_state.send_chat_message = True
-                        st.session_state.show_quick_start_prompts = False 
+                        st.session_state.show_quick_start_prompts = False
                         st.rerun()
 
             st.markdown("---")
@@ -118,12 +124,13 @@ def render_sidebar():
                             st.session_state.active_conversation = i
                             st.rerun()
                     with col2:
-                        if st.button("🗑️", key=f"delete_{i}"):
+                        if st.button("🗑️", key=f"delete_{i}", type="primary"):
                             st.session_state.delete_candidate = i
                             st.rerun()
 
             else:
-                st.warning("⚠️ Are you sure you want to delete this conversation?")
+                st.warning(
+                    "⚠️ Are you sure you want to delete this conversation?")
                 col_confirm, col_cancel = st.columns(2)
 
                 if col_confirm.button("Yes, delete", key="confirm_delete"):
@@ -131,7 +138,7 @@ def render_sidebar():
 
                     from core.utils import save_conversations
                     save_conversations(st.session_state.conversations)
-                    
+
                     del st.session_state.delete_candidate
                     st.session_state.active_conversation = -1
                     st.rerun()
@@ -151,17 +158,11 @@ def render_sidebar():
             st.info("No conversations yet. Start a new chat!")
 
         st.markdown("---")
-        
-        st.markdown(
-            """
-            <a href="#" target="_blank" class="emergency_button">
-                🚨 Emergency Help
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
 
-        st.markdown("")
+        # --- DEDICATED EMERGENCY PAGE BUTTON ---
+        if st.button("🚨 Emergency Help", use_container_width=True, type="secondary"):
+            st.session_state.show_emergency_page = True
+            st.rerun()
 
         # --- 3. Dynamic Mood Tracker & Micro-Journal (Fixed Tip & New Button) ---
         with st.expander("🧠 Mental Health Check"):
@@ -179,7 +180,8 @@ def render_sidebar():
             selected_mood_label = st.radio(
                 "Mood Scale",
                 options=mood_labels,
-                index=mood_labels.index("😊 Okay") if "😊 Okay" in mood_labels else 2,
+                index=mood_labels.index(
+                    "😊 Okay") if "😊 Okay" in mood_labels else 2,
                 key="mood_selector_radio",
                 horizontal=True,
                 label_visibility="collapsed"
@@ -204,7 +206,6 @@ def render_sidebar():
                     st.session_state.mood_tip_display = ""
                 if "mood_entry_status" not in st.session_state:
                     st.session_state.mood_entry_status = ""
-
 
                 st.text_area(
                     f"✏️ {journal_prompt_text}",
@@ -240,7 +241,8 @@ def render_sidebar():
                             st.session_state.mood_entry_status = ""
                             st.rerun()
                         else:
-                            st.warning("Please enter your thoughts before asking TalkHeal.")
+                            st.warning(
+                                "Please enter your thoughts before asking TalkHeal.")
 
                 if st.session_state.mood_tip_display:
                     st.success(st.session_state.mood_tip_display)
@@ -253,14 +255,16 @@ def render_sidebar():
         with st.expander("📚 Resources & Knowledge Base"):
             st.markdown("**Explore topics or search for help:**")
 
-            resource_search_query = st.text_input("Search resources...", key="resource_search", placeholder="e.g., 'anxiety tips', 'therapy'", label_visibility="collapsed")
+            resource_search_query = st.text_input(
+                "Search resources...", key="resource_search", placeholder="e.g., 'anxiety tips', 'therapy'", label_visibility="collapsed")
 
-            if resource_search_query: 
+            if resource_search_query:
                 filtered_topics = [
                     topic for topic in mental_health_resources_full
-                    if resource_search_query.lower() in topic.lower() or \
-                        any(resource_search_query.lower() in link['label'].lower() for link in mental_health_resources_full[topic]['links']) or \
-                        resource_search_query.lower() in mental_health_resources_full[topic]['description'].lower()
+                    if resource_search_query.lower() in topic.lower() or
+                    any(resource_search_query.lower() in link['label'].lower() for link in mental_health_resources_full[topic]['links']) or
+                    resource_search_query.lower(
+                    ) in mental_health_resources_full[topic]['description'].lower()
                 ]
 
                 if not filtered_topics:
@@ -270,17 +274,19 @@ def render_sidebar():
                     st.markdown("**Matching Resources:**")
                     for topic in filtered_topics:
                         st.markdown(f"**{topic}**")
-                        st.info(mental_health_resources_full[topic]['description'])
+                        st.info(
+                            mental_health_resources_full[topic]['description'])
                         for link in mental_health_resources_full[topic]['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
                         st.markdown("---")
             else:
-                resource_tabs = st.tabs(list(mental_health_resources_full.keys()))
+                resource_tabs = st.tabs(
+                    list(mental_health_resources_full.keys()))
 
                 for i, tab_title in enumerate(mental_health_resources_full.keys()):
                     with resource_tabs[i]:
                         topic_data = mental_health_resources_full[tab_title]
-                        st.markdown(f"**{tab_title}")
+                        st.markdown(f"**{tab_title}**")  # fixed typo
                         st.info(topic_data['description'])
                         for link in topic_data['links']:
                             st.markdown(f"• [{link['label']}]({link['url']})")
@@ -288,28 +294,28 @@ def render_sidebar():
 
         with st.expander("☎️ Crisis Support"):
             st.markdown("**24/7 Crisis Hotlines:**")
-            for category, numbers in emergency_resources.items():
-                st.markdown(f"**{category}:**")
-                for number in numbers:
-                    st.markdown(f"• {number}")
+            for resource in GLOBAL_RESOURCES:
+                st.markdown(
+                    f"**{resource['name']}**: {resource['desc']} [Visit Website]({resource['url']})")
 
         # Theme toggle in sidebar
         with st.expander("🎨 Theme Settings"):
             current_theme = get_current_theme()
             is_dark = current_theme["name"] == "Dark"
-            
+
             # Palette selector (only for light mode)
             if not is_dark:
                 palette_names = [p["name"] for p in PALETTES]
                 selected_palette = st.selectbox(
                     "Choose a soothing color palette:",
                     palette_names,
-                    index=palette_names.index(st.session_state.get("palette_name", "Light")),
+                    index=palette_names.index(
+                        st.session_state.get("palette_name", "Light")),
                     key="palette_selector",
                 )
                 if selected_palette != st.session_state.get("palette_name", "Light"):
                     set_palette(selected_palette)
-            
+
             # Current theme display with better styling
             st.markdown("""
             <div class="theme-info-box">
@@ -317,11 +323,11 @@ def render_sidebar():
                 <span>{} Mode</span>
             </div>
             """.format(current_theme['name']), unsafe_allow_html=True)
-            
+
             # Theme toggle button with better styling
             button_text = "🌙 Dark Mode" if not is_dark else "☀️ Light Mode"
             button_color = "primary" if not is_dark else "secondary"
-            
+
             if st.button(
                 button_text,
                 key="sidebar_theme_toggle",
@@ -329,7 +335,6 @@ def render_sidebar():
                 type=button_color
             ):
                 toggle_theme()
-            
 
         with st.expander("ℹ️ About TalkHeal"):
             st.markdown("""

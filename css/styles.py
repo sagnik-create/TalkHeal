@@ -2,34 +2,37 @@
 import streamlit as st
 import base64
 
+
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
 
+
 def apply_custom_css():
     # Import theme configuration
     from core.theme import get_current_theme
     theme_config = get_current_theme()
-    
+
     # Path to background image based on theme
-    background_image_path = theme_config.get('background_image', 'Background.jpg')
+    background_image_path = theme_config.get(
+        'background_image', 'Background.jpg')
     background_gradient = theme_config.get('background_gradient', None)
-    
+
     base64_image = None
     if background_image_path:
         try:
             base64_image = get_base64_of_bin_file(background_image_path)
         except Exception:
             base64_image = None
-    
+
     if base64_image:
         background_css = f'background-image: url("data:image/jpeg;base64,{base64_image}");'
     elif background_gradient:
         background_css = f'background-image: {background_gradient};'
     else:
         background_css = ''
-    
+
     st.markdown(f"""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -487,6 +490,23 @@ def apply_custom_css():
             box-shadow: 0 6px 20px var(--active-conversation-shadow) !important;
             font-weight: 700 !important;
             transform: translateX(8px) scale(1.02) !important;
+        }}
+        /* Dedicated style for the red emergency button */
+        .stButton > button[kind="secondary"] {{
+            background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+            color: white !important;
+            border: 1px solid #ef4444 !important;
+            font-weight: 600 !important;
+            transform: none !important; /* Reset transform from other rules */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+        }}
+
+        .stButton > button[kind="secondary"]:hover {{
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+            border-color: #dc2626 !important;
+            color: white !important;
+            transform: translateY(-2px) !important; /* Add a nice hover effect */
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
         }}
         
         /* Sidebar toggle button */
