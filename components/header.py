@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 def render_header():
     with st.container():
         # Top bar with hamburger menu and theme toggle
