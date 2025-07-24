@@ -83,7 +83,7 @@ def render_sidebar():
         if "send_chat_message" not in st.session_state:
             st.session_state.send_chat_message = False
 
-        if st.button("➕ New Chat", key="new_chat", use_container_width=True):
+        if st.button("➕ New Chat", key="new_chat", use_container_width=True, type="primary"):
             create_new_conversation()
             st.session_state.show_quick_start_prompts = True
             st.rerun()
@@ -124,7 +124,7 @@ def render_sidebar():
                             st.session_state.active_conversation = i
                             st.rerun()
                     with col2:
-                        if st.button("🗑️", key=f"delete_{i}"):
+                        if st.button("🗑️", key=f"delete_{i}", type="primary"):
                             st.session_state.delete_candidate = i
                             st.rerun()
 
@@ -138,7 +138,7 @@ def render_sidebar():
 
                     from core.utils import save_conversations
                     save_conversations(st.session_state.conversations)
-                    
+
                     del st.session_state.delete_candidate
                     st.session_state.active_conversation = -1
                     st.rerun()
@@ -159,8 +159,8 @@ def render_sidebar():
 
         st.markdown("---")
 
-        # --- METHOD 2: DEDICATED PAGE BUTTON ---
-        if st.button("🚨 Emergency Help", use_container_width=True, type="primary"):
+        # --- DEDICATED EMERGENCY PAGE BUTTON ---
+        if st.button("🚨 Emergency Help", use_container_width=True, type="secondary"):
             st.session_state.show_emergency_page = True
             st.rerun()
 
