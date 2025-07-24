@@ -20,7 +20,7 @@ def apply_custom_css():
         'surface': 'rgba(255,255,255,0.14)',
         'surface_alt': 'rgba(25,25,46,0.23)',
         'text_primary': '#fff',
-        'text_secondary': '#e2e8f0',
+        'text_secondary': 'white',
         'text_muted': '#a0aec0',
         'border': 'rgba(255,255,255,0.18)',
         'border_light': 'rgba(255,255,255,0.09)',
@@ -445,11 +445,11 @@ def apply_custom_css():
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea {{
             background: var(--glass-effect) !important;
-            background-color: rgba(30, 41, 59, 0.55) !important;
+            background-color: #FFFFD0 !important;
             border: 2px solid var(--border) !important;
             border-radius: var(--radius) !important;
             font-size: 1em !important;
-            color: #f8fafc;
+            color: black;
             font-family: 'Inter',sans-serif !important;
             transition: all .18s cubic-bezier(.35,.72,.44,1.18) !important;
             backdrop-filter: blur(10px) !important;
@@ -464,7 +464,7 @@ def apply_custom_css():
         /* Input placeholder styling */
         .stTextInput > div > div > input::placeholder,
         .stTextArea > div > div > textarea::placeholder {{
-            color: #cfd9e6 !important;
+            color: black !important;
             opacity: .77 !important;
         }}
 
@@ -495,7 +495,7 @@ def apply_custom_css():
         .stExpander > div,
         .stExpanderHeader,
         .stExpanderContent {{
-            background: rgba(30, 38, 68, 0.81) !important;
+            background: rgba(255, 255, 255, 0.30) !important;
             color: #f7fafc !important;
             border-radius: var(--radius-lg, 18px) !important;
             border: 1.5px solid var(--border, rgba(255,255,255,0.11)) !important;
