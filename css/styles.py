@@ -32,7 +32,6 @@ def apply_custom_css():
     
     background_image_path = theme_config.get('background_image', 'Background.jpg')
     base64_image = get_base64_of_bin_file(background_image_path) if background_image_path else None
-    
     st.markdown(f"""
     <style>
         /* Font imports */
@@ -440,8 +439,62 @@ def apply_custom_css():
             transform: translateY(-2px) scale(1.04) !important;
             box-shadow: 0 4px 16px rgba(99,102,241,0.2) !important;
         }}
+        
+        /* Primary buttons */
+        .stButton > button[kind="primary"],
+        .stFormSubmitButton > button[kind="primary"] {{
+            background: var(--light-transparent-bg, rgba(255,255,255,0.20)) !important;
+            color: white !important;
+            font-weight: 700 !important;
+        }}
+        
+        .stButton > button[kind="primary"]:hover,
+        .stFormSubmitButton > button[kind="primary"]:hover {{
+            background: rgba(99, 102, 241, 0.9) !important;
+            color: white !important;
+        }}
+        
+        .stApp [data-testid="stSidebar"] .stButton button[data-testid*="stButton-primary"] {{
+            background: var(--active-conversation-bg) !important;
+            color: white !important;
+            border: 2px solid var(--active-conversation-border) !important;
+            box-shadow: 0 6px 20px var(--active-conversation-shadow) !important;
+            font-weight: 700 !important;
+            transform: translateX(8px) scale(1.02) !important;
+        }}
+        /* Dedicated style for the red emergency button */
+        .stButton > button[kind="secondary"] {{
+            background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+            color: white !important;
+            border: 1px solid #ef4444 !important;
+            font-weight: 600 !important;
+            transform: none !important; /* Reset transform from other rules */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+        }}
 
-        /* Input field styling */
+        .stButton > button[kind="secondary"]:hover {{
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+            border-color: #dc2626 !important;
+            color: white !important;
+            transform: translateY(-2px) !important; /* Add a nice hover effect */
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+        }}
+        
+        /* Sidebar toggle button */
+        .stApp [data-testid="stSidebarToggleButton"] button,
+        button[data-testid="stSidebarToggleButton"] {{
+            background: var(--light-transparent-bg) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--light-transparent-border) !important;
+            border-radius: 50% !important;
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 20px !important;
+            font-weight: 900 !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+        }}
+        
+        /* Form input styling */
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea {{
             background: var(--glass-effect) !important;

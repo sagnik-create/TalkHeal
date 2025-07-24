@@ -1,4 +1,6 @@
 streamlit
 streamlit_modal
 google-generativeai
+geopy
+requests
 Pillow
