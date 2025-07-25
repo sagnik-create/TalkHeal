@@ -85,6 +85,34 @@ def get_ai_response(user_message, model):
     except Exception as e:
         return "I'm here to listen and support you. Sometimes I have trouble connecting, but I want you to know that your feelings are valid and you're not alone. Would you like to share more about what you're experiencing?"
 
+# Cached IP retrieval to fix performance issues
+def cached_user_ip():
+   # Check if IP is already cached in session state
+    if hasattr(st.session_state, 'cached_ip') and hasattr(st.session_state, 'ip_cache_time'):
+        # Check if cache is still valid 
+        cache_age = datetime.now() - st.session_state.ip_cache_time
+        if cache_age < timedelta(hours=1):
+            return st.session_state.cached_ip
+    
+    # Cache is missing or expired, fetch new IP
+    try:
+        response = requests.get("https://api.ipify.org", timeout=5)
+        ip = response.text.strip()
+          # Cache the IP and timestamp
+        st.session_state.cached_ip = ip
+        st.session_state.ip_cache_time = datetime.now()
+        
+        return ip
+    except (requests.RequestException, requests.Timeout, Exception):
+        # This ensures the app continues working even if IP service fails
+        fallback_id = f"session_{hash(str(st.session_state)) % 100000}"
+        # Cache the fallback ID so we use the same one consistently
+        if not hasattr(st.session_state, 'cached_ip'):
+            st.session_state.cached_ip = fallback_id
+            st.session_state.ip_cache_time = datetime.now()
+        
+        return st.session_state.cached_ip
+
 #Implementing IP Based Isolation
 def get_user_ip():
     try:
@@ -94,10 +122,10 @@ def get_user_ip():
 
 #Saving and loading to/from JSON File
 def get_memory_file():
-    ip = get_user_ip()
+    ip = cached_user_ip()  
     os.makedirs("data", exist_ok=True)
     return f"data/conversations_{ip}.json"
-
+    
 def save_conversations(conversations):
     memory_file = get_memory_file()
     with open(memory_file, 'w', encoding="utf-8") as f:
