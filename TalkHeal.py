@@ -1,7 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
 from core.utils import save_conversations, load_conversations
-
 from core.config import configure_gemini, PAGE_CONFIG
 from core.utils import get_current_time, create_new_conversation
 from css.styles import apply_custom_css
@@ -37,13 +36,36 @@ st.set_page_config(
     initial_sidebar_state=st.session_state.sidebar_state
 )
 
-# --- 3. APPLY STYLES & CONFIGURATIONS ---
+# --- 3. TONE OPTIONS ---
+TONE_OPTIONS = {
+    "Compassionate Listener": "You are a compassionate listener — soft, empathetic, patient — like a therapist who listens without judgment.",
+    "Motivating Coach": "You are a motivating coach — energetic, encouraging, and action-focused — helping the user push through rough days.",
+    "Wise Friend": "You are a wise friend — thoughtful, poetic, and reflective — giving soulful responses and timeless advice.",
+    "Neutral Therapist": "You are a neutral therapist — balanced, logical, and non-intrusive — asking guiding questions using CBT techniques.",
+    "Mindfulness Guide": "You are a mindfulness guide — calm, slow, and grounding — focused on breathing, presence, and awareness."
+}
+
+def get_tone_prompt():
+    selected = st.session_state.get("selected_tone", "Compassionate Listener")
+    return TONE_OPTIONS.get(selected, TONE_OPTIONS["Compassionate Listener"])
+
+# --- 4. SIDEBAR WITH TONE SELECTOR ---
+with st.sidebar:
+    st.header("🧠 Choose Your AI Tone")
+    tone = st.selectbox(
+        "Select a personality tone:",
+        options=list(TONE_OPTIONS.keys()),
+        index=0 if "selected_tone" not in st.session_state else list(TONE_OPTIONS.keys()).index(st.session_state["selected_tone"]),
+        key="selected_tone"
+    )
+
+# --- 5. APPLY STYLES & CONFIGURATIONS ---
 apply_custom_css()
 model = configure_gemini()
 
 render_sidebar()
 
-# --- 5. PAGE ROUTING ---
+# --- 6. PAGE ROUTING ---
 main_area = st.container()
 # handle loading conversations 
 if not st.session_state.conversations:
@@ -65,8 +87,9 @@ else:
     # Render the standard chat interface
     with main_area:
         render_header()
+        st.subheader(f"🗣️ Current Chatbot Tone: **{st.session_state['selected_tone']}**")
         render_chat_interface()
-        handle_chat_input(model)
+        handle_chat_input(model, system_prompt=get_tone_prompt())
 
 st.markdown("""
 <script>
