@@ -9,13 +9,18 @@ st.set_page_config(
 )
 
 import google.generativeai as genai
+from core.db import init_db, create_user, get_user_by_username, create_chat, add_message, get_messages
+
+# --- ENSURE TABLES EXIST BEFORE ANY DB USAGE ---
+init_db()
+
 from core.utils import save_conversations, load_conversations
 from core.config import configure_gemini, PAGE_CONFIG
 from core.utils import get_current_time, create_new_conversation
 from css.styles import apply_custom_css
 from components.header import render_header
 from components.sidebar import render_sidebar
-from components.chat_interface import render_chat_interface, handle_chat_input
+from components.chat_interface import render_chat_interface
 from components.emergency_page import render_emergency_page
 
 
