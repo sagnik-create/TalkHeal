@@ -37,6 +37,8 @@ if "mental_disorders" not in st.session_state:
         "Substance Use Disorders", "ADHD & Neurodevelopmental", "Personality Disorders",
         "Sleep Disorders"
     ]
+if "selected_tone" not in st.session_state:
+    st.session_state.selected_tone = "Compassionate Listener"
 
 # --- 2. SET PAGE CONFIG ---
 
@@ -45,33 +47,57 @@ if "mental_disorders" not in st.session_state:
 apply_custom_css()
 model = configure_gemini()
 
+# --- 4. TONE SELECTION DROPDOWN IN SIDEBAR ---
+TONE_OPTIONS = {
+    "Compassionate Listener": "You are a compassionate listener — soft, empathetic, patient — like a therapist who listens without judgment.",
+    "Motivating Coach": "You are a motivating coach — energetic, encouraging, and action-focused — helping the user push through rough days.",
+    "Wise Friend": "You are a wise friend — thoughtful, poetic, and reflective — giving soulful responses and timeless advice.",
+    "Neutral Therapist": "You are a neutral therapist — balanced, logical, and non-intrusive — asking guiding questions using CBT techniques.",
+    "Mindfulness Guide": "You are a mindfulness guide — calm, slow, and grounding — focused on breathing, presence, and awareness."
+}
+
+with st.sidebar:
+    st.header("🧠 Choose Your AI Tone")
+    selected_tone = st.selectbox(
+        "Select a personality tone:",
+        options=list(TONE_OPTIONS.keys()),
+        index=0
+    )
+    st.session_state.selected_tone = selected_tone
+
+# --- 5. DEFINE FUNCTION TO GET TONE PROMPT ---
+def get_tone_prompt():
+    return TONE_OPTIONS.get(st.session_state.get("selected_tone", "Compassionate Listener"), TONE_OPTIONS["Compassionate Listener"])
+
+# --- 6. RENDER SIDEBAR ---
 render_sidebar()
 
-# --- 5. PAGE ROUTING ---
+# --- 7. PAGE ROUTING ---
 main_area = st.container()
-# handle loading conversations 
+
 if not st.session_state.conversations:
     saved_conversations = load_conversations()
     if saved_conversations:
         st.session_state.conversations = saved_conversations
         if st.session_state.active_conversation == -1:
-             st.session_state.active_conversation = 0
+            st.session_state.active_conversation = 0
     else:
         create_new_conversation()
         st.session_state.active_conversation = 0
     st.rerun()
 
-# handle page routing 
+# --- 8. RENDER PAGE ---
 if st.session_state.get("show_emergency_page"):
     with main_area:
         render_emergency_page()
 else:
-    # Render the standard chat interface
     with main_area:
         render_header()
+        st.subheader(f"🗣️ Current Chatbot Tone: **{st.session_state['selected_tone']}**")
         render_chat_interface()
-        handle_chat_input(model)
+        handle_chat_input(model, system_prompt=get_tone_prompt())
 
+# --- 9. SCROLL SCRIPT ---
 st.markdown("""
 <script>
     function scrollToBottom() {
