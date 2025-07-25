@@ -15,7 +15,8 @@
 * Gemini-powered chatbot for mental health companionship
 * Empathetic and encouraging tone—never clinical or diagnostic
 * Smart conversation history with multi-threaded support
-
+* Chatbot personality tone selector
+  
 ### 📘 Resource & Crisis Help
 
 * Mental health resource library with live search
