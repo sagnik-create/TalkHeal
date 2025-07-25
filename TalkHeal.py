@@ -1,4 +1,13 @@
 import streamlit as st
+
+# ✅ MUST be the first Streamlit command
+st.set_page_config(
+    page_title="TalkHeal",
+    page_icon="💬",
+    layout="wide",
+    initial_sidebar_state=st.session_state.get("sidebar_state", "expanded")
+)
+
 import google.generativeai as genai
 from core.utils import save_conversations, load_conversations
 from core.config import configure_gemini, PAGE_CONFIG
@@ -8,6 +17,7 @@ from components.header import render_header
 from components.sidebar import render_sidebar
 from components.chat_interface import render_chat_interface, handle_chat_input
 from components.emergency_page import render_emergency_page
+
 
 # --- 1. INITIALIZE SESSION STATE ---
 if "chat_history" not in st.session_state:
@@ -31,12 +41,7 @@ if "selected_tone" not in st.session_state:
     st.session_state.selected_tone = "Compassionate Listener"
 
 # --- 2. SET PAGE CONFIG ---
-st.set_page_config(
-    page_title=PAGE_CONFIG["page_title"],
-    page_icon=PAGE_CONFIG["page_icon"],
-    layout=PAGE_CONFIG["layout"],
-    initial_sidebar_state=st.session_state.sidebar_state
-)
+
 
 # --- 3. APPLY STYLES & CONFIGURATIONS ---
 apply_custom_css()
@@ -103,4 +108,4 @@ st.markdown("""
     }
     setTimeout(scrollToBottom, 100);
 </script>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True) 
