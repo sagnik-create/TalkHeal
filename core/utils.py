@@ -95,17 +95,15 @@ def cached_user_ip():
     
     # Cache is missing or expired, fetch new IP
     try:
-        # Set a reasonable timeout to prevent hanging
         response = requests.get("https://api.ipify.org", timeout=5)
         ip = response.text.strip()
-        
         # Cache the IP and timestamp
         st.session_state.cached_ip = ip
         st.session_state.ip_cache_time = datetime.now()
         
         return ip
     except (requests.RequestException, requests.Timeout, Exception):
-        # Fallback: use session ID or generate a pseudo-unique identifier
+        # Fallback: use session ID or generate a unique identifier
         fallback_id = f"session_{hash(str(st.session_state)) % 100000}"
         
         # Cache the fallback ID so we use the same one consistently
