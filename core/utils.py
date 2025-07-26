@@ -87,7 +87,7 @@ def get_ai_response(user_message, model):
 
 # Cached IP retrieval to fix performance issues
 def cached_user_ip():
-   # Check if IP is already cached in session state
+     # Check if IP is already cached in session state
     if hasattr(st.session_state, 'cached_ip') and hasattr(st.session_state, 'ip_cache_time'):
         # Check if cache is still valid 
         cache_age = datetime.now() - st.session_state.ip_cache_time
