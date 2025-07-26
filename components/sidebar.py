@@ -1,7 +1,7 @@
 import streamlit as st
 import webbrowser
 from datetime import datetime
-from core.utils import create_new_conversation, get_current_time
+from core.utils import get_current_time
 from core.theme import get_current_theme, toggle_theme, set_palette, PALETTES
 
 # --- Structured Emergency Resources ---
@@ -73,6 +73,8 @@ mental_health_resources_full = {
 
 
 def render_sidebar():
+    from core.db import get_chats_for_user  # <-- move import here
+
     """Renders the left and right sidebars."""
 
     with st.sidebar:
@@ -85,7 +87,9 @@ def render_sidebar():
             st.session_state.send_chat_message = False
 
         if st.button("➕ New Chat", key="new_chat", use_container_width=True, type="primary"):
-            create_new_conversation()
+            from core.db import create_chat
+            chat_id = create_chat(st.session_state.user_id, "Untitled Chat")
+            st.session_state.active_chat_id = chat_id
             st.session_state.show_quick_start_prompts = True
             st.rerun()
         if st.session_state.show_quick_start_prompts:
@@ -107,58 +111,6 @@ def render_sidebar():
                         st.rerun()
 
             st.markdown("---")
-
-        if st.session_state.conversations:
-            if "delete_candidate" not in st.session_state:
-                for i, convo in enumerate(st.session_state.conversations):
-                    is_active = i == st.session_state.active_conversation
-                    button_style_icon = "🟢" if is_active else "📝"
-
-                    col1, col2 = st.columns([5, 1])
-                    with col1:
-                        if st.button(
-                            f"{button_style_icon} {convo['title'][:22]}...",
-                            key=f"convo_{i}",
-                            help=f"Started: {convo['date']}",
-                            use_container_width=True
-                        ):
-                            st.session_state.active_conversation = i
-                            st.rerun()
-                    with col2:
-                        if st.button("🗑️", key=f"delete_{i}", type="primary"):
-                            st.session_state.delete_candidate = i
-                            st.rerun()
-
-            else:
-                st.warning(
-                    "⚠️ Are you sure you want to delete this conversation?")
-                col_confirm, col_cancel = st.columns(2)
-
-                if col_confirm.button("Yes, delete", key="confirm_delete"):
-                    del st.session_state.conversations[st.session_state.delete_candidate]
-
-                    from core.utils import save_conversations
-                    save_conversations(st.session_state.conversations)
-
-                    del st.session_state.delete_candidate
-                    st.session_state.active_conversation = -1
-                    st.rerun()
-
-                if "cancel_clicked" not in st.session_state:
-                    st.session_state.cancel_clicked = False
-
-                if col_cancel.button("Cancel", key="cancel_delete"):
-                    if not st.session_state.cancel_clicked:
-                        st.session_state.cancel_clicked = True
-                        del st.session_state.delete_candidate
-                        st.rerun()
-                else:
-                    st.session_state.cancel_clicked = False
-
-        else:
-            st.info("No conversations yet. Start a new chat!")
-
-        st.markdown("---")
 
         # --- DEDICATED EMERGENCY PAGE BUTTON ---
         if st.button("🚨 Emergency Help", use_container_width=True, type="secondary"):
