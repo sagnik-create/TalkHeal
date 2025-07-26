@@ -91,7 +91,6 @@ def generate_response(user_input, model):
         st.error("❌ Network connection issue. Please check your internet connection.")
         return None
     except Exception as e:
-        st.error(f"❌ Failed to generate response: {e}")
         st.error(f"❌ Unexpected error occurred: {e}")
         return None
 
