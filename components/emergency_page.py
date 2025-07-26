@@ -56,7 +56,6 @@ def render_emergency_page():
                     st.error("Network error while searching for location. Please check your internet connection.")
                     st.session_state.pop('location_info', None)
                 except Exception as e:
-                    st.error(f"An error occurred during search: {e}")
                     st.error(f"An unexpected error occurred during search. Please try again.")
                     st.session_state.pop('location_info', None)
         else:
