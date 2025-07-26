@@ -122,7 +122,7 @@ def get_user_ip():
 
 #Saving and loading to/from JSON File
 def get_memory_file():
-    ip = get_cached_user_ip()
+    ip = cached_user_ip()
     os.makedirs("data", exist_ok=True)
     return f"data/conversations_{ip}.json"
 
