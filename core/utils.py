@@ -85,11 +85,10 @@ def get_ai_response(user_message, model):
     except Exception as e:
         return "I'm here to listen and support you. Sometimes I have trouble connecting, but I want you to know that your feelings are valid and you're not alone. Would you like to share more about what you're experiencing?"
 
-# Cached IP retrieval to fix performance issues
+# Cached IP to fix performance issues
 def cached_user_ip():
      # Check if IP is already cached in session state
     if hasattr(st.session_state, 'cached_ip') and hasattr(st.session_state, 'ip_cache_time'):
-        # Check if cache is still valid 
         cache_age = datetime.now() - st.session_state.ip_cache_time
         if cache_age < timedelta(hours=1):
             return st.session_state.cached_ip
@@ -104,7 +103,6 @@ def cached_user_ip():
         
         return ip
     except (requests.RequestException, requests.Timeout, Exception):
-        # This ensures the app continues working even if IP service fails
         fallback_id = f"session_{hash(str(st.session_state)) % 100000}"
         # Cache the fallback ID so we use the same one consistently
         if not hasattr(st.session_state, 'cached_ip'):
