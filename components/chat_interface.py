@@ -44,3 +44,4 @@ def render_chat_interface(model):
             ai_response = get_ai_response(prompt, model)
             add_message(chat_id, "bot", ai_response)
         st.rerun()
+
