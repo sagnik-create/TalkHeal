@@ -118,10 +118,8 @@ def handle_chat_input(model, system_prompt):
                     })
 
             except Exception as e:
-                st.error(f"An error occurred: {e}")
                 active_convo["messages"].append({
                     "sender": "bot",
-                    "message": "I’m having trouble responding right now. Please try again in a moment.",
                     "time": get_current_time()
                 })
 
