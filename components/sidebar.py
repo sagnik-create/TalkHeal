@@ -3,6 +3,8 @@ import webbrowser
 from datetime import datetime
 from core.utils import create_new_conversation, get_current_time
 from core.theme import get_current_theme, toggle_theme, set_palette, PALETTES
+from components.profile import initialize_profile_state, render_profile_section
+
 
 # --- Structured Emergency Resources ---
 GLOBAL_RESOURCES = [
@@ -74,7 +76,10 @@ mental_health_resources_full = {
 
 def render_sidebar():
     """Renders the left and right sidebars."""
-
+     
+    with st.sidebar:
+        # === PROFILE SECTION (Now imported from profile.py) ===
+        render_profile_section()
     with st.sidebar:
         st.markdown("### 💬 Conversations")
         if "show_quick_start_prompts" not in st.session_state:
