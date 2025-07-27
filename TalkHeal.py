@@ -17,6 +17,7 @@ from components.header import render_header
 from components.sidebar import render_sidebar
 from components.chat_interface import render_chat_interface, handle_chat_input
 from components.emergency_page import render_emergency_page
+from components.profile import apply_global_font_size
 
 
 # --- 1. INITIALIZE SESSION STATE ---
@@ -41,6 +42,7 @@ if "selected_tone" not in st.session_state:
     st.session_state.selected_tone = "Compassionate Listener"
 
 # --- 2. SET PAGE CONFIG ---
+apply_global_font_size()
 
 
 # --- 3. APPLY STYLES & CONFIGURATIONS ---
