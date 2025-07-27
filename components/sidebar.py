@@ -78,9 +78,7 @@ def render_sidebar():
     """Renders the left and right sidebars."""
      
     with st.sidebar:
-        # === PROFILE SECTION (Now imported from profile.py) ===
         render_profile_section()
-    with st.sidebar:
         st.markdown("### 💬 Conversations")
         if "show_quick_start_prompts" not in st.session_state:
             st.session_state.show_quick_start_prompts = False
