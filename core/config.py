@@ -1,6 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 from pathlib import Path
+import requests
 
 # ---------- Logo and Page Config ----------
 logo_path = str(Path(__file__).resolve().parent.parent / "TalkHealLogo.png")
@@ -77,8 +78,20 @@ def generate_response(user_input, model):
             {"role": "user", "parts": [user_input]}
         ])
         return response.text
+    except ValueError as e:
+        st.error("❌ Invalid input or model configuration issue. Please check your input.")
+        return None
+    except google.generativeai.types.BlockedPromptException as e:
+        st.error("❌ Content policy violation. Please rephrase your message.")
+        return None
+    except google.generativeai.types.GenerationException as e:
+        st.error("❌ Failed to generate response. Please try again.")
+        return None
+    except requests.RequestException as e:
+        st.error("❌ Network connection issue. Please check your internet connection.")
+        return None
     except Exception as e:
-        st.error(f"❌ Failed to generate response: {e}")
+        st.error(f"❌ Unexpected error occurred: {e}")
         return None
 
 # ---------- MAIN CHAT INTERFACE ----------
