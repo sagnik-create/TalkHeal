@@ -130,9 +130,19 @@ def render_sidebar():
                             st.session_state.active_conversation = i
                             st.rerun()
                     with col2:
-                        if st.button("🗑️", key=f"delete_{i}", type="primary"):
-                            st.session_state.delete_candidate = i
-                            st.rerun()
+                        if convo["messages"]:
+                            if st.button("🗑️", key=f"delete_{i}", type="primary", use_container_width=True):
+                                st.session_state.delete_candidate = i
+                                st.rerun()
+                        else:
+                                st.button(
+                                "🗑️",
+                                key=f"delete_{i}",
+                                type="primary",
+                                use_container_width=True,
+                                disabled=not convo["messages"]  # Disable if it's a new/empty conversation
+                            )
+
 
             else:
                 st.warning(

@@ -95,7 +95,11 @@ if st.session_state.get("show_emergency_page"):
 else:
     with main_area:
         render_header()
-        st.subheader(f"🗣️ Current Chatbot Tone: **{st.session_state['selected_tone']}**")
+        st.markdown(f"""
+<div style="text-align: center; margin: 20px 0;">
+    <h3>🗣️ Current Chatbot Tone: <strong>{st.session_state['selected_tone']}</strong></h3>
+</div>
+""", unsafe_allow_html=True)
         render_chat_interface()
         handle_chat_input(model, system_prompt=get_tone_prompt())
 
