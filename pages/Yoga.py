@@ -16,7 +16,7 @@ lottie_yoga = load_lottiefile("assets/yoga_animation.json")
 
 # --- Load Yoga Data ---
 try:
-    with open(os.path.join("data", "yoga.json"), "r") as f:
+    with open(os.path.join("data", "Yoga.json"), "r") as f:
         yoga_data = json.load(f)
 except FileNotFoundError:
     yoga_data = {}
