@@ -96,14 +96,16 @@ div[data-testid="stVerticalBlock"]:has(div.stTextArea)
 }}
 
 [data-testid="stSidebar"] {{
-    background-color: rgba(253, 208, 232, 0.7) !important; 
-    border-right: 2px solid rgba(245, 167, 208, 0.8) !important;
-    backdrop-filter: blur(10px);
+    background-color: rgba(253, 208, 232, 0.4) !important;
+    border-right: 2px solid rgba(245, 167, 208, 0.6) !important;
+    backdrop-filter: blur(12px) brightness(1.1) !important;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15) !important;
 }}
 
 header[data-testid="stHeader"] {{
-    background-color: rgba(255, 230, 242, 0.7) !important;
-    backdrop-filter: blur(5px);
+    background-color: rgba(255, 230, 242, 0.4) !important;
+    backdrop-filter: blur(8px) brightness(1.1) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }}
 
 hr, div[role="separator"], [data-testid="stHorizontalBlock"],
@@ -145,10 +147,12 @@ div[data-testid="stSelectbox"] * {{
 div[data-testid="stSelectbox"] > div:first-child > div {{
     color: #4a148c !important;
     font-style: italic !important;
-    background-color: rgba(255, 240, 246, 0.7) !important;
-    border: 1px solid rgba(245, 167, 208, 0.8) !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
     border-radius: 12px;
     padding: 0.75rem 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    backdrop-filter: blur(5px) brightness(1.05);
 }}
 
 .stSelectbox input {{
