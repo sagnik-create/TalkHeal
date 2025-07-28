@@ -145,13 +145,13 @@ div[data-testid="stSelectbox"] * {{
 }}
 
 div[data-testid="stSelectbox"] > div:first-child > div {{
-    color: #4a148c !important;
+    color: #4a148c !important; 
     font-style: italic !important;
     background-color: rgba(255, 255, 255, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.4) !important;
     border-radius: 12px;
     padding: 0.75rem 1rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
     backdrop-filter: blur(5px) brightness(1.05);
 }}
 
@@ -159,11 +159,36 @@ div[data-testid="stSelectbox"] > div:first-child > div {{
     pointer-events: none !important;
     caret-color: transparent !important;
     user-select: none !important;
-    background-color: rgba(255, 240, 246, 0.7) !important;
+    background-color: transparent !important;
+    color: #4a148c !important;
+    font-weight: 500;
+}}
+
+div[data-baseweb="popover"] > div > ul {{
+    background-color: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    border-radius: 12px;
+    backdrop-filter: blur(10px) brightness(1.05) !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2) !important;
+}}
+
+div[data-baseweb="popover"] li {{
+    color: #4a148c !important;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}}
+
+div[data-baseweb="popover"] li:hover {{
+    background-color: rgba(255, 240, 246, 0.8) !important;
     color: #4a148c !important;
 }}
 
-/* Asana Info Box */
+div[data-baseweb="popover"] li[aria-selected="true"] {{
+    background-color: rgba(184, 51, 162, 0.8) !important;
+    color: white !important;
+    font-weight: bold !important;
+}}
+
 div[style*="background-color: #fff0f6"] {{
     background-color: rgba(255, 240, 246, 0.7) !important;
     padding: 1.2rem;
@@ -174,7 +199,6 @@ div[style*="background-color: #fff0f6"] {{
     backdrop-filter: blur(8px);
 }}
 
-/* Asana Names */
 div[style*="font-size: 24px"] {{
     color: #4a148c !important;
     font-weight: bold;
