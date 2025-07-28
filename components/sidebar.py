@@ -3,6 +3,8 @@ import webbrowser
 from datetime import datetime
 from core.utils import create_new_conversation, get_current_time
 from core.theme import get_current_theme, toggle_theme, set_palette, PALETTES
+from components.profile import initialize_profile_state, render_profile_section
+
 
 # --- Structured Emergency Resources ---
 GLOBAL_RESOURCES = [
@@ -74,8 +76,9 @@ mental_health_resources_full = {
 
 def render_sidebar():
     """Renders the left and right sidebars."""
-
+     
     with st.sidebar:
+        render_profile_section()
         st.markdown("### 💬 Conversations")
         if "show_quick_start_prompts" not in st.session_state:
             st.session_state.show_quick_start_prompts = False
@@ -125,9 +128,19 @@ def render_sidebar():
                             st.session_state.active_conversation = i
                             st.rerun()
                     with col2:
-                        if st.button("🗑️", key=f"delete_{i}", type="primary"):
-                            st.session_state.delete_candidate = i
-                            st.rerun()
+                        if convo["messages"]:
+                            if st.button("🗑️", key=f"delete_{i}", type="primary", use_container_width=True):
+                                st.session_state.delete_candidate = i
+                                st.rerun()
+                        else:
+                                st.button(
+                                "🗑️",
+                                key=f"delete_{i}",
+                                type="primary",
+                                use_container_width=True,
+                                disabled=not convo["messages"]  # Disable if it's a new/empty conversation
+                            )
+
 
             else:
                 st.warning(

@@ -17,6 +17,7 @@ from components.header import render_header
 from components.sidebar import render_sidebar
 from components.chat_interface import render_chat_interface, handle_chat_input
 from components.emergency_page import render_emergency_page
+from components.profile import apply_global_font_size
 
 
 # --- 1. INITIALIZE SESSION STATE ---
@@ -41,6 +42,7 @@ if "selected_tone" not in st.session_state:
     st.session_state.selected_tone = "Compassionate Listener"
 
 # --- 2. SET PAGE CONFIG ---
+apply_global_font_size()
 
 
 # --- 3. APPLY STYLES & CONFIGURATIONS ---
@@ -93,7 +95,11 @@ if st.session_state.get("show_emergency_page"):
 else:
     with main_area:
         render_header()
-        st.subheader(f"🗣️ Current Chatbot Tone: **{st.session_state['selected_tone']}**")
+        st.markdown(f"""
+<div style="text-align: center; margin: 20px 0;">
+    <h3>🗣️ Current Chatbot Tone: <strong>{st.session_state['selected_tone']}</strong></h3>
+</div>
+""", unsafe_allow_html=True)
         render_chat_interface()
         handle_chat_input(model, system_prompt=get_tone_prompt())
 
