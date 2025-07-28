@@ -14,7 +14,7 @@ PAGE_CONFIG = {
     "menu_items": None
 }
 
-st.set_page_config(**PAGE_CONFIG)
+#st.set_page_config(**PAGE_CONFIG)
 
 # ---------- Custom Dropdown Style ----------
 st.markdown("""
