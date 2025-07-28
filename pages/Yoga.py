@@ -32,7 +32,7 @@ try:
 except FileNotFoundError:
     yoga_data = {}
 
-background_image_path = "blue.png"
+background_image_path = "lavender.png"
 base64_background_image = get_base64_of_bin_file(background_image_path)
 
 # --- Custom CSS ---
@@ -250,17 +250,21 @@ selected_mood = st.selectbox(
 
 # --- Asana Section ---
 if selected_mood != "Select your mood":
-    st.markdown("<div style='background-color: #fff0f6; padding: 1.2rem; border-radius: 16px; margin-top: 1rem;'>", unsafe_allow_html=True)
-    st.markdown(f"<div style='font-size: 24px; font-weight: bold; color: #a94ca7;'>🧘 {asana.get('sanskrit_name')} ({asana.get('english_name')})</div>", unsafe_allow_html=True)
-    st.markdown(f"<p style='font-size: 16px; font-style: italic; color: #555;'>💖 {asana.get('benefit')}</p>", unsafe_allow_html=True)
+    asana = yoga_data.get(selected_mood)
+    if asana:
+        st.markdown("<div style='background-color: #fff0f6; padding: 1.2rem; border-radius: 16px; margin-top: 1rem;'>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size: 24px; font-weight: bold; color: #a94ca7;'>🧘 {asana.get('sanskrit_name')} ({asana.get('english_name')})</div>", unsafe_allow_html=True)
+        st.markdown(f"<p style='font-size: 16px; font-style: italic; color: #555;'>💖 {asana.get('benefit')}</p>", unsafe_allow_html=True)
 
-    with st.expander("📋 Steps to Perform"):
-        steps = asana.get("steps", [])
-        if steps:
-            for i, step in enumerate(steps, 1):
-                fixed_step = step.replace("â€“", "–").replace("â€‹", "")
-                st.markdown(f"<div style='background-color: #ffe6f2; border-left: 4px solid #d85fa7; padding: 0.5rem; border-radius: 10px; margin-bottom: 0.4rem; font-size: 15px;'>{i}. {fixed_step}</div>", unsafe_allow_html=True)
-        else:
-            st.markdown("<div>No steps available for this asana.</div>", unsafe_allow_html=True)
+        with st.expander("📋 Steps to Perform"):
+            steps = asana.get("steps", [])
+            if steps:
+                for i, step in enumerate(steps, 1):
+                    fixed_step = step.replace("â€“", "–").replace("â€‹", "")
+                    st.markdown(f"<div style='background-color: #ffe6f2; border-left: 4px solid #d85fa7; padding: 0.5rem; border-radius: 10px; margin-bottom: 0.4rem; font-size: 15px;'>{i}. {fixed_step}</div>", unsafe_allow_html=True)
+            else:
+                st.markdown("<div>No steps available for this asana.</div>", unsafe_allow_html=True)
 
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    else:
+        st.warning(f"No yoga asana found for '{selected_mood}'. Please select another mood.")
