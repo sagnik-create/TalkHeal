@@ -64,6 +64,7 @@ def handle_chat_input(model, system_prompt):
     st.session_state.pre_filled_chat_input = ""
 
     with st.form(key="chat_form", clear_on_submit=True):
+
         col1, col2 = st.columns([5, 1])
         with col1:
             user_input = st.text_input(
