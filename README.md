@@ -56,29 +56,26 @@
 
 ## 📊 Project Stats
 
-<p align="center">
-  <a href="https://github.com/eccentriccoder01/TalkHeal">
-    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/eccentriccoder01/TalkHeal?style=flat-square" />
-  </a>
-  <a href="https://github.com/eccentriccoder01/TalkHeal/fork">
-    <img alt="GitHub Forks" src="https://img.shields.io/github/forks/eccentriccoder01/TalkHeal?style=flat-square" />
-  </a>
-  <a href="https://github.com/eccentriccoder01/TalkHeal/graphs/contributors">
-    <img alt="Contributors" src="https://img.shields.io/github/contributors/eccentriccoder01/TalkHeal?style=flat-square" />
-  </a>
-  <a href="https://github.com/eccentriccoder01/TalkHeal/issues">
-    <img alt="Open Issues" src="https://img.shields.io/github/issues/eccentriccoder01/TalkHeal?style=flat-square" />
-  </a>
-  <a href="https://github.com/eccentriccoder01/TalkHeal/pulls">
-    <img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/eccentriccoder01/TalkHeal?style=flat-square" />
-  </a>
-  <a href="https://github.com/eccentriccoder01/TalkHeal/commits/main">
-    <img alt="Last Commit" src="https://img.shields.io/github/last-commit/eccentriccoder01/TalkHeal?style=flat-square" />
-  </a>
-  <a href="https://github.com/eccentriccoder01/TalkHeal/blob/main/LICENSE">
-    <img alt="License" src="https://img.shields.io/github/license/eccentriccoder01/TalkHeal?style=flat-square" />
-  </a>
+<div align="center">
+<p>
+
+[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg?style=flat)
+![Visitors](https://api.visitorbadge.io/api/Visitors?path=eccentriccoder01%2FTalkHeal%20&countColor=%23263759&style=flat)
+![GitHub Forks](https://img.shields.io/github/forks/eccentriccoder01/TalkHeal)
+![GitHub Repo Stars](https://img.shields.io/github/stars/eccentriccoder01/TalkHeal)
+![GitHub Contributors](https://img.shields.io/github/contributors/eccentriccoder01/TalkHeal)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/eccentriccoder01/TalkHeal)
+![GitHub Repo Size](https://img.shields.io/github/repo-size/eccentriccoder01/TalkHeal)
+![GitHub Total Lines](https://sloc.xyz/github/eccentriccoder01/TalkHeal)
+![Github](https://img.shields.io/github/license/eccentriccoder01/TalkHeal)
+![GitHub Issues](https://img.shields.io/github/issues/eccentriccoder01/TalkHeal)
+![GitHub Closed Issues](https://img.shields.io/github/issues-closed-raw/eccentriccoder01/TalkHeal)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eccentriccoder01/TalkHeal)
+![GitHub Closed Pull Requests](https://img.shields.io/github/issues-pr-closed/eccentriccoder01/TalkHeal)
+
 </p>
+</div>
 
 ---
 
@@ -104,14 +101,11 @@ For a detailed walkthrough of TalkHeal's features and how to use them, check out
 
 ## 🛠️ Technologies Used
 
-| Tech                  | Purpose                           |
-| --------------------- | --------------------------------- |
-| **Python**            | Core backend and AI logic         |
-| **Streamlit**         | UI and frontend integration       |
-| **Google Gemini API** | Generative AI Conversations       |
-| **Session State**     | Manage multi-threaded chat memory |
-| **CSS Variables**     | Theming and modern styling        |
-| **Streamlit Secrets** | Secure API key management         |
+![Python](https://img.shields.io/badge/Python-20232A?style=for-the-badge&logo=python&logoColor=61DAFB)
+![CSS](https://img.shields.io/badge/CSS-38B2AC?style=for-the-badge&logo=css&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-4EA94B?style=for-the-badge&logo=sqlite&logoColor=white)
+![Gemini](https://img.shields.io/badge/Gemini-3448C5?style=for-the-badge&logo=google&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-0099FF?style=for-the-badge&logo=streamlit&logoColor=white)
 
 ---
 
