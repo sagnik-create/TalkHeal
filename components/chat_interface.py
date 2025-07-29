@@ -1,13 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
-<<<<<<< HEAD
-from core.utils import get_current_time, get_ai_response
-from core.db import get_messages, add_message
-=======
 from core.utils import get_current_time, get_ai_response, save_conversations
 import requests
->>>>>>> 6b12b14fba6e561f35f7c864f50d1a517462c65d
 
 # Inject JS to get user's local time zone
 def set_user_time_in_session():
@@ -50,15 +45,7 @@ def render_chat_interface(model, system_prompt):
         st.write(f"{msg['sender']}: {msg['message']}")
 
     with st.form(key="chat_form", clear_on_submit=True):
-<<<<<<< HEAD
-        user_input = st.text_input("Your message")
-        send_pressed = st.form_submit_button("Send")
-    if send_pressed and user_input.strip():
-        add_message(chat_id, "user", user_input.strip())
-        ai_response = get_ai_response(user_input, model)
-        add_message(chat_id, "bot", ai_response)
-        st.rerun()
-=======
+
         col1, col2 = st.columns([5, 1])
         with col1:
             user_input = st.text_input(
@@ -137,4 +124,3 @@ def render_chat_interface(model, system_prompt):
 
             save_conversations(st.session_state.conversations)
             st.rerun()
->>>>>>> 6b12b14fba6e561f35f7c864f50d1a517462c65d
